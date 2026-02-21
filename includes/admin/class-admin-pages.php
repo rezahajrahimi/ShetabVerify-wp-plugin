@@ -10,8 +10,8 @@ class ShetabVerify_Admin {
 
     public static function register_menu() {
         add_menu_page(
-            'مدیریت شتاب',
-            'مدیریت شتاب',
+            'کارت به کارت',
+            'کارت به کارت',
             'manage_woocommerce',
             'shetab-verify',
             array( __CLASS__, 'render_settings_page' ),
