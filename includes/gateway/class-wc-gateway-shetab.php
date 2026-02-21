@@ -11,8 +11,8 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
     public function __construct() {
         $this->id                 = 'shetab_verify';
         $this->has_fields         = false;
-        $this->method_title       = 'پرداخت شتاب (تایید خودکار)';
-        $this->method_description = 'انتقال وجه بانکی با مبلغ منحصربه‌فرد (تایید خودکار تراکنش).';
+        $this->method_title       = 'کارت به کارت (تایید خودکار)';
+        $this->method_description = 'کارت به کارت با استفاده از درگاه شتاب (تایید خودکار تراکنش).';
 
         $this->supports = array( 'products', 'refunds' );
 
@@ -20,6 +20,14 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
         $this->init_settings();
 
         add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
+        add_filter( 'woocommerce_thankyou_order_received_text', array( $this, 'change_thankyou_text' ), 10, 2 );
+    }
+
+    public function change_thankyou_text( $text, $order ) {
+        if ( $order && $order->get_payment_method() === $this->id && $order->get_status() === 'on-hold' ) {
+            return 'سفارش شما ثبت شده و در انتظار پرداخت می‌باشد. لطفاً جهت نهایی شدن سفارش، مبلغ مورد نظر را طبق دستورالعمل زیر واریز نمایید.';
+        }
+        return $text;
     }
 
     public function init_form_fields() {
@@ -33,7 +41,7 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
             'title'   => array(
                 'title'   => 'عنوان درگاه',
                 'type'    => 'text',
-                'default' => 'انتقال کارت به کارت (شتاب)',
+                'default' => 'کارت به کارت (تایید خودکار)',
             ),
         );
     }
@@ -218,10 +226,16 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
             .shetab-support-item { display: inline-block; margin-left: 20px; color: #4a5568; text-decoration: none; }
             .shetab-support-item img { vertical-align: middle; margin-left: 5px; width: 20px; }
             .shetab-manager-msg { font-style: italic; color: #4a5568; margin-top: 10px; padding: 10px; border-right: 4px solid #3182ce; background: #fff; }
+
+            /* Hide bulky WC elements for cleaner focus on payment details */
+            .woocommerce-order-details, 
+            .woocommerce-customer-details {
+                display: none !important;
+            }
         </style>
 
         <div class="shetab-instructions">
-            <h2><?php echo 'اطلاعات پرداخت (ShetabVerify)'; ?></h2>
+            <h2><?php echo 'اطلاعات پرداخت'; ?></h2>
             <p><?php echo 'لطفاً مبلغ دقیق زیر را به شماره کارت اعلام شده منتقل نمایید:'; ?></p>
             
             <p class="shetab-amount"><?php printf( 'مبلغ: %s تومان', number_format_i18n( $txn->unique_amount ) ); ?></p>

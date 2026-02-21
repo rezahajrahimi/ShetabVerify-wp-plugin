@@ -13,7 +13,7 @@
         const settings = window.wc.wcSettings.getSetting( 'shetab_verify_data', {} );
         console.log('ShetabVerify Blocks Settings:', settings);
 
-        const label = window.wp.htmlEntities.decodeEntities( settings.title || 'ShetabVerify' );
+        const label = window.wp.htmlEntities.decodeEntities( settings.title || 'کارت به کارت' );
 
         const Content = ( props ) => {
             const { eventRegistration, emitResponse } = props;
@@ -34,7 +34,7 @@
             }, [ emitResponse.responseTypes.SUCCESS, onPaymentSetup ] );
 
             return window.wp.element.createElement( 'div', { className: 'shetab-verify-blocks' },
-                window.wp.element.createElement( 'p', null, window.wp.htmlEntities.decodeEntities( settings.description || 'Pay via bank transfer with unique suffix amount.' ) )
+                window.wp.element.createElement( 'p', null, window.wp.htmlEntities.decodeEntities( settings.description || 'تایید خودکار کارت به کارت' ) )
             );
         };
 
