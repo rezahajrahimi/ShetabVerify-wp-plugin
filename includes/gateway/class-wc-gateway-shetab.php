@@ -282,6 +282,7 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
             var txnId = <?php echo (int) $txn->id; ?>;
             var orderId = <?php echo (int) $order_id; ?>;
             var el = document.getElementById('shetab-countdown-' + txnId);
+            var statusUrl = '<?php echo esc_url( get_rest_url( null, "shetab-verify/v1/status" ) ); ?>';
 
             function tick(){
                 if (remaining <= 0) { el.textContent = '<?php echo "زمان شما به پایان رسیده است."; ?>'; return; }
@@ -292,11 +293,17 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
             }
             setInterval(tick, 1000);
 
-            // polling status every 5s
+            // polling status every 5s with correct REST URL
             setInterval(function(){
-                fetch( window.location.origin + '/wp-json/shetab-verify/v1/status?order_id=' + orderId )
+                fetch( statusUrl + '?order_id=' + orderId )
                     .then(function(r){ return r.json(); })
-                    .then(function(data){ if ( data && data.status === 'confirmed' ) { location.reload(); } });
+                    .then(function(data){ 
+                        if ( data && data.status === 'confirmed' ) { 
+                            // Try to find if there is a redirection in return url or just reload
+                            window.location.reload(); 
+                        } 
+                    })
+                    .catch(function(err){ console.error('Error polling status:', err); });
             }, 5000);
         })();
         </script>

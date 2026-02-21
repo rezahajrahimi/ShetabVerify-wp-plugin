@@ -118,6 +118,12 @@ class ShetabVerify_DB {
         return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE order_id = %d AND unique_amount = %d AND status = 'pending' LIMIT 1", absint( $order_id ), absint( $amount ) ) );
     }
 
+    public static function get_pending_transaction_by_amount( $amount ) {
+        global $wpdb;
+        $table = $wpdb->prefix . 'shetab_transactions';
+        return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE unique_amount = %d AND status = 'pending' ORDER BY id DESC LIMIT 1", absint( $amount ) ) );
+    }
+
     public static function get_card_usage( $card_id, $period = 'none' ) {
         global $wpdb;
         $table = $wpdb->prefix . 'shetab_transactions';

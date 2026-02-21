@@ -114,6 +114,17 @@ class ShetabVerify_Admin {
         <div class="shetab-admin-wrap">
             <h1><?php echo 'مدیریت ShetabVerify'; ?></h1>
 
+            <?php if ( get_option( 'permalink_structure' ) === '' ) : ?>
+                <div class="notice notice-error" style="border-right-color: #d63638; background: #fff; padding: 15px; border-right-width: 4px; box-shadow: 0 1px 1px rgba(0,0,0,.04); margin: 20px 0;">
+                    <h3 style="color: #d63638; margin-top: 0; font-weight: bold;"><?php echo '⚠️ توجه بسیار مهم: تنظیمات وردپرس ناقص است'; ?></h3>
+                    <p style="font-size: 1rem; line-height: 1.6;">
+                        <?php echo 'برای کارکرد صحیح سیستم تایید خودکار (API)، باید حتماً تنظیمات <strong>"پیوندهای یکتا"</strong> وردپرس را از حالت "ساده" خارج کنید.'; ?>
+                        <br>
+                        <?php echo 'لطفاً به بخش <a href="' . admin_url( 'options-permalink.php' ) . '" target="_blank"><strong>تنظیمات > پیوندهای یکتا</strong></a> رفته و گزینه را روی <strong>"نام نوشته"</strong> قرار دهید.'; ?>
+                    </p>
+                </div>
+            <?php endif; ?>
+
             <?php foreach ( $messages as $m ) : ?>
                 <div class="notice notice-success is-dismissible"><p><?php echo esc_html( $m ); ?></p></div>
             <?php endforeach; ?>

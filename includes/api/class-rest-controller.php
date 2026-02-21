@@ -19,45 +19,54 @@ class ShetabVerify_REST_Controller {
     }
 
     public static function confirm_payment( WP_REST_Request $request ) {
-        $params = $request->get_json_params();
+        // Use get_params() instead of get_json_params() to support both JSON and Form Data
+        $params = $request->get_params();
 
-        if ( empty( $params['order_id'] ) || empty( $params['amount'] ) ) {
-            return new WP_Error( 'invalid_request', 'order_id and amount are required', array( 'status' => 400 ) );
+        // Extract amount from payload (Flutter app sends 'amount' as string or int)
+        $amount = ! empty( $params['amount'] ) ? absint( preg_replace( '/\D/', '', $params['amount'] ) ) : 0;
+
+        if ( ! $amount ) {
+            return new WP_Error( 'invalid_request', 'مبلغ تراکنش (amount) در داده‌های ارسالی یافت نشد.', array( 'status' => 400 ) );
         }
 
-        // Authenticate using X-Shetab-Secret or Bearer token
-        $secret = $request->get_header( 'x-shetab-secret' );
-        if ( empty( $secret ) ) {
-            $auth = $request->get_header( 'authorization' );
-            if ( $auth && preg_match( '/Bearer\s+(.*)/i', $auth, $m ) ) {
-                $secret = $m[1];
-            }
+        // Authenticate using Authorization header (as used in flutter app: 'Authorization': settings.apiKey)
+        $secret = $request->get_header( 'authorization' );
+        
+        // If Bearer is present, strip it
+        if ( $secret && preg_match( '/Bearer\s+(.*)/i', $secret, $m ) ) {
+            $secret = $m[1];
         }
 
-        if ( ! ShetabVerify_Utils::verify_api_secret( $secret ) ) {
-            return new WP_Error( 'unauthorized', 'Invalid secret', array( 'status' => 401 ) );
+        if ( empty( $secret ) || ! ShetabVerify_Utils::verify_api_secret( $secret ) ) {
+            return new WP_Error( 'unauthorized', 'کلید امنیتی (Secret) نامعتبر است یا در هدر Authorization ارسال نشده است.', array( 'status' => 401 ) );
         }
 
-        $order_id = absint( $params['order_id'] );
-        $amount   = absint( $params['amount'] );
-
-        $txn = ShetabVerify_DB::get_pending_transaction_by_order_and_amount( $order_id, $amount );
+        // Find match by unique_amount for pending transactions
+        $txn = ShetabVerify_DB::get_pending_transaction_by_amount( $amount );
         if ( ! $txn ) {
-            return new WP_Error( 'not_found', 'Pending transaction not found or expired', array( 'status' => 404 ) );
+            return new WP_Error( 'not_found', 'تراکنش در انتظار پرداختی با این مبلغ یافت نشد یا منقضی شده است.', array( 'status' => 404 ) );
         }
 
-        // mark confirmed
-        ShetabVerify_DB::mark_transaction_confirmed( $txn->id, isset( $params['remote_ref'] ) ? sanitize_text_field( $params['remote_ref'] ) : '', $params );
+        $order_id = absint($txn->order_id);
+        $remote_ref = ! empty( $params['recipeId'] ) ? sanitize_text_field( $params['recipeId'] ) : '';
 
-        // mark order as paid
+        // Mark confirmed in DB
+        ShetabVerify_DB::mark_transaction_confirmed( $txn->id, $remote_ref, $params );
+
+        // Mark WooCommerce order as paid
         if ( function_exists( 'wc_get_order' ) ) {
             $order = wc_get_order( $order_id );
             if ( $order ) {
-                $order->payment_complete( isset( $params['remote_ref'] ) ? sanitize_text_field( $params['remote_ref'] ) : '' );
+                $order->payment_complete( $remote_ref );
+                $order->add_order_note( sprintf( 'تایید خودکار: مبلغ %s توسط اپلیکیشن تایید شد. کد رهگیری: %s', number_format_i18n($amount), $remote_ref ) );
             }
         }
 
-        return rest_ensure_response( array( 'success' => true, 'message' => 'confirmed' ) );
+        return rest_ensure_response( array( 
+            'success' => true, 
+            'message' => 'پرداخت با موفقیت تایید شد.',
+            'order_id' => $order_id 
+        ) );
     }
 
     public static function get_status( WP_REST_Request $request ) {
