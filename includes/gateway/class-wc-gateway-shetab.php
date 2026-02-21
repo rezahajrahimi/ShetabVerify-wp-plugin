@@ -259,15 +259,17 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
             .shetab-receipt-preview { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; justify-content: center; }
             .shetab-receipt-preview img { width: 80px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; }
 
-            /* Hide bulky WC elements for cleaner focus on payment details */
+            /* Hide bulky WC elements ONLY while payment is pending/on-hold */
+            <?php if ( $order->get_status() === 'on-hold' || $txn->status === 'pending' ) : ?>
             .woocommerce-order-details, 
             .woocommerce-customer-details {
                 display: none !important;
             }
+            <?php endif; ?>
         </style>
 
         <div class="shetab-instructions">
-            <h2><?php echo 'اطلاعات پرداخت'; ?></h2>
+            <h2><?php echo ( in_array( $order->get_status(), array( 'processing', 'completed' ) ) ) ? 'رسید پرداخت شما' : 'اطلاعات پرداخت'; ?></h2>
 
             <?php if ( ! empty( $receipts ) ) : ?>
                 <div style="background: #f0fff4; border: 1px solid #38a169; padding: 20px; border-radius: 10px; margin-bottom: 20px;">

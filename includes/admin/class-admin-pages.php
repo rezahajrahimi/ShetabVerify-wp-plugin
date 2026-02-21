@@ -85,6 +85,12 @@ class ShetabVerify_Admin {
         if ( $action === 'shetab_confirm_receipt' ) {
             $order->payment_complete();
             $order->add_order_note( 'رسید واریز توسط مدیر تایید شد.' );
+            
+            // Sync with local transactions table to update card statistics
+            $txn = ShetabVerify_DB::get_transaction_by_order_id( $order_id );
+            if ( $txn && $txn->status !== 'confirmed' ) {
+                ShetabVerify_DB::mark_transaction_confirmed( $txn->id, 'manual_admin_confirmation' );
+            }
         } else {
             $order->update_status( 'failed', 'رسید واریز توسط مدیر نامعتبر اعلام شد.' );
             $order->add_order_note( 'رسید واریز توسط مدیر نامعتبر اعلام و سفارش رد شد.' );
@@ -323,17 +329,25 @@ class ShetabVerify_Admin {
                             <th><?php echo 'شناسه'; ?></th>
                             <th><?php echo 'برچسب'; ?></th>
                             <th><?php echo 'شماره کارت کامل'; ?></th>
-                            <th><?php echo 'محدودیت (تعداد / مبلع)'; ?></th>
+                            <th><?php echo 'محدودیت اصلی (تعداد / مبلع)'; ?></th>
+                            <th><?php echo 'میزان پر شده (عملکرد)'; ?></th>
                             <th><?php echo 'وضعیت'; ?></th>
                             <th><?php echo 'عملیات'; ?></th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if ( empty( $cards ) ) : ?>
-                            <tr><td colspan="6" style="text-align:center; padding: 20px;"><?php echo 'هیچ کارتی تنظیم نشده است.'; ?></td></tr>
+                            <tr><td colspan="7" style="text-align:center; padding: 20px;"><?php echo 'هیچ کارتی تنظیم نشده است.'; ?></td></tr>
                         <?php else : ?>
                             <?php foreach ( $cards as $c ) : ?>
-                                <?php $full_number = ShetabVerify_Utils::decrypt_card_number($c->encrypted_number); ?>
+                                <?php 
+                                    $full_number = ShetabVerify_Utils::decrypt_card_number($c->encrypted_number); 
+                                    $usage = ShetabVerify_DB::get_card_usage( $c->id, $c->reset_period );
+                                    $order_links = array();
+                                    foreach ( $usage['orders'] as $oid ) {
+                                        $order_links[] = '<a href="' . admin_url( 'post.php?post=' . $oid . '&action=edit' ) . '" target="_blank">#' . $oid . '</a>';
+                                    }
+                                ?>
                                 <tr>
                                     <td><?php echo esc_html( $c->id ); ?></td>
                                     <td><?php echo esc_html( $c->label ); ?></td>
@@ -343,7 +357,18 @@ class ShetabVerify_Admin {
                                             <button type="button" class="shetab-copy-btn" onclick="copyToClipboard('<?php echo esc_js($full_number); ?>')" style="padding: 2px 5px; font-size: 0.7rem;">کپی</button>
                                         </div>
                                     </td>
-                                    <td><?php echo esc_html( $c->max_deposits_count ); ?> / <?php echo esc_html( number_format_i18n( $c->max_total_amount ) ); ?></td>
+                                    <td><?php echo esc_html( $c->max_deposits_count ?: '∞' ); ?> / <?php echo esc_html( $c->max_total_amount ? number_format_i18n( $c->max_total_amount ) : '∞' ); ?></td>
+                                    <td>
+                                        <div style="font-size: 0.85rem; line-height: 1.4;">
+                                            <strong>تراکنش:</strong> <?php echo esc_html($usage['count']); ?>
+                                            <br><strong>مبلغ کل:</strong> <?php echo number_format_i18n($usage['total']); ?> تومان
+                                            <?php if ( ! empty( $order_links ) ) : ?>
+                                                <div style="margin-top:5px; color:#718096; font-size:0.75rem;">
+                                                    <strong>سفارشات:</strong> <?php echo implode(', ', $order_links); ?>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </td>
                                     <td><?php echo $c->active ? '<span style="color:#38a169;">✅ فعال</span>' : '<span style="color:#e53e3e;">❌ غیرفعال</span>'; ?></td>
                                     <td>
                                         <form method="post" onsubmit="return confirm('آیا از حذف این کارت مطمئن هستید؟');">
