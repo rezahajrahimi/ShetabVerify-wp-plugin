@@ -139,20 +139,24 @@ class ShetabVerify_DB {
 
         // Only count 'confirmed' for usage tracking (actual money received)
         // Fix: Use direct interpolation for $where_date because $wpdb->prepare wraps %s in quotes
-        $sql = $wpdb->prepare( "SELECT order_id, unique_amount FROM {$table} WHERE card_id = %d AND status = 'confirmed' AND {$where_date}", absint( $card_id ) );
+        $sql = $wpdb->prepare( "SELECT order_id, unique_amount, confirmed_at FROM {$table} WHERE card_id = %d AND status = 'confirmed' AND {$where_date}", absint( $card_id ) );
         $rows = $wpdb->get_results( $sql );
         
         $total_amount = 0;
-        $order_ids = array();
+        $order_details = array();
         foreach ( $rows as $r ) {
             $total_amount += $r->unique_amount;
-            $order_ids[] = (int) $r->order_id;
+            $order_details[] = array(
+                'id' => (int) $r->order_id,
+                'amount' => (int) $r->unique_amount,
+                'date' => $r->confirmed_at
+            );
         }
 
         return array( 
             'count' => count( $rows ), 
             'total' => (int) $total_amount,
-            'orders' => array_unique( $order_ids )
+            'orders' => $order_details
         );
     }
 
