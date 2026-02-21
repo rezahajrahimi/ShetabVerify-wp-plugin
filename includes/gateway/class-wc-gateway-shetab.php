@@ -24,8 +24,14 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
     }
 
     public function change_thankyou_text( $text, $order ) {
-        if ( $order && $order->get_payment_method() === $this->id && $order->get_status() === 'on-hold' ) {
-            return 'سفارش شما ثبت شده و در انتظار پرداخت می‌باشد. لطفاً جهت نهایی شدن سفارش، مبلغ مورد نظر را طبق دستورالعمل زیر واریز نمایید.';
+        if ( $order && $order->get_payment_method() === $this->id ) {
+            if ( $order->get_status() === 'on-hold' ) {
+                return $this->get_option( 'thankyou_awaiting_message', 'سفارش شما ثبت شده و در انتظار پرداخت می‌باشد. لطفاً جهت نهایی شدن سفارش، مبلغ مورد نظر را طبق دستورالعمل زیر واریز نمایید.' );
+            }
+            
+            if ( in_array( $order->get_status(), array( 'processing', 'completed' ) ) ) {
+                return $this->get_option( 'thankyou_success_message', 'پرداخت شما با موفقیت تایید شد. سفارش شما در حال پردازش می‌باشد.' );
+            }
         }
         return $text;
     }
@@ -42,6 +48,18 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
                 'title'   => 'عنوان درگاه',
                 'type'    => 'text',
                 'default' => 'کارت به کارت (تایید خودکار)',
+            ),
+            'thankyou_awaiting_message' => array(
+                'title'   => 'پیام در انتظار پرداخت',
+                'type'    => 'textarea',
+                'default' => 'سفارش شما ثبت شده و در انتظار پرداخت می‌باشد. لطفاً جهت نهایی شدن سفارش، مبلغ مورد نظر را طبق دستورالعمل زیر واریز نمایید.',
+                'description' => 'این پیام زمانی نمایش داده می‌شود که تراکنش هنوز تایید نشده است.',
+            ),
+            'thankyou_success_message' => array(
+                'title'   => 'پیام موفقیت پرداخت',
+                'type'    => 'textarea',
+                'default' => 'پرداخت شما با موفقیت تایید شد. سفارش شما در حال پردازش می‌باشد.',
+                'description' => 'این پیام زمانی نمایش داده می‌شود که اپلیکیشن پرداخت را تایید کرده باشد.',
             ),
         );
     }
