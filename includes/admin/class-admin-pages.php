@@ -6,6 +6,104 @@ if ( ! defined( 'ABSPATH' ) ) {
 class ShetabVerify_Admin {
     public static function init() {
         add_action( 'admin_menu', array( __CLASS__, 'register_menu' ) );
+        add_action( 'add_meta_boxes', array( __CLASS__, 'add_order_receipt_metabox' ) );
+        add_action( 'admin_init', array( __CLASS__, 'handle_receipt_actions' ) );
+    }
+
+    public static function add_order_receipt_metabox() {
+        add_meta_box(
+            'shetab_order_receipts',
+            'فیش‌های واریزی (شتاب)',
+            array( __CLASS__, 'render_order_receipt_metabox' ),
+            array( 'shop_order', 'woocommerce_page_wc-orders' ),
+            'side',
+            'high'
+        );
+    }
+
+    public static function render_order_receipt_metabox( $post_or_order ) {
+        // Handle both Post (Legacy) and Order (HPOS) objects
+        $order = null;
+        if ( $post_or_order instanceof WC_Order ) {
+            $order = $post_or_order;
+        } elseif ( $post_or_order instanceof WP_Post ) {
+            $order = wc_get_order( $post_or_order->ID );
+        } elseif ( is_numeric( $post_or_order ) ) {
+            $order = wc_get_order( $post_or_order );
+        }
+
+        if ( ! $order ) return;
+
+        $order_id = $order->get_id();
+        $receipts = $order->get_meta( '_shetab_receipts' );
+        
+        if ( empty( $receipts ) || ! is_array( $receipts ) ) {
+            echo '<p style="color:#666; font-style:italic;">هیچ فیشی برای این سفارش آپلود نشده است.</p>';
+            return;
+        }
+
+        echo '<div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin-bottom:15px; background: #f9f9f9; padding: 10px; border-radius: 5px;">';
+        foreach ( $receipts as $aid ) {
+            $url = wp_get_attachment_url( $aid );
+            $img = wp_get_attachment_image_src( $aid, 'thumbnail' );
+            if ( $img ) {
+                echo '<a href="' . esc_url( $url ) . '" target="_blank" style="display:block; border: 2px solid #eee; border-radius: 4px; overflow:hidden;">';
+                echo '<img src="' . esc_url( $img[0] ) . '" style="width:100%; height:80px; object-fit:cover; display:block;">';
+                echo '</a>';
+            } else {
+                echo '<div style="background:#eee; height:80px; display:flex; align-items:center; justify-content:center; font-size:10px; color:#999; text-align:center;">تصویر یافت نشد<br>(#'.esc_html($aid).')</div>';
+            }
+        }
+        echo '</div>';
+
+        $confirm_nonce = wp_create_nonce( 'shetab_receipt_action' );
+        ?>
+        <div style="display:flex; gap:5px; margin-top:10px;">
+            <a href="<?php echo esc_url( admin_url( 'admin-ajax.php?action=shetab_confirm_receipt&order_id=' . $order_id . '&_nonce=' . $confirm_nonce ) ); ?>" 
+               class="button button-primary" style="background:#38a169; border-color:#38a169;">✅ تأیید فیش</a>
+            <a href="<?php echo esc_url( admin_url( 'admin-ajax.php?action=shetab_reject_receipt&order_id=' . $order_id . '&_nonce=' . $confirm_nonce ) ); ?>" 
+               class="button button-secondary" style="color:#e53e3e; border-color:#e53e3e;">❌ نامعتبر</a>
+        </div>
+        <p style="color:#666; font-size:0.85em; margin-top:10px;">تأیید فیش، فیش سفارش را به حالت <strong>"در حال انجام"</strong> تغییر می‌دهد.</p>
+        <?php
+    }
+
+    public static function handle_receipt_actions() {
+        if ( ! current_user_can( 'manage_woocommerce' ) ) return;
+
+        $action = isset( $_GET['action'] ) ? $_GET['action'] : '';
+        if ( ! in_array( $action, array( 'shetab_confirm_receipt', 'shetab_reject_receipt' ) ) ) return;
+
+        $order_id = isset( $_GET['order_id'] ) ? absint( $_GET['order_id'] ) : 0;
+        $nonce    = isset( $_GET['_nonce'] ) ? $_GET['_nonce'] : '';
+        
+        if ( ! wp_verify_nonce( $nonce, 'shetab_receipt_action' ) ) return;
+
+        $order = wc_get_order( $order_id );
+        if ( ! $order ) return;
+
+        if ( $action === 'shetab_confirm_receipt' ) {
+            $order->payment_complete();
+            $order->add_order_note( 'رسید واریز توسط مدیر تایید شد.' );
+        } else {
+            $order->update_status( 'failed', 'رسید واریز توسط مدیر نامعتبر اعلام شد.' );
+            $order->add_order_note( 'رسید واریز توسط مدیر نامعتبر اعلام و سفارش رد شد.' );
+        }
+
+        // Use get_edit_post_link if possible, otherwise fallback to referer or simple redirect
+        $redirect_url = admin_url( 'post.php?post=' . $order_id . '&action=edit' );
+        
+        // Check if we are using the new WooCommerce Order Screen (HPOS)
+        if ( function_exists( 'wc_get_container' ) && method_exists( $order, 'get_id' ) ) {
+            // Modern WC way to get edit link
+            $edit_link = ( function_exists( 'get_edit_post_link' ) ) ? get_edit_post_link( $order_id ) : '';
+            if ( $edit_link ) {
+                $redirect_url = $edit_link;
+            }
+        }
+
+        wp_redirect( $redirect_url );
+        exit;
     }
 
     public static function register_menu() {

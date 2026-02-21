@@ -16,6 +16,86 @@ class ShetabVerify_REST_Controller {
             'callback' => array( __CLASS__, 'get_status' ),
             'permission_callback' => '__return_true',
         ) );
+
+        register_rest_route( 'shetab-verify/v1', '/upload-receipt', array(
+            'methods'  => 'POST',
+            'callback' => array( __CLASS__, 'handle_receipt_upload' ),
+            'permission_callback' => '__return_true',
+        ) );
+    }
+
+    public static function handle_receipt_upload( WP_REST_Request $request ) {
+        $order_id = absint( $request->get_param( 'order_id' ) );
+        if ( ! $order_id ) {
+            return new WP_Error( 'invalid_order', 'شناسه سفارش نامعتبر است.', array( 'status' => 400 ) );
+        }
+
+        $order = wc_get_order( $order_id );
+        if ( ! $order ) {
+            return new WP_Error( 'invalid_order', 'سفارش یافت نشد.', array( 'status' => 404 ) );
+        }
+
+        $files = $request->get_file_params();
+        if ( empty( $files['receipts'] ) ) {
+            return new WP_Error( 'no_files', 'هیچ فایلی آپلود نشده است.', array( 'status' => 400 ) );
+        }
+
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+
+        $uploaded_ids = array();
+        $receipts = $files['receipts'];
+
+        // If single file, normalize to array
+        if ( ! is_array( $receipts['name'] ) ) {
+            $receipts = array(
+                'name'     => array( $receipts['name'] ),
+                'type'     => array( $receipts['type'] ),
+                'tmp_name' => array( $receipts['tmp_name'] ),
+                'error'    => array( $receipts['error'] ),
+                'size'     => array( $receipts['size'] ),
+            );
+        }
+
+        for ( $i = 0; $i < count( $receipts['name'] ); $i++ ) {
+            $file = array(
+                'name'     => $receipts['name'][$i],
+                'type'     => $receipts['type'][$i],
+                'tmp_name' => $receipts['tmp_name'][$i],
+                'error'    => $receipts['error'][$i],
+                'size'     => $receipts['size'][$i],
+            );
+
+            // Use 0 as parent to be safe with HPOS, we'll store relationship in meta
+            $attach_id = media_handle_sideload( $file, 0 );
+            if ( ! is_wp_error( $attach_id ) ) {
+                $uploaded_ids[] = (int) $attach_id;
+            }
+        }
+
+        if ( empty( $uploaded_ids ) ) {
+            $msg = is_wp_error( $attach_id ) ? $attach_id->get_error_message() : 'خطا در آپلود تصاویر.';
+            return new WP_Error( 'upload_failed', $msg, array( 'status' => 500 ) );
+        }
+
+        // Use CRUD methods for compatibility with HPOS
+        $existing = $order->get_meta( '_shetab_receipts' );
+        if ( ! is_array( $existing ) ) { $existing = array(); }
+        $all_receipts = array_merge( $existing, $uploaded_ids );
+        
+        $order->update_meta_data( '_shetab_receipts', $all_receipts );
+
+        // Update order status to a state that represents "Manual Verification Required"
+        $order->update_status( 'on-hold', 'کاربر تصویر رسید بانکی را آپلود کرد.' );
+        $order->add_order_note( 'رسیدهای آپلود شده توسط کاربر آماده بررسی مدیریت هستند.' );
+        $order->save();
+
+        return rest_ensure_response( array(
+            'success' => true,
+            'message' => 'تصاویر با موفقیت آپلود شدند و در انتظار تایید مدیریت هستند.',
+            'receipt_ids' => $uploaded_ids
+        ) );
     }
 
     public static function confirm_payment( WP_REST_Request $request ) {
