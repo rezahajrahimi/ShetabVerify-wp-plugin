@@ -10,8 +10,8 @@ class ShetabVerify_Admin {
 
     public static function register_menu() {
         add_menu_page(
-            __( 'ShetabVerify', 'shetab-verify' ),
-            __( 'ShetabVerify', 'shetab-verify' ),
+            'مدیریت شتاب',
+            'مدیریت شتاب',
             'manage_woocommerce',
             'shetab-verify',
             array( __CLASS__, 'render_settings_page' ),
@@ -54,207 +54,236 @@ class ShetabVerify_Admin {
             if ( $action === 'save_secret' && isset( $_POST['api_secret'] ) ) {
                 $secret = sanitize_text_field( wp_unslash( $_POST['api_secret'] ) );
                 ShetabVerify_Utils::set_api_secret( $secret );
-                $messages[] = __( 'API secret saved.', 'shetab-verify' );
+                $messages[] = 'Secret API با موفقیت ذخیره شد.';
             }
 
-            if ( $action === 'run_diagnostics' ) {
-                shetab_verify_run_diagnostics();
-                $messages[] = __( 'Diagnostics run — check the debug output below.', 'shetab-verify' );
-            }
-
-            if ( $action === 'create_test_order' ) {
-                $res = shetab_verify_create_test_order();
-                if ( ! empty( $res['error'] ) ) {
-                    $messages[] = __( 'Error creating test order: ', 'shetab-verify' ) . esc_html( $res['error'] );
-                } else {
-                    $messages[] = sprintf( __( 'Test product created (ID: %d). Visit checkout to see if the gateway appears.', 'shetab-verify' ), absint( $res['product_id'] ) );
-                }
+            if ( $action === 'save_support_info' ) {
+                update_option( 'shetab_support_whatsapp', sanitize_text_field( $_POST['support_whatsapp'] ?? '' ) );
+                update_option( 'shetab_support_telegram', sanitize_text_field( $_POST['support_telegram'] ?? '' ) );
+                update_option( 'shetab_support_manager_text', sanitize_textarea_field( $_POST['support_manager_text'] ?? '' ) );
+                $messages[] = 'اطلاعات پشتیبانی با موفقیت ذخیره شد.';
             }
         }
 
         $cards = ShetabVerify_DB::get_cards();
-        $secret_hash = get_option( 'shetab_api_secret_hash' );
+        $api_secret = ShetabVerify_Utils::get_api_secret();
+
+        $confirm_api_url = home_url( '/wp-json/shetab-verify/v1/confirm' );
+        $status_api_url = home_url( '/wp-json/shetab-verify/v1/status' );
         ?>
-        <div class="wrap">
-            <h1><?php esc_html_e( 'ShetabVerify settings', 'shetab-verify' ); ?></h1>
+        <style>
+            .shetab-admin-wrap {
+                direction: rtl;
+                font-family: 'Tahoma', sans-serif;
+                margin: 20px;
+                background: #fdfdfd;
+                border-radius: 8px;
+                padding: 20px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            }
+            .shetab-card {
+                background: #fff;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 24px;
+                margin-bottom: 24px;
+                transition: all 0.3s ease;
+            }
+            .shetab-card:hover { box-shadow: 0 8px 16px rgba(0,0,0,0.05); }
+            .shetab-card h2 { margin-top: 0; color: #2d3748; border-bottom: 2px solid #edf2f7; padding-bottom: 12px; margin-bottom: 20px; font-size: 1.5rem; }
+            .shetab-form-group { margin-bottom: 15px; }
+            .shetab-form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #4a5568; }
+            .shetab-form-group input[type="text"], .shetab-form-group input[type="password"], .shetab-form-group input[type="number"], .shetab-form-group select, .shetab-form-group textarea {
+                width: 100%; max-width: 400px; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; box-sizing: border-box;
+            }
+            .shetab-api-info { display: flex; align-items: center; gap: 10px; background: #f7fafc; padding: 12px; border-radius: 8px; margin-top: 10px; }
+            .shetab-qr-container { display: flex; flex-direction: column; align-items: center; margin-top: 15px; }
+            .shetab-qr-image { border: 1px solid #edf2f7; padding: 8px; border-radius: 8px; background: #fff; margin-bottom: 10px; }
+            .shetab-copy-btn { background: #4a5568; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; }
+            .shetab-copy-btn:hover { background: #2d3748; }
+            .shetab-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+            .shetab-table th, .shetab-table td { text-align: right; padding: 12px; border-bottom: 1px solid #edf2f7; }
+            .shetab-table th { background: #f8fafc; color: #64748b; font-weight: 600; }
+            .shetab-btn { background: #3182ce; color: #fff; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem; }
+            .shetab-btn:hover { background: #2b6cb0; }
+            .shetab-btn-danger { background: #e53e3e; }
+            .shetab-btn-danger:hover { background: #c53030; }
+            .notice { direction: rtl; }
+        </style>
+
+        <div class="shetab-admin-wrap">
+            <h1><?php echo 'مدیریت ShetabVerify'; ?></h1>
 
             <?php foreach ( $messages as $m ) : ?>
                 <div class="notice notice-success is-dismissible"><p><?php echo esc_html( $m ); ?></p></div>
             <?php endforeach; ?>
 
-            <h2><?php esc_html_e( 'API Secret', 'shetab-verify' ); ?></h2>
-            <form method="post">
-                <?php wp_nonce_field( 'shetab_verify_admin' ); ?>
-                <input type="hidden" name="shetab_action" value="save_secret">
-                <table class="form-table">
-                    <tr>
-                        <th scope="row"><?php esc_html_e( 'Secret', 'shetab-verify' ); ?></th>
-                        <td>
-                            <input name="api_secret" type="password" class="regular-text" autocomplete="new-password">
-                            <p class="description"><?php echo $secret_hash ? esc_html__( 'A secret is already set.', 'shetab-verify' ) : esc_html__( 'No secret set yet.', 'shetab-verify' ); ?></p>
-                        </td>
-                    </tr>
-                </table>
-                <?php submit_button( __( 'Save Secret', 'shetab-verify' ) ); ?>
-            </form>
-
-            <h2><?php esc_html_e( 'Bank cards', 'shetab-verify' ); ?></h2>
-            <form method="post" style="max-width:700px;">
-                <?php wp_nonce_field( 'shetab_verify_admin' ); ?>
-                <input type="hidden" name="shetab_action" value="add_card">
-                <table class="form-table">
-                    <tr>
-                        <th scope="row"><label for="label"><?php esc_html_e( 'Label', 'shetab-verify' ); ?></label></th>
-                        <td><input name="label" id="label" type="text" class="regular-text" required></td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><label for="card_number"><?php esc_html_e( 'Card number', 'shetab-verify' ); ?></label></th>
-                        <td><input name="card_number" id="card_number" type="text" class="regular-text" placeholder="0000 0000 0000 0000" required></td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><label for="max_deposits_count"><?php esc_html_e( 'Max deposits (count)', 'shetab-verify' ); ?></label></th>
-                        <td><input name="max_deposits_count" id="max_deposits_count" type="number" min="0" value="0"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><label for="max_total_amount"><?php esc_html_e( 'Max total amount (Toman)', 'shetab-verify' ); ?></label></th>
-                        <td><input name="max_total_amount" id="max_total_amount" type="number" min="0" value="0"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><label for="reset_period"><?php esc_html_e( 'Reset period', 'shetab-verify' ); ?></label></th>
-                        <td>
-                            <select name="reset_period" id="reset_period">
-                                <option value="none"><?php esc_html_e( 'None (lifetime)', 'shetab-verify' ); ?></option>
-                                <option value="daily"><?php esc_html_e( 'Daily', 'shetab-verify' ); ?></option>
-                                <option value="monthly"><?php esc_html_e( 'Monthly', 'shetab-verify' ); ?></option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><?php esc_html_e( 'Active', 'shetab-verify' ); ?></th>
-                        <td><label><input name="active" type="checkbox" checked> <?php esc_html_e( 'Enable this card', 'shetab-verify' ); ?></label></td>
-                    </tr>
-                </table>
-                <?php submit_button( __( 'Add Card', 'shetab-verify' ) ); ?>
-            </form>
-
-            <h3><?php esc_html_e( 'Existing cards', 'shetab-verify' ); ?></h3>
-            <table class="widefat fixed" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th><?php esc_html_e( 'ID', 'shetab-verify' ); ?></th>
-                        <th><?php esc_html_e( 'Label', 'shetab-verify' ); ?></th>
-                        <th><?php esc_html_e( 'Masked', 'shetab-verify' ); ?></th>
-                        <th><?php esc_html_e( 'Limits', 'shetab-verify' ); ?></th>
-                        <th><?php esc_html_e( 'Active', 'shetab-verify' ); ?></th>
-                        <th><?php esc_html_e( 'Actions', 'shetab-verify' ); ?></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if ( empty( $cards ) ) : ?>
-                        <tr><td colspan="6"><?php esc_html_e( 'No cards configured.', 'shetab-verify' ); ?></td></tr>
-                    <?php else : ?>
-                        <?php foreach ( $cards as $c ) : ?>
-                            <tr>
-                                <td><?php echo esc_html( $c->id ); ?></td>
-                                <td><?php echo esc_html( $c->label ); ?></td>
-                                <td><?php echo esc_html( $c->masked_number ); ?></td>
-                                <td><?php echo esc_html( $c->max_deposits_count ); ?> / <?php echo esc_html( number_format_i18n( $c->max_total_amount ) ); ?></td>
-                                <td><?php echo $c->active ? esc_html__( 'Yes', 'shetab-verify' ) : esc_html__( 'No', 'shetab-verify' ); ?></td>
-                                <td>
-                                    <form method="post" style="display:inline;">
-                                        <?php wp_nonce_field( 'shetab_verify_admin' ); ?>
-                                        <input type="hidden" name="shetab_action" value="delete_card">
-                                        <input type="hidden" name="delete_card" value="<?php echo esc_attr( $c->id ); ?>">
-                                        <?php submit_button( __( 'Delete', 'shetab-verify' ), 'small', '', false ); ?>
-                                    </form>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
+            <div class="shetab-card">
+                <h2><?php echo 'Secret API (کلید مخفی)'; ?></h2>
+                <form method="post">
+                    <?php wp_nonce_field( 'shetab_verify_admin' ); ?>
+                    <input type="hidden" name="shetab_action" value="save_secret">
+                    <div class="shetab-form-group">
+                        <label><?php echo 'مقدار کلید:'; ?></label>
+                        <input name="api_secret" type="text" class="regular-text" value="<?php echo esc_attr($api_secret); ?>">
+                        <p class="description"><?php echo $api_secret ? 'کلید هم اکنون تنظیم شده است.' : 'هنوز کلیدی تنظیم نشده است.'; ?></p>
+                    </div>
+                    <?php if ( $api_secret ) : ?>
+                        <div class="shetab-api-info">
+                            <span><?php echo esc_html($api_secret); ?></span>
+                            <button type="button" class="shetab-copy-btn" onclick="copyToClipboard('<?php echo esc_js($api_secret); ?>')"><?php echo 'کپی به کلیپبورد'; ?></button>
+                        </div>
+                        <div class="shetab-qr-container">
+                            <div class="shetab-qr-image">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<?php echo urlencode($api_secret); ?>" alt="QR Secret">
+                            </div>
+                            <span style="font-size:0.8rem; color:#718096;"><?php echo 'اسکن برای کپی کلید'; ?></span>
+                        </div>
                     <?php endif; ?>
-                </tbody>
-            </table>
-
-            <h2><?php esc_html_e( 'REST API', 'shetab-verify' ); ?></h2>
-            <p><?php esc_html_e( 'Confirm endpoint: POST /wp-json/shetab-verify/v1/confirm (requires secret).', 'shetab-verify' ); ?></p>
-            <p><?php esc_html_e( 'Status endpoint: GET /wp-json/shetab-verify/v1/status?order_id=123', 'shetab-verify' ); ?></p>
-
-            <h2><?php esc_html_e( 'Diagnostics', 'shetab-verify' ); ?></h2>
-            <div style="margin-bottom:1rem;">
-                <form method="post" style="display:inline-block;margin-right:1rem;">
-                    <?php wp_nonce_field( 'shetab_verify_admin' ); ?>
-                    <input type="hidden" name="shetab_action" value="run_diagnostics">
-                    <?php submit_button( __( 'Run gateway diagnostics', 'shetab-verify' ), 'secondary', '', false ); ?>
-                </form>
-                <form method="post" style="display:inline-block;">
-                    <?php wp_nonce_field( 'shetab_verify_admin' ); ?>
-                    <input type="hidden" name="shetab_action" value="create_test_order">
-                    <?php submit_button( __( 'Create test order & cart', 'shetab-verify' ), 'secondary', '', false ); ?>
+                    <p style="margin-top:20px;"><button type="submit" class="shetab-btn"><?php echo 'ذخیره کلید مخفی'; ?></button></p>
                 </form>
             </div>
 
-            <?php $diag = get_transient( 'shetab_verify_debug_available' ); ?>
-            <div style="background:#fff;padding:12px;border:1px solid #ddd;max-width:900px;">
-                <strong><?php esc_html_e( 'Last diagnostics', 'shetab-verify' ); ?>:</strong>
-                <?php if ( empty( $diag ) ) : ?>
-                    <p><?php esc_html_e( 'No diagnostics run yet.', 'shetab-verify' ); ?></p>
-                <?php else : ?>
-                    <p><strong><?php esc_html_e( 'Time', 'shetab-verify' ); ?>:</strong> <?php echo esc_html( $diag['time'] ?? '' ); ?></p>
-                    <p><strong><?php esc_html_e( 'shetab_verify present (available)', 'shetab-verify' ); ?>:</strong> <?php echo ! empty( $diag['found_available'] ) ? esc_html__( 'Yes', 'shetab-verify' ) : esc_html__( 'No', 'shetab-verify' ); ?></p>
-                    <p><strong><?php esc_html_e( 'Available gateways', 'shetab-verify' ); ?>:</strong> <?php echo esc_html( implode( ', ', $diag['available'] ?? array() ) ); ?></p>
+            <div class="shetab-card">
+                <h2><?php echo 'آدرس‌های API'; ?></h2>
+                <div class="shetab-form-group">
+                    <label><?php echo 'تایید پرداخت (Confirm):'; ?></label>
+                    <div class="shetab-api-info">
+                        <code><?php echo esc_html($confirm_api_url); ?></code>
+                        <button type="button" class="shetab-copy-btn" onclick="copyToClipboard('<?php echo esc_js($confirm_api_url); ?>')"><?php echo 'کپی'; ?></button>
+                    </div>
+                    <div class="shetab-qr-container" style="display:inline-flex; margin-right:20px;">
+                        <img class="shetab-qr-image" src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=<?php echo urlencode($confirm_api_url); ?>" width="100">
+                    </div>
+                </div>
+                <div class="shetab-form-group">
+                    <label><?php echo 'وضعیت پرداخت (Status):'; ?></label>
+                    <div class="shetab-api-info">
+                        <code><?php echo esc_html($status_api_url); ?></code>
+                        <button type="button" class="shetab-copy-btn" onclick="copyToClipboard('<?php echo esc_js($status_api_url); ?>')"><?php echo 'کپی'; ?></button>
+                    </div>
+                    <div class="shetab-qr-container" style="display:inline-flex;">
+                        <img class="shetab-qr-image" src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=<?php echo urlencode($status_api_url); ?>" width="100">
+                    </div>
+                </div>
+            </div>
 
-                    <p><strong><?php esc_html_e( 'shetab_verify present (registered)', 'shetab-verify' ); ?>:</strong> <?php echo ! empty( $diag['found_registered'] ) ? esc_html__( 'Yes', 'shetab-verify' ) : esc_html__( 'No', 'shetab-verify' ); ?></p>
-                    <p><strong><?php esc_html_e( 'Registered gateway classes (filter)', 'shetab-verify' ); ?>:</strong> <?php echo esc_html( implode( ', ', $diag['registered_gateways'] ?? array() ) ); ?></p>
+            <div class="shetab-card">
+                <h2><?php echo 'افزودن کارت بانکی جدید'; ?></h2>
+                <form method="post">
+                    <?php wp_nonce_field( 'shetab_verify_admin' ); ?>
+                    <input type="hidden" name="shetab_action" value="add_card">
+                    <div class="shetab-form-group">
+                        <label for="label"><?php echo 'نام/برچسب کارت:'; ?></label>
+                        <input name="label" id="label" type="text" required placeholder="مثلا: کارت مدیریت">
+                    </div>
+                    <div class="shetab-form-group">
+                        <label for="card_number"><?php echo 'شماره ۱۶ رقمی کارت:'; ?></label>
+                        <input name="card_number" id="card_number" type="text" maxlength="16" required placeholder="0000000000000000">
+                    </div>
+                    <div class="shetab-form-group">
+                        <label for="max_deposits_count"><?php echo 'حداکثر تعداد تراکنش:'; ?></label>
+                        <input name="max_deposits_count" id="max_deposits_count" type="number" min="0" value="0">
+                        <p class="description"><?php echo '۰ به معنی نامحدود'; ?></p>
+                    </div>
+                    <div class="shetab-form-group">
+                        <label for="max_total_amount"><?php echo 'حداکثر مبلغ کل (تومان):'; ?></label>
+                        <input name="max_total_amount" id="max_total_amount" type="number" min="0" value="0">
+                        <p class="description"><?php echo '۰ به معنی نامحدود'; ?></p>
+                    </div>
+                    <div class="shetab-form-group">
+                        <label for="reset_period"><?php echo 'دوره بازنشانی محدودیت:'; ?></label>
+                        <select name="reset_period" id="reset_period">
+                            <option value="none"><?php echo 'بدون بازنشانی (همیشگی)'; ?></option>
+                            <option value="daily"><?php echo 'روزانه'; ?></option>
+                            <option value="monthly"><?php echo 'ماهانه'; ?></option>
+                        </select>
+                    </div>
+                    <div class="shetab-form-group">
+                        <label><input name="active" type="checkbox" checked> <?php echo 'کارت فعال باشد'; ?></label>
+                    </div>
+                    <button type="submit" class="shetab-btn"><?php echo 'افزودن کارت'; ?></button>
+                </form>
+            </div>
 
-                    <?php if ( ! empty( $diag['filter_invoked_recently'] ) ) : ?>
-                        <p style="color:#080;"><strong><?php esc_html_e( 'Gateway registration filter invoked recently', 'shetab-verify' ); ?></strong></p>
-                    <?php endif; ?>
-
-                    <?php if ( ! empty( $diag['available_filter_called_recently'] ) ) : ?>
-                        <p style="color:#080;"><strong><?php esc_html_e( 'woocommerce_available_payment_gateways filter ran recently', 'shetab-verify' ); ?></strong></p>
-                    <?php endif; ?>
-                    <?php if ( ! empty( $diag['available_filter_last_added'] ) ) : ?>
-                        <p><strong><?php esc_html_e( 'Fallback filter last added gateway', 'shetab-verify' ); ?>:</strong> <?php echo esc_html( $diag['available_filter_last_added'] ); ?></p>
-                    <?php endif; ?>
-
-                    <?php if ( ! empty( $diag['store_api_last_injected'] ) || ! empty( $diag['store_api_seen'] ) ) : ?>
-                        <h4><?php esc_html_e( 'WooCommerce Blocks store API', 'shetab-verify' ); ?></h4>
-                        <?php if ( ! empty( $diag['store_api_last_injected'] ) ) : ?>
-                            <p><strong><?php esc_html_e( 'ShetabVerify injected on route', 'shetab-verify' ); ?>:</strong> <?php echo esc_html( $diag['store_api_route'] ?? '' ); ?></p>
-                            <p><strong><?php esc_html_e( 'Injection time', 'shetab-verify' ); ?>:</strong> <?php echo esc_html( $diag['store_api_last_injected'] ); ?></p>
+            <div class="shetab-card">
+                <h2><?php echo 'کارت‌های موجود (Existing Cards)'; ?></h2>
+                <table class="shetab-table">
+                    <thead>
+                        <tr>
+                            <th><?php echo 'شناسه'; ?></th>
+                            <th><?php echo 'برچسب'; ?></th>
+                            <th><?php echo 'شماره کارت کامل'; ?></th>
+                            <th><?php echo 'محدودیت (تعداد / مبلع)'; ?></th>
+                            <th><?php echo 'وضعیت'; ?></th>
+                            <th><?php echo 'عملیات'; ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if ( empty( $cards ) ) : ?>
+                            <tr><td colspan="6" style="text-align:center; padding: 20px;"><?php echo 'هیچ کارتی تنظیم نشده است.'; ?></td></tr>
                         <?php else : ?>
-                            <p><strong><?php esc_html_e( 'Store API reported the gateway already', 'shetab-verify' ); ?>:</strong> <?php echo esc_html( $diag['store_api_seen'] ); ?></p>
+                            <?php foreach ( $cards as $c ) : ?>
+                                <?php $full_number = ShetabVerify_Utils::decrypt_card_number($c->encrypted_number); ?>
+                                <tr>
+                                    <td><?php echo esc_html( $c->id ); ?></td>
+                                    <td><?php echo esc_html( $c->label ); ?></td>
+                                    <td>
+                                        <div style="direction:ltr; text-align:right;">
+                                            <?php echo esc_html( $full_number ); ?>
+                                            <button type="button" class="shetab-copy-btn" onclick="copyToClipboard('<?php echo esc_js($full_number); ?>')" style="padding: 2px 5px; font-size: 0.7rem;">کپی</button>
+                                        </div>
+                                    </td>
+                                    <td><?php echo esc_html( $c->max_deposits_count ); ?> / <?php echo esc_html( number_format_i18n( $c->max_total_amount ) ); ?></td>
+                                    <td><?php echo $c->active ? '<span style="color:#38a169;">✅ فعال</span>' : '<span style="color:#e53e3e;">❌ غیرفعال</span>'; ?></td>
+                                    <td>
+                                        <form method="post" onsubmit="return confirm('آیا از حذف این کارت مطمئن هستید؟');">
+                                            <?php wp_nonce_field( 'shetab_verify_admin' ); ?>
+                                            <input type="hidden" name="shetab_action" value="delete_card">
+                                            <input type="hidden" name="delete_card" value="<?php echo esc_attr( $c->id ); ?>">
+                                            <button type="submit" class="shetab-copy-btn shetab-btn-danger"><?php echo 'حذف'; ?></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
                         <?php endif; ?>
-                    <?php else : ?>
-                        <p style="color:#c60;"><strong><?php esc_html_e( 'Blocks store API has not returned ShetabVerify yet; this may be why the new checkout never shows the option.', 'shetab-verify' ); ?></strong></p>
-                    <?php endif; ?>
-
-                    <?php if ( ! empty( $diag['is_available_debug'] ) ) : ?>
-                        <h4><?php esc_html_e( 'Last is_available() check', 'shetab-verify' ); ?></h4>
-                        <p><strong><?php esc_html_e( 'Time', 'shetab-verify' ); ?>:</strong> <?php echo esc_html( $diag['is_available_debug']['time'] ?? '' ); ?></p>
-                        <p><strong><?php esc_html_e( 'enabled option', 'shetab-verify' ); ?>:</strong> <?php echo esc_html( $diag['is_available_debug']['enabled_option'] ?? '' ); ?></p>
-                        <p><strong><?php esc_html_e( 'cards_count', 'shetab-verify' ); ?>:</strong> <?php echo esc_html( $diag['is_available_debug']['cards_count'] ?? 0 ); ?></p>
-                        <p><strong><?php esc_html_e( 'cart_total', 'shetab-verify' ); ?>:</strong> <?php echo esc_html( $diag['is_available_debug']['cart_total'] ?? 'n/a' ); ?></p>
-                        <p><strong><?php esc_html_e( 'is_admin', 'shetab-verify' ); ?>:</strong> <?php echo ! empty( $diag['is_available_debug']['is_admin'] ) ? esc_html__( 'Yes', 'shetab-verify' ) : esc_html__( 'No', 'shetab-verify' ); ?></p>
-                        <p><strong><?php esc_html_e( 'result', 'shetab-verify' ); ?>:</strong> <?php echo ! empty( $diag['is_available_debug']['result'] ) ? esc_html__( 'Available', 'shetab-verify' ) : esc_html__( 'Not available', 'shetab-verify' ); ?></p>
-                    <?php endif; ?>
-
-                    <?php if ( ! empty( $diag['error'] ) ) : ?><p style="color:#900;"><strong><?php esc_html_e( 'Error', 'shetab-verify' ); ?>:</strong> <?php echo esc_html( $diag['error'] ); ?></p><?php endif; ?>
-                <?php endif; ?>
+                    </tbody>
+                </table>
             </div>
 
-            <?php $test_order = get_transient( 'shetab_verify_test_order_info' ); ?>
-            <div style="background:#f9f9f9;padding:12px;border:1px solid #ddd;max-width:900px;margin-top:2rem;">
-                <strong><?php esc_html_e( 'Test order info', 'shetab-verify' ); ?>:</strong>
-                <?php if ( empty( $test_order ) ) : ?>
-                    <p><?php esc_html_e( 'No test order created yet. Click "Create test order & cart" above.', 'shetab-verify' ); ?></p>
-                <?php else : ?>
-                    <p><strong><?php esc_html_e( 'Product ID', 'shetab-verify' ); ?>:</strong> <?php echo esc_html( $test_order['product_id'] ?? '' ); ?></p>
-                    <p><strong><?php esc_html_e( 'Cart total', 'shetab-verify' ); ?>:</strong> <?php echo esc_html( $test_order['cart_total'] ?? '' ); ?></p>
-                    <p><a href="<?php echo esc_url( $test_order['checkout_url'] ?? '' ); ?>" class="button" target="_blank"><?php esc_html_e( 'Visit checkout (in new tab)', 'shetab-verify' ); ?></a></p>
-                    <p style="font-size:0.9em;color:#666;"><strong><?php esc_html_e( 'Note', 'shetab-verify' ); ?>:</strong> <?php esc_html_e( 'After visiting checkout, return here and run diagnostics again to see if the gateway was available.', 'shetab-verify' ); ?></p>
-                <?php endif; ?>
+            <div class="shetab-card">
+                <h2><?php echo 'اطلاعات پشتیبانی'; ?></h2>
+                <form method="post">
+                    <?php wp_nonce_field( 'shetab_verify_admin' ); ?>
+                    <input type="hidden" name="shetab_action" value="save_support_info">
+                    <div class="shetab-form-group">
+                        <label><?php echo 'آیدی واتس‌اپ (مثال: 989123456789):'; ?></label>
+                        <input name="support_whatsapp" type="text" value="<?php echo esc_attr(get_option('shetab_support_whatsapp')); ?>" placeholder="989...">
+                    </div>
+                    <div class="shetab-form-group">
+                        <label><?php echo 'آیدی تلگرام:'; ?></label>
+                        <input name="support_telegram" type="text" value="<?php echo esc_attr(get_option('shetab_support_telegram')); ?>" placeholder="@username">
+                    </div>
+                    <div class="shetab-form-group">
+                        <label><?php echo 'متن مدیر جهت نمایش به کاربر:'; ?></label>
+                        <textarea name="support_manager_text" rows="4" style="max-width:600px;"><?php echo esc_textarea(get_option('shetab_support_manager_text')); ?></textarea>
+                    </div>
+                    <button type="submit" class="shetab-btn"><?php echo 'ذخیره اطلاعات پشتیبانی'; ?></button>
+                </form>
             </div>
         </div>
+
+        <script>
+        function copyToClipboard(text) {
+            var tempInput = document.createElement("input");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            alert("در کلیپبورد کپی شد: " + text);
+        }
+        </script>
         <?php
     }
 }

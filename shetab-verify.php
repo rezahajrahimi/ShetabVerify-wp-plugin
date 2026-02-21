@@ -70,7 +70,7 @@ require_once SSV_PLUGIN_DIR . 'includes/gateway/class-wc-gateway-shetab.php';
             }
             $cards = method_exists( 'ShetabVerify_DB', 'get_active_cards' ) ? ShetabVerify_DB::get_active_cards() : array();
             if ( empty( $cards ) ) {
-                echo '<div class="notice notice-warning"><p>' . esc_html__( 'ShetabVerify is enabled but no destination bank cards are configured — add at least one card in ShetabVerify settings to make the gateway appear on checkout.', 'shetab-verify' ) . '</p></div>';
+                echo '<div class="notice notice-warning"><p>' . 'درگاه ShetabVerify فعال است اما هیچ کارت بانکی تنظیم نشده است — برای نمایش درگاه در تسویه حساب، حداقل یک کارت را در تنظیمات مدیریت شتاب تعریف کنید.' . '</p></div>';
             }
         } );
 

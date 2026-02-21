@@ -45,7 +45,19 @@ class ShetabVerify_Utils {
             return false;
         }
         $hash = wp_hash_password( $secret );
-        return update_option( 'shetab_api_secret_hash', $hash );
+        update_option( 'shetab_api_secret_hash', $hash );
+        
+        // Store encrypted version for display as requested by user
+        $encrypted = self::encrypt_card_number( $secret );
+        return update_option( 'shetab_api_secret_encrypted', $encrypted );
+    }
+
+    public static function get_api_secret() {
+        $encrypted = get_option( 'shetab_api_secret_encrypted' );
+        if ( empty( $encrypted ) ) {
+            return '';
+        }
+        return self::decrypt_card_number( $encrypted );
     }
 
     public static function verify_api_secret( $provided ) {
