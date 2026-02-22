@@ -13,6 +13,7 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
         $this->has_fields         = false;
         $this->method_title       = 'کارت به کارت (تایید خودکار)';
         $this->method_description = 'کارت به کارت با استفاده از درگاه شتاب (تایید خودکار تراکنش).';
+        $this->icon               = SSV_PLUGIN_URL . 'public/assets/images/logo.png';
 
         $this->supports = array( 'products', 'refunds' );
 

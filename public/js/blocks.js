@@ -40,7 +40,14 @@
 
         const Label = ( props ) => {
             const { PaymentMethodLabel } = props.components;
-            return window.wp.element.createElement( PaymentMethodLabel, { text: label } );
+            const labelText = window.wp.htmlEntities.decodeEntities( settings.title || 'کارت به کارت' );
+            if ( settings.logo_url ) {
+                return window.wp.element.createElement( 'div', { style: { display: 'flex', alignItems: 'center', gap: '10px' } },
+                    window.wp.element.createElement( 'img', { src: settings.logo_url, alt: labelText, style: { height: '32px', width: 'auto' } } ),
+                    window.wp.element.createElement( PaymentMethodLabel, { text: labelText } )
+                );
+            }
+            return window.wp.element.createElement( PaymentMethodLabel, { text: labelText } );
         };
 
         window.wc.wcBlocksRegistry.registerPaymentMethod( {

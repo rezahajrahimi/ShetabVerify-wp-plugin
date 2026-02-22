@@ -233,7 +233,10 @@ class ShetabVerify_Admin {
         </style>
 
         <div class="shetab-admin-wrap">
-            <h1><?php echo 'مدیریت ShetabVerify'; ?></h1>
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 30px;">
+                <img src="<?php echo SSV_PLUGIN_URL . 'public/assets/images/logo.png'; ?>" style="height: 60px; width: auto;" alt="Shetab Logo">
+                <h1 style="margin: 0; padding: 0;"><?php echo 'مدیریت ShetabVerify'; ?></h1>
+            </div>
 
             <?php if ( get_option( 'permalink_structure' ) === '' ) : ?>
                 <div class="notice notice-error" style="border-right-color: #d63638; background: #fff; padding: 15px; border-right-width: 4px; box-shadow: 0 1px 1px rgba(0,0,0,.04); margin: 20px 0;">
