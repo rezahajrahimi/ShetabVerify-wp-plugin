@@ -74,6 +74,7 @@ class WC_ShetabVerify_Blocks_Support extends Automattic\WooCommerce\Blocks\Payme
             'title'       => $this->gateway->title,
             'description' => $this->gateway->description,
             'supports'    => $this->gateway->supports,
+            'logo_url'    => $this->gateway->icon,
         );
     }
 }
