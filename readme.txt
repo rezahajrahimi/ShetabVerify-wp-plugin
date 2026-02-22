@@ -22,6 +22,17 @@ Automate bank transfer (Card-to-Card) confirmations in WooCommerce using unique 
 *   **Security**: Uses encrypted storage for card numbers and secure API secrets for communication.
 *   **WooCommerce Blocks Support**: Fully compatible with the modern WooCommerce Checkout Block.
 
+== توضیحات فارسی (Persian Description) ==
+
+**شتاب‌وریفای (ShetabVerify)** یک راهکار پیشرفته برای فروشگاه‌های وردپرسی در ایران است که از روش "کارت به کارت" برای تسویه حساب استفاده می‌کنند. با استفاده از این افزونه و اپلیکیشن همراه آن، دیگر نیازی به تایید دستی فیش‌های واریزی ندارید.
+
+### ویژگی‌های کلیدی:
+*   **تولید شناسه پرداخت منحصر به فرد**: برای هر سفارش یک مبلغ جزئی (مثلاً ۱ تا ۹۹۹ تومان) به مبلغ اصلی اضافه می‌شود تا تراکنش‌های مشابه از هم تفکیک شوند.
+*   **تایید خودکار تراکنش**: از طریق اتصال به اپلیکیشن موبایل، به محض دریافت پیامک واریز، وضعیت سفارش به صورت خودکار تغییر می‌کند.
+*   **مدیریت کارت‌ها**: امکان تعریف چندین کارت بانکی با محدودیت تعداد و مبلغ تراکنش روزانه و ماهانه.
+*   **پشتیبانی از جستجوی فارسی**: بهینه‌سازی شده برای عباراتی چون "درگاه کارت به کارت"، "تایید خودکار واریز" و "شتاب".
+*   **سازگاری با Checkout Blocks**: کاملاً هماهنگ با نسخه جدید تسویه حساب وردپرس.
+
 == Installation ==
 
 1. Upload the plugin files to the `/wp-content/plugins/shetab-verify` directory.
