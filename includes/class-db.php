@@ -137,9 +137,27 @@ class ShetabVerify_DB {
             $where_date = $wpdb->prepare( "created_at >= %s", $start );
         }
 
-        $sql = $wpdb->prepare( "SELECT COUNT(*) as cnt, COALESCE(SUM(unique_amount),0) as total FROM {$table} WHERE card_id = %d AND status IN ('pending','confirmed') AND %s", absint( $card_id ), $where_date );
-        $row = $wpdb->get_row( $sql );
-        return array( 'count' => (int) $row->cnt, 'total' => (int) $row->total );
+        // Only count 'confirmed' for usage tracking (actual money received)
+        // Fix: Use direct interpolation for $where_date because $wpdb->prepare wraps %s in quotes
+        $sql = $wpdb->prepare( "SELECT order_id, unique_amount, confirmed_at FROM {$table} WHERE card_id = %d AND status = 'confirmed' AND {$where_date}", absint( $card_id ) );
+        $rows = $wpdb->get_results( $sql );
+        
+        $total_amount = 0;
+        $order_details = array();
+        foreach ( $rows as $r ) {
+            $total_amount += $r->unique_amount;
+            $order_details[] = array(
+                'id' => (int) $r->order_id,
+                'amount' => (int) $r->unique_amount,
+                'date' => $r->confirmed_at
+            );
+        }
+
+        return array( 
+            'count' => count( $rows ), 
+            'total' => (int) $total_amount,
+            'orders' => $order_details
+        );
     }
 
     public static function mark_transaction_confirmed( $transaction_id, $remote_ref = '', $raw_payload = null ) {
@@ -150,10 +168,14 @@ class ShetabVerify_DB {
             'remote_ref' => sanitize_text_field( $remote_ref ),
             'confirmed_at' => current_time( 'mysql' ),
         );
+        $formats = array( '%s', '%s', '%s' );
+
         if ( $raw_payload ) {
             $update['raw_payload'] = maybe_serialize( $raw_payload );
+            $formats[] = '%s';
         }
-        $wpdb->update( $table, $update, array( 'id' => absint( $transaction_id ) ), array( '%s', '%s', '%s', '%s' ), array( '%d' ) );
+
+        $wpdb->update( $table, $update, array( 'id' => absint( $transaction_id ) ), $formats, array( '%d' ) );
     }
 
     public static function cleanup_expired_transactions() {

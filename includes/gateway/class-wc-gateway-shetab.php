@@ -201,8 +201,15 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
     }
 
     public static function render_payment_instructions( $order_id ) {
+        $order = wc_get_order( $order_id );
+        if ( ! $order ) return;
+
         $txn = ShetabVerify_DB::get_transaction_by_order_id( $order_id );
-        if ( ! $txn || $txn->status !== 'pending' ) {
+        
+        // Always try to show receipts if they exist regardless of transaction status
+        $receipts = $order->get_meta( '_shetab_receipts' );
+
+        if ( ! $txn ) {
             return;
         }
 
@@ -245,30 +252,75 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
             .shetab-support-item img { vertical-align: middle; margin-left: 5px; width: 20px; }
             .shetab-manager-msg { font-style: italic; color: #4a5568; margin-top: 10px; padding: 10px; border-right: 4px solid #3182ce; background: #fff; }
 
-            /* Hide bulky WC elements for cleaner focus on payment details */
+            /* Upload Styles */
+            .shetab-upload-box { background: #fffaf0; border: 1px dashed #ed8936; padding: 20px; border-radius: 10px; margin-top: 20px; text-align: center; }
+            .shetab-upload-btn { background: #ed8936; color: #fff; padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; margin-top: 10px; display: inline-block; }
+            .shetab-upload-btn:hover { background: #dd6b20; }
+            .shetab-receipt-preview { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; justify-content: center; }
+            .shetab-receipt-preview img { width: 80px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; }
+
+            /* Hide bulky WC elements ONLY while payment is pending/on-hold */
+            <?php if ( $order->get_status() === 'on-hold' || $txn->status === 'pending' ) : ?>
             .woocommerce-order-details, 
             .woocommerce-customer-details {
                 display: none !important;
             }
+            <?php endif; ?>
         </style>
 
         <div class="shetab-instructions">
-            <h2><?php echo 'اطلاعات پرداخت'; ?></h2>
-            <p><?php echo 'لطفاً مبلغ دقیق زیر را به شماره کارت اعلام شده منتقل نمایید:'; ?></p>
-            
-            <p class="shetab-amount"><?php printf( 'مبلغ: %s تومان', number_format_i18n( $txn->unique_amount ) ); ?></p>
-            
-            <?php if ( $card ) : ?>
-                <div class="shetab-card-box">
-                    <span><?php echo 'شماره کارت: '; ?></span>
-                    <strong style="letter-spacing: 2px;"><?php echo esc_html( $full_card_number ); ?></strong>
-                    <p style="font-size: 0.9rem; margin-top: 5px; color: #4a5568;"><?php echo esc_html( $card->label ); ?></p>
+            <h2><?php echo ( in_array( $order->get_status(), array( 'processing', 'completed' ) ) ) ? 'رسید پرداخت شما' : 'اطلاعات پرداخت'; ?></h2>
+
+            <?php if ( ! empty( $receipts ) ) : ?>
+                <div style="background: #f0fff4; border: 1px solid #38a169; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <div style="font-size: 2.5rem; margin-bottom: 10px;">⏳</div>
+                    <strong style="color: #2f855a; font-size: 1.15rem;"><?php echo 'فیش واریزی شما دریافت شد و در انتظار تایید مدیریت است.'; ?></strong>
+                    <p style="margin-top: 10px; color: #4a5568;"><?php echo 'پس از تایید کارشناسان، سفارش شما وارد مرحله ارسال خواهد شد.'; ?></p>
                 </div>
             <?php endif; ?>
+            
+            <?php if ( $txn->status === 'pending' && empty( $receipts ) ) : ?>
+                <p><?php echo 'لطفاً مبلغ دقیق زیر را به شماره کارت اعلام شده منتقل نمایید:'; ?></p>
+                
+                <p class="shetab-amount"><?php printf( 'مبلغ: %s تومان', number_format_i18n( $txn->unique_amount ) ); ?></p>
+                
+                <?php if ( $card ) : ?>
+                    <div class="shetab-card-box">
+                        <span><?php echo 'شماره کارت: '; ?></span>
+                        <strong style="letter-spacing: 2px;"><?php echo esc_html( $full_card_number ); ?></strong>
+                        <p style="font-size: 0.9rem; margin-top: 5px; color: #4a5568;"><?php echo esc_html( $card->label ); ?></p>
+                    </div>
+                <?php endif; ?>
 
-            <p class="shetab-countdown" id="shetab-countdown-<?php echo esc_attr( $txn->id ); ?>">
-                <?php echo sprintf( 'زمان باقیمانده برای انتقال: %s', gmdate( 'i:s', $remaining ) ); ?>
-            </p>
+                <p class="shetab-countdown" id="shetab-countdown-<?php echo esc_attr( $txn->id ); ?>">
+                    <?php echo sprintf( 'زمان باقیمانده برای انتقال: %s', gmdate( 'i:s', $remaining ) ); ?>
+                </p>
+
+                <!-- Receipt Upload Form -->
+                <?php if ( empty( $receipts ) ) : ?>
+                    <div class="shetab-upload-box" id="shetab-upload-container">
+                        <strong><?php echo 'آپلود تصویر فیش واریزی (اختیاری):'; ?></strong>
+                        <p style="font-size: 0.85rem; color: #718096; margin-bottom: 10px;"><?php echo 'اگر تراکنش شما تایید نشد، می‌توانید تصویر فیش را اینجا آپلود کنید.'; ?></p>
+                        <input type="file" id="shetab-receipt-files" multiple accept="image/*" style="display:none;">
+                        <label for="shetab-receipt-files" class="shetab-upload-btn"><?php echo 'انتخاب تصویر فیش'; ?></label>
+                        <button type="button" id="shetab-do-upload" class="shetab-upload-btn" style="display:none; background: #38a169;"><?php echo 'ارسال فیش ها'; ?></button>
+                        <div id="file-list-preview" class="shetab-receipt-preview"></div>
+                    </div>
+                <?php endif; ?>
+            <?php endif; ?>
+
+            <?php if ( ! empty( $receipts ) ) : ?>
+                <div style="margin-top: 20px; border-top: 1px solid #edf2f7; padding-top: 15px;">
+                    <strong><?php echo 'تصاویر رسید آپلود شده:'; ?></strong>
+                    <div class="shetab-receipt-preview">
+                        <?php foreach ( $receipts as $aid ) : ?>
+                            <a href="<?php echo esc_url( wp_get_attachment_url( $aid ) ); ?>" target="_blank">
+                                <?php echo wp_get_attachment_image( $aid, 'thumbnail' ); ?>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
 
             <div class="shetab-support-info">
                 <strong><?php echo 'راهنمایی و پشتیبانی:'; ?></strong>
@@ -301,15 +353,71 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
             var orderId = <?php echo (int) $order_id; ?>;
             var el = document.getElementById('shetab-countdown-' + txnId);
             var statusUrl = '<?php echo esc_url( get_rest_url( null, "shetab-verify/v1/status" ) ); ?>';
+            var uploadUrl = '<?php echo esc_url( get_rest_url( null, "shetab-verify/v1/upload-receipt" ) ); ?>';
 
-            function tick(){
-                if (remaining <= 0) { el.textContent = '<?php echo "زمان شما به پایان رسیده است."; ?>'; return; }
-                remaining--; 
-                var mm = Math.floor(remaining/60); 
-                var ss = remaining % 60; 
-                el.textContent = '<?php echo "زمان باقیمانده برای انتقال: "; ?> ' + (mm<10?('0'+mm):mm) + ':' + (ss<10?('0'+ss):ss);
+            // Timer Tick
+            if (el) {
+                function tick(){
+                    if (remaining <= 0) { el.textContent = '<?php echo "زمان شما به پایان رسیده است."; ?>'; return; }
+                    remaining--; 
+                    var mm = Math.floor(remaining/60); 
+                    var ss = remaining % 60; 
+                    el.textContent = '<?php echo "زمان باقیمانده برای انتقال: "; ?> ' + (mm<10?('0'+mm):mm) + ':' + (ss<10?('0'+ss):ss);
+                }
+                setInterval(tick, 1000);
             }
-            setInterval(tick, 1000);
+
+            // Upload Logic
+            var fileInput = document.getElementById('shetab-receipt-files');
+            var uploadBtn = document.getElementById('shetab-do-upload');
+            var previewBlock = document.getElementById('file-list-preview');
+
+            if (fileInput) {
+                fileInput.onchange = function() {
+                    previewBlock.innerHTML = '';
+                    if (this.files.length > 0) {
+                        uploadBtn.style.display = 'inline-block';
+                        for (var i=0; i<this.files.length; i++) {
+                            var img = document.createElement('img');
+                            img.src = URL.createObjectURL(this.files[i]);
+                            previewBlock.appendChild(img);
+                        }
+                    } else {
+                        uploadBtn.style.display = 'none';
+                    }
+                };
+            }
+
+            if (uploadBtn) {
+                uploadBtn.onclick = function() {
+                    var formData = new FormData();
+                    formData.append('order_id', orderId);
+                    for (var i=0; i<fileInput.files.length; i++) {
+                        formData.append('receipts[]', fileInput.files[i]);
+                    }
+                    
+                    this.disabled = true;
+                    this.textContent = 'در حال ارسال...';
+
+                    fetch(uploadUrl, { method: 'POST', body: formData })
+                        .then(function(r){ return r.json(); })
+                        .then(function(data){ 
+                            if (data.success) {
+                                alert(data.message);
+                                window.location.reload();
+                            } else {
+                                alert('خطا: ' + (data.message || 'مشکلی در آپلود پیش آمد.'));
+                                uploadBtn.disabled = false;
+                                uploadBtn.textContent = 'ارسال فیش ها';
+                            }
+                        })
+                        .catch(function(err){
+                            console.error(err);
+                            alert('خطای سیستمی در آپلود');
+                            uploadBtn.disabled = false;
+                        });
+                };
+            }
 
             // polling status every 5s with correct REST URL
             setInterval(function(){
