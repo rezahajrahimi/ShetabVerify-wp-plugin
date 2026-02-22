@@ -21,7 +21,7 @@ class ShetabVerify_Activator {
         if ( false === get_option( $option_name ) ) {
             $defaults = array(
                 'enabled' => 'yes',
-                'title'   => __( 'Bank transfer (ShetabVerify)', 'shetab-verify' ),
+                'title'   => __( 'Bank transfer (ShetabVerify)', 'shetabverify' ),
             );
             add_option( $option_name, $defaults );
         }

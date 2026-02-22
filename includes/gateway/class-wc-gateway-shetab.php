@@ -137,26 +137,26 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
         if ( $description = $this->get_description() ) {
             echo wpautop( wp_kses_post( $description ) );
         }
-        echo '<p>' . esc_html__( 'After checkout you will be shown a bank card number and an amount to transfer (including a unique suffix).', 'shetab-verify' ) . '</p>';
+        echo '<p>' . esc_html__( 'After checkout you will be shown a bank card number and an amount to transfer (including a unique suffix).', 'shetabverify' ) . '</p>';
     }
 
     public function process_payment( $order_id ) {
         $order = wc_get_order( $order_id );
         if ( ! $order ) {
-            wc_add_notice( __( 'Invalid order.', 'shetab-verify' ), 'error' );
+            wc_add_notice( __( 'Invalid order.', 'shetabverify' ), 'error' );
             return array( 'result' => 'failure' );
         }
 
         $original_amount = (int) round( $order->get_total() );
         $unique_amount   = ShetabVerify_Utils::generate_unique_amount( $original_amount );
         if ( ! $unique_amount ) {
-            wc_add_notice( __( 'Unable to generate a unique payment amount. Please try again.', 'shetab-verify' ), 'error' );
+            wc_add_notice( __( 'Unable to generate a unique payment amount. Please try again.', 'shetabverify' ), 'error' );
             return array( 'result' => 'failure' );
         }
 
         $cards = ShetabVerify_DB::get_active_cards();
         if ( empty( $cards ) ) {
-            wc_add_notice( __( 'No destination bank cards configured. Please contact the store owner.', 'shetab-verify' ), 'error' );
+            wc_add_notice( __( 'No destination bank cards configured. Please contact the store owner.', 'shetabverify' ), 'error' );
             return array( 'result' => 'failure' );
         }
 
@@ -173,7 +173,7 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
         }
 
         if ( ! $card ) {
-            wc_add_notice( __( 'No available bank cards are currently accepting payments. Please contact the store owner.', 'shetab-verify' ), 'error' );
+            wc_add_notice( __( 'No available bank cards are currently accepting payments. Please contact the store owner.', 'shetabverify' ), 'error' );
             return array( 'result' => 'failure' );
         }
 
@@ -193,7 +193,7 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
         $order->save();
 
         // mark order pending/on-hold while waiting for transfer
-        $order->update_status( 'on-hold', __( 'Awaiting bank transfer (ShetabVerify).', 'shetab-verify' ) );
+        $order->update_status( 'on-hold', __( 'Awaiting bank transfer (ShetabVerify).', 'shetabverify' ) );
 
         return array(
             'result'   => 'success',
@@ -353,8 +353,8 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
             var txnId = <?php echo (int) $txn->id; ?>;
             var orderId = <?php echo (int) $order_id; ?>;
             var el = document.getElementById('shetab-countdown-' + txnId);
-            var statusUrl = '<?php echo esc_url( get_rest_url( null, "shetab-verify/v1/status" ) ); ?>';
-            var uploadUrl = '<?php echo esc_url( get_rest_url( null, "shetab-verify/v1/upload-receipt" ) ); ?>';
+            var statusUrl = '<?php echo esc_url( get_rest_url( null, "shetabverify/v1/status" ) ); ?>';
+            var uploadUrl = '<?php echo esc_url( get_rest_url( null, "shetabverify/v1/upload-receipt" ) ); ?>';
 
             // Timer Tick
             if (el) {

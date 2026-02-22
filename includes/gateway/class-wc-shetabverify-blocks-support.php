@@ -55,13 +55,13 @@ class WC_ShetabVerify_Blocks_Support extends Automattic\WooCommerce\Blocks\Payme
      */
     public function get_payment_method_script_handles() {
         wp_register_script(
-            'wc-shetab-verify-blocks-integration',
+            'wc-shetabverify-blocks-integration',
             plugins_url( 'public/js/blocks.js', SSV_PLUGIN_FILE ),
             array( 'wp-element', 'wp-html-entities', 'wc-blocks-registry', 'wc-settings' ),
             '1.0.0',
             true
         );
-        return array( 'wc-shetab-verify-blocks-integration' );
+        return array( 'wc-shetabverify-blocks-integration' );
     }
 
     /**

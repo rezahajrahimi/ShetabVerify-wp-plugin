@@ -195,7 +195,7 @@ class ShetabVerify_DB {
             if ( function_exists( 'wc_get_order' ) ) {
                 $order = wc_get_order( $r->order_id );
                 if ( $order && ! in_array( $order->get_status(), array( 'cancelled', 'processing', 'completed' ), true ) ) {
-                    $order->update_status( 'cancelled', __( 'Payment expired (ShetabVerify).', 'shetab-verify' ) );
+                    $order->update_status( 'cancelled', __( 'Payment expired (ShetabVerify).', 'shetabverify' ) );
                 }
             }
         }

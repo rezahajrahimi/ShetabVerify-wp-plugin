@@ -5,8 +5,8 @@
  * Description: WooCommerce payment gateway — Automated Card-to-Card transaction confirmation via mobile app.
  * Version:     0.1.0
  * Author:      Reza HajRahimi
- * Author URI:  http://verify.webdide.ir/
- * Text Domain: shetab-verify
+ * Author URI:  http://webdide.ir/
+ * Text Domain: shetabverify
  * Domain Path: /languages
  * License:     GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -38,14 +38,12 @@ add_action( 'plugins_loaded', 'shetab_verify_init' );
 // add_action( 'woocommerce_blocks_loaded', 'shetab_verify_woocommerce_block_support' );
 
 function shetab_verify_init() {
-    load_plugin_textdomain( 'shetab-verify', false, dirname( plugin_basename( SSV_PLUGIN_FILE ) ) . '/languages' );
-
     // Add a custom cron schedule for cleanup (every 5 minutes)
     add_filter( 'cron_schedules', function ( $schedules ) {
         if ( empty( $schedules['shetab_verify_every_5min'] ) ) {
             $schedules['shetab_verify_every_5min'] = array(
                 'interval' => 5 * MINUTE_IN_SECONDS,
-                'display'  => __( 'Every 5 Minutes', 'shetab-verify' ),
+                'display'  => __( 'Every 5 Minutes', 'shetabverify' ),
             );
         }
         return $schedules;
@@ -67,7 +65,7 @@ require_once SSV_PLUGIN_DIR . 'includes/gateway/class-wc-gateway-shetab.php';
                 return;
             }
             $screen = get_current_screen();
-            if ( $screen && $screen->id === 'woocommerce_page_shetab-verify' ) {
+            if ( $screen && $screen->id === 'woocommerce_page_shetabverify' ) {
                 return; // Don't show on the plugin settings page itself
             }
             $gw_opts = get_option( 'woocommerce_shetab_verify_settings', array() );
@@ -76,7 +74,7 @@ require_once SSV_PLUGIN_DIR . 'includes/gateway/class-wc-gateway-shetab.php';
             }
             $cards = method_exists( 'ShetabVerify_DB', 'get_active_cards' ) ? ShetabVerify_DB::get_active_cards() : array();
             if ( empty( $cards ) ) {
-                echo '<div class="notice notice-warning"><p>' . esc_html__( 'ShetabVerify gateway is enabled but no active bank cards are configured. To show the gateway on checkout, please add at least one active card in Shetab Management.', 'shetab-verify' ) . '</p></div>';
+                echo '<div class="notice notice-warning"><p>' . esc_html__( 'ShetabVerify gateway is enabled but no active bank cards are configured. To show the gateway on checkout, please add at least one active card in Shetab Management.', 'shetabverify' ) . '</p></div>';
             }
         } );
 
@@ -104,18 +102,18 @@ require_once SSV_PLUGIN_DIR . 'includes/gateway/class-wc-gateway-shetab.php';
 
         // enqueue frontend/block assets
         // add_action( 'wp_enqueue_scripts', function() {
-        //     wp_register_script( 'shetab-verify-blocks', plugins_url( 'public/js/blocks.js', SSV_PLUGIN_FILE ), array(), SSV_VERSION, true );
-        //     wp_localize_script( 'shetab-verify-blocks', 'shetab_verify', array(
-        //         'rest_url' => esc_url_raw( rest_url( 'shetab-verify/v1' ) ),
+        //     wp_register_script( 'shetabverify-blocks', plugins_url( 'public/js/blocks.js', SSV_PLUGIN_FILE ), array(), SSV_VERSION, true );
+        //     wp_localize_script( 'shetabverify-blocks', 'shetab_verify', array(
+        //         'rest_url' => esc_url_raw( rest_url( 'shetabverify/v1' ) ),
         //         'gateway_id' => 'shetab_verify',
-        //         'gateway_title' => __( 'ShetabVerify', 'shetab-verify' ),
+        //         'gateway_title' => __( 'ShetabVerify', 'shetabverify' ),
         //     ) );
 
         //     // Add settings for blocks
         //     if ( function_exists( 'WC' ) && WC()->payment_gateways() ) {
         //         $gateway = WC()->payment_gateways()->payment_gateways()['shetab_verify'] ?? null;
         //         if ( $gateway ) {
-        //             wp_localize_script( 'shetab-verify-blocks', 'wc_shetab_verify_settings_params', array(
+        //             wp_localize_script( 'shetabverify-blocks', 'wc_shetab_verify_settings_params', array(
         //                 'title' => $gateway->get_title(),
         //                 'description' => $gateway->get_description(),
         //                 'supports' => $gateway->supports,
@@ -124,7 +122,7 @@ require_once SSV_PLUGIN_DIR . 'includes/gateway/class-wc-gateway-shetab.php';
         //     }
 
         //     if ( is_checkout() || is_account_page() || is_page() ) {
-        //         wp_enqueue_script( 'shetab-verify-blocks' );
+        //         wp_enqueue_script( 'shetabverify-blocks' );
         //     }
         // } );
 
@@ -142,8 +140,8 @@ require_once SSV_PLUGIN_DIR . 'includes/gateway/class-wc-gateway-shetab.php';
         // add_filter( 'woocommerce_get_settings_for_shetab_verify', function( $settings ) {
         //     return array_merge( $settings, array(
         //         'enabled' => 'yes',
-        //         'title' => __( 'Bank transfer (ShetabVerify)', 'shetab-verify' ),
-        //         'description' => __( 'Pay via bank transfer with unique suffix amount.', 'shetab-verify' ),
+        //         'title' => __( 'Bank transfer (ShetabVerify)', 'shetabverify' ),
+        //         'description' => __( 'Pay via bank transfer with unique suffix amount.', 'shetabverify' ),
         //         'supports' => array( 'products', 'refunds' ),
         //     ) );
         // } );
@@ -159,7 +157,7 @@ function shetab_verify_add_gateway( $gateways ) {
     $note = array( 'time' => current_time( 'mysql' ), 'incoming' => $gateways );
     set_transient( 'shetab_verify_filter_called', $note, 5 * MINUTE_IN_SECONDS );
     if ( function_exists( 'wc_get_logger' ) ) {
-        wc_get_logger()->debug( 'shetab_verify_add_gateway invoked; incoming: ' . wp_json_encode( $gateways ), array( 'source' => 'shetab-verify' ) );
+        wc_get_logger()->debug( 'shetab_verify_add_gateway invoked; incoming: ' . wp_json_encode( $gateways ), array( 'source' => 'shetabverify' ) );
     } else {
         error_log( 'shetab_verify_add_gateway invoked; incoming: ' . wp_json_encode( $gateways ) );
     }
@@ -188,7 +186,7 @@ function shetab_verify_force_available_gateway( $available ) {
         $available['shetab_verify'] = $gw;
         set_transient( 'shetab_verify_available_filter_added', current_time( 'mysql' ), 5 * MINUTE_IN_SECONDS );
         if ( function_exists( 'wc_get_logger' ) ) {
-            wc_get_logger()->debug( 'ShetabVerify fallback filter added the gateway to available_payment_gateways.', array( 'source' => 'shetab-verify' ) );
+            wc_get_logger()->debug( 'ShetabVerify fallback filter added the gateway to available_payment_gateways.', array( 'source' => 'shetabverify' ) );
         }
     }
 
@@ -279,7 +277,7 @@ function shetab_verify_extend_store_api_payment_methods( $response, $server, $re
 
     // Log the modified data
     if ( function_exists( 'wc_get_logger' ) ) {
-        wc_get_logger()->debug( 'ShetabVerify store API modified payment_methods: ' . wp_json_encode( $data['payment_methods'] ), array( 'source' => 'shetab-verify' ) );
+        wc_get_logger()->debug( 'ShetabVerify store API modified payment_methods: ' . wp_json_encode( $data['payment_methods'] ), array( 'source' => 'shetabverify' ) );
     } else {
         error_log( 'ShetabVerify store API modified payment_methods: ' . wp_json_encode( $data['payment_methods'] ) );
     }
@@ -299,7 +297,7 @@ function shetab_verify_run_diagnostics() {
         $data['error'] = 'WooCommerce not active';
         set_transient( 'shetab_verify_debug_available', $data, 5 * MINUTE_IN_SECONDS );
         if ( function_exists( 'wc_get_logger' ) ) {
-            wc_get_logger()->debug( 'ShetabVerify diagnostics: WooCommerce not active', array( 'source' => 'shetab-verify' ) );
+            wc_get_logger()->debug( 'ShetabVerify diagnostics: WooCommerce not active', array( 'source' => 'shetabverify' ) );
         } else {
             error_log( 'ShetabVerify diagnostics: WooCommerce not active' );
         }
@@ -386,14 +384,14 @@ function shetab_verify_run_diagnostics() {
 
     // log summary
     if ( function_exists( 'wc_get_logger' ) ) {
-        wc_get_logger()->debug( 'ShetabVerify diagnostics summary: ' . wp_json_encode( $data ), array( 'source' => 'shetab-verify' ) );
+        wc_get_logger()->debug( 'ShetabVerify diagnostics summary: ' . wp_json_encode( $data ), array( 'source' => 'shetabverify' ) );
     } else {
         error_log( 'ShetabVerify diagnostics summary: ' . wp_json_encode( $data ) );
     }
 
     // log
     if ( function_exists( 'wc_get_logger' ) ) {
-        wc_get_logger()->debug( 'ShetabVerify diagnostics: ' . wp_json_encode( $data ), array( 'source' => 'shetab-verify' ) );
+        wc_get_logger()->debug( 'ShetabVerify diagnostics: ' . wp_json_encode( $data ), array( 'source' => 'shetabverify' ) );
     } else {
         error_log( 'ShetabVerify diagnostics: ' . wp_json_encode( $data ) );
     }
@@ -405,7 +403,7 @@ function shetab_verify_run_diagnostics() {
 
 function shetab_verify_woocommerce_missing_notice() {
     if ( current_user_can( 'activate_plugins' ) ) {
-        echo '<div class="notice notice-error"><p>' . esc_html__( 'ShetabVerify requires WooCommerce to be installed and active.', 'shetab-verify' ) . '</p></div>';
+        echo '<div class="notice notice-error"><p>' . esc_html__( 'ShetabVerify requires WooCommerce to be installed and active.', 'shetabverify' ) . '</p></div>';
     }
 }
 
@@ -503,7 +501,7 @@ function shetab_verify_create_test_order() {
     set_transient( 'shetab_verify_test_order_info', $diag, 10 * MINUTE_IN_SECONDS );
 
     if ( function_exists( 'wc_get_logger' ) ) {
-        wc_get_logger()->debug( 'ShetabVerify test order created: ' . wp_json_encode( $diag ), array( 'source' => 'shetab-verify' ) );
+        wc_get_logger()->debug( 'ShetabVerify test order created: ' . wp_json_encode( $diag ), array( 'source' => 'shetabverify' ) );
     } else {
         error_log( 'ShetabVerify test order created: ' . wp_json_encode( $diag ) );
     }

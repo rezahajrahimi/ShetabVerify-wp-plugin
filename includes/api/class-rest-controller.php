@@ -5,19 +5,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class ShetabVerify_REST_Controller {
     public static function register_routes() {
-        register_rest_route( 'shetab-verify/v1', '/confirm', array(
+        register_rest_route( 'shetabverify/v1', '/confirm', array(
             'methods'  => 'POST',
             'callback' => array( __CLASS__, 'confirm_payment' ),
             'permission_callback' => '__return_true',
         ) );
 
-        register_rest_route( 'shetab-verify/v1', '/status', array(
+        register_rest_route( 'shetabverify/v1', '/status', array(
             'methods'  => 'GET',
             'callback' => array( __CLASS__, 'get_status' ),
             'permission_callback' => '__return_true',
         ) );
 
-        register_rest_route( 'shetab-verify/v1', '/upload-receipt', array(
+        register_rest_route( 'shetabverify/v1', '/upload-receipt', array(
             'methods'  => 'POST',
             'callback' => array( __CLASS__, 'handle_receipt_upload' ),
             'permission_callback' => array( __CLASS__, 'check_upload_permission' ),
@@ -66,17 +66,17 @@ class ShetabVerify_REST_Controller {
     public static function handle_receipt_upload( WP_REST_Request $request ) {
         $order_id = absint( $request->get_param( 'order_id' ) );
         if ( ! $order_id ) {
-            return new WP_Error( 'invalid_order', __( 'Invalid order ID.', 'shetab-verify' ), array( 'status' => 400 ) );
+            return new WP_Error( 'invalid_order', __( 'Invalid order ID.', 'shetabverify' ), array( 'status' => 400 ) );
         }
 
         $order = wc_get_order( $order_id );
         if ( ! $order ) {
-            return new WP_Error( 'invalid_order', __( 'Order not found.', 'shetab-verify' ), array( 'status' => 404 ) );
+            return new WP_Error( 'invalid_order', __( 'Order not found.', 'shetabverify' ), array( 'status' => 404 ) );
         }
 
         $files = $request->get_file_params();
         if ( empty( $files['receipts'] ) ) {
-            return new WP_Error( 'no_files', __( 'No files were uploaded.', 'shetab-verify' ), array( 'status' => 400 ) );
+            return new WP_Error( 'no_files', __( 'No files were uploaded.', 'shetabverify' ), array( 'status' => 400 ) );
         }
 
         require_once ABSPATH . 'wp-admin/includes/image.php';
@@ -114,7 +114,7 @@ class ShetabVerify_REST_Controller {
         }
 
         if ( empty( $uploaded_ids ) ) {
-            $msg = is_wp_error( $attach_id ) ? $attach_id->get_error_message() : __( 'Error uploading images.', 'shetab-verify' );
+            $msg = is_wp_error( $attach_id ) ? $attach_id->get_error_message() : __( 'Error uploading images.', 'shetabverify' );
             return new WP_Error( 'upload_failed', $msg, array( 'status' => 500 ) );
         }
 
@@ -126,14 +126,14 @@ class ShetabVerify_REST_Controller {
         $order->update_meta_data( '_shetab_receipts', $all_receipts );
 
         // Update order status to a state that represents "Manual Verification Required"
-        $status_msg = __( 'User uploaded a payment receipt image.', 'shetab-verify' );
+        $status_msg = __( 'User uploaded a payment receipt image.', 'shetabverify' );
         $order->update_status( 'on-hold', $status_msg );
-        $order->add_order_note( __( 'Uploaded receipts are ready for admin review.', 'shetab-verify' ) );
+        $order->add_order_note( __( 'Uploaded receipts are ready for admin review.', 'shetabverify' ) );
         $order->save();
 
         return rest_ensure_response( array(
             'success' => true,
-            'message' => __( 'Images uploaded successfully and are awaiting admin confirmation.', 'shetab-verify' ),
+            'message' => __( 'Images uploaded successfully and are awaiting admin confirmation.', 'shetabverify' ),
             'receipt_ids' => $uploaded_ids
         ) );
     }
@@ -146,7 +146,7 @@ class ShetabVerify_REST_Controller {
         $amount = ! empty( $params['amount'] ) ? absint( preg_replace( '/\D/', '', $params['amount'] ) ) : 0;
 
         if ( ! $amount ) {
-            return new WP_Error( 'invalid_request', __( 'Transaction amount (amount) not found in the sent data.', 'shetab-verify' ), array( 'status' => 400 ) );
+            return new WP_Error( 'invalid_request', __( 'Transaction amount (amount) not found in the sent data.', 'shetabverify' ), array( 'status' => 400 ) );
         }
 
         // Authenticate using Authorization header (as used in flutter app: 'Authorization': settings.apiKey)
@@ -158,13 +158,13 @@ class ShetabVerify_REST_Controller {
         }
 
         if ( empty( $secret ) || ! ShetabVerify_Utils::verify_api_secret( $secret ) ) {
-            return new WP_Error( 'unauthorized', __( 'Invalid or missing API Secret in Authorization header.', 'shetab-verify' ), array( 'status' => 401 ) );
+            return new WP_Error( 'unauthorized', __( 'Invalid or missing API Secret in Authorization header.', 'shetabverify' ), array( 'status' => 401 ) );
         }
 
         // Find match by unique_amount for pending transactions
         $txn = ShetabVerify_DB::get_pending_transaction_by_amount( $amount );
         if ( ! $txn ) {
-            return new WP_Error( 'not_found', __( 'No pending transaction found with this amount or it has expired.', 'shetab-verify' ), array( 'status' => 404 ) );
+            return new WP_Error( 'not_found', __( 'No pending transaction found with this amount or it has expired.', 'shetabverify' ), array( 'status' => 404 ) );
         }
 
         $order_id = absint($txn->order_id);
@@ -178,20 +178,13 @@ class ShetabVerify_REST_Controller {
             $order = wc_get_order( $order_id );
             if ( $order ) {
                 $order->payment_complete( $remote_ref );
-                $order->add_order_note( sprintf( __( 'Auto-confirmation: Amount %s verified by app. Ref Code: %s', 'shetab-verify' ), number_format_i18n($amount), $remote_ref ) );
+                $order->add_order_note( sprintf( __( 'Auto-confirmation: Amount %s verified by app. Ref Code: %s', 'shetabverify' ), number_format_i18n($amount), $remote_ref ) );
             }
         }
 
         return rest_ensure_response( array( 
             'success' => true, 
-            'message' => __( 'Payment confirmed successfully.', 'shetab-verify' ),
-            'order_id' => $order_id 
-        ) );
-    }
-
-        return rest_ensure_response( array( 
-            'success' => true, 
-            'message' => 'پرداخت با موفقیت تایید شد.',
+            'message' => __( 'Payment confirmed successfully.', 'shetabverify' ),
             'order_id' => $order_id 
         ) );
     }

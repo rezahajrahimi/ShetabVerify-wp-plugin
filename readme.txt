@@ -2,7 +2,7 @@
 Contributors: rezahajrahimi
 Tags: woocommerce, payment, shetab, bank transfer, auto-verification, card-to-card, iran
 Requires at least: 5.0
-Tested up to: 6.4.3
+Tested up to: 6.9
 Requires PHP: 7.4
 Stable tag: 0.1.0
 License: GPLv2 or later

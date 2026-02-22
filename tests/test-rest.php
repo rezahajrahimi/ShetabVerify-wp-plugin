@@ -19,7 +19,7 @@ class Test_ShetabVerify_REST extends WP_UnitTestCase {
         ) );
 
         // build request
-        $request = new WP_REST_Request( 'POST', '/shetab-verify/v1/confirm' );
+        $request = new WP_REST_Request( 'POST', '/shetabverify/v1/confirm' );
         $request->set_header( 'x-shetab-secret', $secret );
         $request->set_body_params( array(
             'order_id' => $order_id,
