@@ -1,13 +1,15 @@
 <?php
 /**
  * Plugin Name: ShetabVerify
- * Plugin URI:  https://example.com/plugins/shetab-verify
- * Description: WooCommerce payment gateway — Auto shetab transaction confirimation.
+ * Plugin URI:  http://verify.webdide.ir/
+ * Description: WooCommerce payment gateway — Automated Card-to-Card transaction confirmation via mobile app.
  * Version:     0.1.0
  * Author:      Reza HajRahimi
+ * Author URI:  http://verify.webdide.ir/
  * Text Domain: shetab-verify
  * Domain Path: /languages
  * License:     GPL-2.0-or-later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -64,13 +66,17 @@ require_once SSV_PLUGIN_DIR . 'includes/gateway/class-wc-gateway-shetab.php';
             if ( ! current_user_can( 'manage_woocommerce' ) ) {
                 return;
             }
+            $screen = get_current_screen();
+            if ( $screen && $screen->id === 'woocommerce_page_shetab-verify' ) {
+                return; // Don't show on the plugin settings page itself
+            }
             $gw_opts = get_option( 'woocommerce_shetab_verify_settings', array() );
             if ( empty( $gw_opts['enabled'] ) || $gw_opts['enabled'] !== 'yes' ) {
                 return;
             }
             $cards = method_exists( 'ShetabVerify_DB', 'get_active_cards' ) ? ShetabVerify_DB::get_active_cards() : array();
             if ( empty( $cards ) ) {
-                echo '<div class="notice notice-warning"><p>' . 'درگاه ShetabVerify فعال است اما هیچ کارت بانکی تنظیم نشده است — برای نمایش درگاه در تسویه حساب، حداقل یک کارت را در تنظیمات مدیریت شتاب تعریف کنید.' . '</p></div>';
+                echo '<div class="notice notice-warning"><p>' . esc_html__( 'ShetabVerify gateway is enabled but no active bank cards are configured. To show the gateway on checkout, please add at least one active card in Shetab Management.', 'shetab-verify' ) . '</p></div>';
             }
         } );
 

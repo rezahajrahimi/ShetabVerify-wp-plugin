@@ -20,24 +20,63 @@ class ShetabVerify_REST_Controller {
         register_rest_route( 'shetab-verify/v1', '/upload-receipt', array(
             'methods'  => 'POST',
             'callback' => array( __CLASS__, 'handle_receipt_upload' ),
-            'permission_callback' => '__return_true',
+            'permission_callback' => array( __CLASS__, 'check_upload_permission' ),
         ) );
+    }
+
+    /**
+     * Permission check for uploading a receipt.
+     * Ensure the user owns the order or has the correct order key.
+     */
+    public static function check_upload_permission( WP_REST_Request $request ) {
+        $order_id = absint( $request->get_param( 'order_id' ) );
+        $order_key = sanitize_text_field( $request->get_param( 'order_key' ) );
+
+        if ( ! $order_id ) {
+            return false;
+        }
+
+        $order = wc_get_order( $order_id );
+        if ( ! $order ) {
+            return false;
+        }
+
+        // 1. If user is logged in and owns the order
+        if ( is_user_logged_in() && $order->get_customer_id() === get_current_user_id() ) {
+            return true;
+        }
+
+        // 2. If order key matches (typical for guests)
+        if ( ! empty( $order_key ) && $order->get_order_key() === $order_key ) {
+            return true;
+        }
+
+        // 3. Fallback to API secret (if the app is doing the upload)
+        $secret = $request->get_header( 'authorization' );
+        if ( $secret && preg_match( '/Bearer\s+(.*)/i', $secret, $m ) ) {
+            $secret = $m[1];
+        }
+        if ( ! empty( $secret ) && ShetabVerify_Utils::verify_api_secret( $secret ) ) {
+            return true;
+        }
+
+        return false;
     }
 
     public static function handle_receipt_upload( WP_REST_Request $request ) {
         $order_id = absint( $request->get_param( 'order_id' ) );
         if ( ! $order_id ) {
-            return new WP_Error( 'invalid_order', 'شناسه سفارش نامعتبر است.', array( 'status' => 400 ) );
+            return new WP_Error( 'invalid_order', __( 'Invalid order ID.', 'shetab-verify' ), array( 'status' => 400 ) );
         }
 
         $order = wc_get_order( $order_id );
         if ( ! $order ) {
-            return new WP_Error( 'invalid_order', 'سفارش یافت نشد.', array( 'status' => 404 ) );
+            return new WP_Error( 'invalid_order', __( 'Order not found.', 'shetab-verify' ), array( 'status' => 404 ) );
         }
 
         $files = $request->get_file_params();
         if ( empty( $files['receipts'] ) ) {
-            return new WP_Error( 'no_files', 'هیچ فایلی آپلود نشده است.', array( 'status' => 400 ) );
+            return new WP_Error( 'no_files', __( 'No files were uploaded.', 'shetab-verify' ), array( 'status' => 400 ) );
         }
 
         require_once ABSPATH . 'wp-admin/includes/image.php';
@@ -75,7 +114,7 @@ class ShetabVerify_REST_Controller {
         }
 
         if ( empty( $uploaded_ids ) ) {
-            $msg = is_wp_error( $attach_id ) ? $attach_id->get_error_message() : 'خطا در آپلود تصاویر.';
+            $msg = is_wp_error( $attach_id ) ? $attach_id->get_error_message() : __( 'Error uploading images.', 'shetab-verify' );
             return new WP_Error( 'upload_failed', $msg, array( 'status' => 500 ) );
         }
 
@@ -87,13 +126,14 @@ class ShetabVerify_REST_Controller {
         $order->update_meta_data( '_shetab_receipts', $all_receipts );
 
         // Update order status to a state that represents "Manual Verification Required"
-        $order->update_status( 'on-hold', 'کاربر تصویر رسید بانکی را آپلود کرد.' );
-        $order->add_order_note( 'رسیدهای آپلود شده توسط کاربر آماده بررسی مدیریت هستند.' );
+        $status_msg = __( 'User uploaded a payment receipt image.', 'shetab-verify' );
+        $order->update_status( 'on-hold', $status_msg );
+        $order->add_order_note( __( 'Uploaded receipts are ready for admin review.', 'shetab-verify' ) );
         $order->save();
 
         return rest_ensure_response( array(
             'success' => true,
-            'message' => 'تصاویر با موفقیت آپلود شدند و در انتظار تایید مدیریت هستند.',
+            'message' => __( 'Images uploaded successfully and are awaiting admin confirmation.', 'shetab-verify' ),
             'receipt_ids' => $uploaded_ids
         ) );
     }
@@ -106,7 +146,7 @@ class ShetabVerify_REST_Controller {
         $amount = ! empty( $params['amount'] ) ? absint( preg_replace( '/\D/', '', $params['amount'] ) ) : 0;
 
         if ( ! $amount ) {
-            return new WP_Error( 'invalid_request', 'مبلغ تراکنش (amount) در داده‌های ارسالی یافت نشد.', array( 'status' => 400 ) );
+            return new WP_Error( 'invalid_request', __( 'Transaction amount (amount) not found in the sent data.', 'shetab-verify' ), array( 'status' => 400 ) );
         }
 
         // Authenticate using Authorization header (as used in flutter app: 'Authorization': settings.apiKey)
@@ -118,13 +158,13 @@ class ShetabVerify_REST_Controller {
         }
 
         if ( empty( $secret ) || ! ShetabVerify_Utils::verify_api_secret( $secret ) ) {
-            return new WP_Error( 'unauthorized', 'کلید امنیتی (Secret) نامعتبر است یا در هدر Authorization ارسال نشده است.', array( 'status' => 401 ) );
+            return new WP_Error( 'unauthorized', __( 'Invalid or missing API Secret in Authorization header.', 'shetab-verify' ), array( 'status' => 401 ) );
         }
 
         // Find match by unique_amount for pending transactions
         $txn = ShetabVerify_DB::get_pending_transaction_by_amount( $amount );
         if ( ! $txn ) {
-            return new WP_Error( 'not_found', 'تراکنش در انتظار پرداختی با این مبلغ یافت نشد یا منقضی شده است.', array( 'status' => 404 ) );
+            return new WP_Error( 'not_found', __( 'No pending transaction found with this amount or it has expired.', 'shetab-verify' ), array( 'status' => 404 ) );
         }
 
         $order_id = absint($txn->order_id);
@@ -138,9 +178,16 @@ class ShetabVerify_REST_Controller {
             $order = wc_get_order( $order_id );
             if ( $order ) {
                 $order->payment_complete( $remote_ref );
-                $order->add_order_note( sprintf( 'تایید خودکار: مبلغ %s توسط اپلیکیشن تایید شد. کد رهگیری: %s', number_format_i18n($amount), $remote_ref ) );
+                $order->add_order_note( sprintf( __( 'Auto-confirmation: Amount %s verified by app. Ref Code: %s', 'shetab-verify' ), number_format_i18n($amount), $remote_ref ) );
             }
         }
+
+        return rest_ensure_response( array( 
+            'success' => true, 
+            'message' => __( 'Payment confirmed successfully.', 'shetab-verify' ),
+            'order_id' => $order_id 
+        ) );
+    }
 
         return rest_ensure_response( array( 
             'success' => true, 
