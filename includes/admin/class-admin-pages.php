@@ -251,6 +251,56 @@ class ShetabVerify_Admin {
             <?php endforeach; ?>
 
             <div class="shetab-card">
+                <h2><?php echo 'راهنما و منابع'; ?></h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                    <div style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #edf2f7; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <h3 style="margin-top: 0; font-size: 1.1rem; color: #2d3748;">
+                                <span class="dashicons dashicons-download" style="margin-left: 8px; color: #3182ce;"></span>
+                                دانلود اپلیکیشن اندروید
+                            </h3>
+                            <p style="font-size: 0.9rem; color: #4a5568; line-height: 1.6;">
+                                برای تایید خودکار تراکنش‌های بانکی، اپلیکیشن شتاب را از کافه بازار دریافت و روی گوشی خود نصب کنید.
+                            </p>
+                        </div>
+                        <a href="https://cafebazaar.ir/app/com.example.shetab_verification" target="_blank" class="shetab-btn" style="display: block; text-decoration: none; text-align: center; margin-top: 15px;">
+                            دانلود از کافه بازار
+                        </a>
+                    </div>
+
+                    <div style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #edf2f7; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <h3 style="margin-top: 0; font-size: 1.1rem; color: #2d3748;">
+                                <span class="dashicons dashicons-welcome-learn-more" style="margin-left: 8px; color: #38a169;"></span>
+                                آموزش استفاده
+                            </h3>
+                            <p style="font-size: 0.9rem; color: #4a5568; line-height: 1.6;">
+                                مشاهده ویدیوهای آموزشی و راهنمای متنی برای تنظیم صحیح پلاگین و اپلیکیشن.
+                            </p>
+                        </div>
+                        <a href="http://verify.webdide.ir/" target="_blank" class="shetab-btn" style="display: block; text-decoration: none; text-align: center; margin-top: 15px; background: #4a5568;">
+                            مشاهده آموزش‌ها
+                        </a>
+                    </div>
+
+                    <div style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #edf2f7; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <h3 style="margin-top: 0; font-size: 1.1rem; color: #2d3748;">
+                                <span class="dashicons dashicons-admin-site-alt3" style="margin-left: 8px; color: #718096;"></span>
+                                وب‌سایت توسعه‌دهنده
+                            </h3>
+                            <p style="font-size: 0.9rem; color: #4a5568; line-height: 1.6;">
+                                برای دریافت آخرین آپدیت‌ها، خرید لایسنس و ارتباط با بخش فنی به وب‌سایت مراجعه کنید.
+                            </p>
+                        </div>
+                        <a href="http://verify.webdide.ir/" target="_blank" class="shetab-btn" style="display: block; text-decoration: none; text-align: center; margin-top: 15px; background: #718096;">
+                            ورود به سایت
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shetab-card">
                 <h2><?php echo 'Secret API (کلید مخفی)'; ?></h2>
                 <form method="post">
                     <?php wp_nonce_field( 'shetab_verify_admin' ); ?>
