@@ -1,4 +1,4 @@
-=== ShetabVerify ===
+=== WebDide Card-to-Card Payment Verification for Shetab and WooCommerce ===
 Contributors: rezahajrahimi
 Tags: woocommerce, payment, shetab, bank transfer, auto-verification, card-to-card, iran
 Requires at least: 5.0
@@ -12,7 +12,7 @@ Automate bank transfer (Card-to-Card) confirmations in WooCommerce using unique 
 
 == Description ==
 
-**ShetabVerify** is a sophisticated solution for WooCommerce stores in Iran that handle "Card-to-Card" payments. Instead of manual verification of transaction slips, this plugin automates the process using a specialized mobile application.
+**WebDide Card-to-Card Payment Verification for Shetab and WooCommerce** is a sophisticated solution for WooCommerce stores in Iran that handle "Card-to-Card" payments. Instead of manual verification of transaction slips, this plugin automates the process using a specialized mobile application.
 
 ### Key Features:
 *   **Unique Suffix Generation**: Generates a small unique suffix (e.g., 0-99 Tomans) for each order to distinguish between multiple transfers of the same base amount.
@@ -22,9 +22,18 @@ Automate bank transfer (Card-to-Card) confirmations in WooCommerce using unique 
 *   **Security**: Uses encrypted storage for card numbers and secure API secrets for communication.
 *   **WooCommerce Blocks Support**: Fully compatible with the modern WooCommerce Checkout Block.
 
+== External services ==
+
+This plugin uses the following third-party services:
+
+*   **QR Code API (api.qrserver.com)**: Used to generate QR codes for the API Secret and endpoint URLs in the admin settings page. This allows shop owners to easily sync the configuration with the mobile app.
+    *   **Data sent**: The API Secret (private key) and the REST API URLs are sent as URL parameters to generate the QR code image.
+    *   **Service provider**: GoQR.me (Digital-Solutions.at).
+    *   **Links**: [Terms of Service](https://goqr.me/terms-of-service/), [Privacy Policy](https://goqr.me/privacy/).
+
 == توضیحات فارسی (Persian Description) ==
 
-**شتاب‌وریفای (ShetabVerify)** یک راهکار پیشرفته برای فروشگاه‌های وردپرسی در ایران است که از روش "کارت به کارت" برای تسویه حساب استفاده می‌کنند. با استفاده از این افزونه و اپلیکیشن همراه آن، دیگر نیازی به تایید دستی فیش‌های واریزی ندارید.
+**تایید پرداخت کارت به کارت وب‌دیده برای شتاب و ووکامرس (WebDide Card-to-Card Payment Verification for Shetab and WooCommerce)** یک راهکار پیشرفته برای فروشگاه‌های وردپرسی در ایران است که از روش "کارت به کارت" برای تسویه حساب استفاده می‌کنند. با استفاده از این افزونه و اپلیکیشن همراه آن، دیگر نیازی به تایید دستی فیش‌های واریزی ندارید.
 
 ### ویژگی‌های کلیدی:
 *   **تولید شناسه پرداخت منحصر به فرد**: برای هر سفارش یک مبلغ جزئی (مثلاً ۱ تا ۹۹۹ تومان) به مبلغ اصلی اضافه می‌شود تا تراکنش‌های مشابه از هم تفکیک شوند.
@@ -39,7 +48,7 @@ Automate bank transfer (Card-to-Card) confirmations in WooCommerce using unique 
 2. Activate the plugin through the 'Plugins' screen in WordPress.
 3. Go to **WooCommerce -> Settings -> Payments** and enable the **ShetabVerify** gateway.
 4. Navigate to the **Shetab Management** menu in your WordPress dashboard to configure your API secret and destination cards.
-5. Download and configure the companion Android app from [Cafe Bazaar](https://cafebazaar.ir/app/com.example.shetab_verification).
+5. Download and configure the companion Android app from [Cafe Bazaar](https://cafebazaar.ir/app/ir.webdide.verify).
 
 == Frequently Asked Questions ==
 

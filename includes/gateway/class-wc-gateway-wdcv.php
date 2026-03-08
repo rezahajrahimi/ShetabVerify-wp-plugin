@@ -7,13 +7,13 @@ if ( ! class_exists( 'WC_Payment_Gateway' ) ) {
     return;
 }
 
-class WC_Gateway_Shetab extends WC_Payment_Gateway {
+class WC_Gateway_WDCV extends WC_Payment_Gateway {
     public function __construct() {
-        $this->id                 = 'shetab_verify';
+        $this->id                 = 'wdcv';
         $this->has_fields         = false;
         $this->method_title       = 'کارت به کارت (تایید خودکار)';
         $this->method_description = 'کارت به کارت با استفاده از درگاه شتاب (تایید خودکار تراکنش).';
-        $this->icon               = SSV_PLUGIN_URL . 'public/assets/images/logo.png';
+        $this->icon               = WDCV_PLUGIN_URL . 'public/assets/images/logo.png';
 
         $this->supports = array( 'products', 'refunds' );
 
@@ -99,13 +99,13 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
 
         // only show the gateway when at least one active destination card is configured
         $cards = array();
-        if ( method_exists( 'ShetabVerify_DB', 'get_active_cards' ) ) {
-            $cards = ShetabVerify_DB::get_active_cards();
+        if ( method_exists( 'WebDide_CV_DB', 'get_active_cards' ) ) {
+            $cards = WebDide_CV_DB::get_active_cards();
             if ( empty( $cards ) ) {
                 $result = false;
 
                 // debug transient for runtime availability checks
-                set_transient( 'shetab_verify_is_available_debug', array(
+                set_transient( 'wdcv_is_available_debug', array(
                     'time' => current_time( 'mysql' ),
                     'enabled_option' => $this->get_option( 'enabled', 'no' ),
                     'cards_count' => 0,
@@ -121,7 +121,7 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
         $result = true;
 
         // debug transient for runtime availability checks
-        set_transient( 'shetab_verify_is_available_debug', array(
+        set_transient( 'wdcv_is_available_debug', array(
             'time' => current_time( 'mysql' ),
             'enabled_option' => $this->get_option( 'enabled', 'no' ),
             'cards_count' => is_array( $cards ) ? count( $cards ) : 0,
@@ -137,33 +137,33 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
         if ( $description = $this->get_description() ) {
             echo wpautop( wp_kses_post( $description ) );
         }
-        echo '<p>' . esc_html__( 'After checkout you will be shown a bank card number and an amount to transfer (including a unique suffix).', 'shetabverify' ) . '</p>';
+        echo '<p>' . esc_html__( 'After checkout you will be shown a bank card number and an amount to transfer (including a unique suffix).', 'webdide-card-to-card-verification' ) . '</p>';
     }
 
     public function process_payment( $order_id ) {
         $order = wc_get_order( $order_id );
         if ( ! $order ) {
-            wc_add_notice( __( 'Invalid order.', 'shetabverify' ), 'error' );
+            wc_add_notice( __( 'Invalid order.', 'webdide-card-to-card-verification' ), 'error' );
             return array( 'result' => 'failure' );
         }
 
         $original_amount = (int) round( $order->get_total() );
-        $unique_amount   = ShetabVerify_Utils::generate_unique_amount( $original_amount );
+        $unique_amount   = WebDide_CV_Utils::generate_unique_amount( $original_amount );
         if ( ! $unique_amount ) {
-            wc_add_notice( __( 'Unable to generate a unique payment amount. Please try again.', 'shetabverify' ), 'error' );
+            wc_add_notice( __( 'Unable to generate a unique payment amount. Please try again.', 'webdide-card-to-card-verification' ), 'error' );
             return array( 'result' => 'failure' );
         }
 
-        $cards = ShetabVerify_DB::get_active_cards();
+        $cards = WebDide_CV_DB::get_active_cards();
         if ( empty( $cards ) ) {
-            wc_add_notice( __( 'No destination bank cards configured. Please contact the store owner.', 'shetabverify' ), 'error' );
+            wc_add_notice( __( 'No destination bank cards configured. Please contact the store owner.', 'webdide-card-to-card-verification' ), 'error' );
             return array( 'result' => 'failure' );
         }
 
         // choose the first active card that is within configured limits
         $card = null;
         foreach ( $cards as $c ) {
-            $usage = ShetabVerify_DB::get_card_usage( $c->id, $c->reset_period );
+            $usage = WebDide_CV_DB::get_card_usage( $c->id, $c->reset_period );
             $count_ok = ( $c->max_deposits_count == 0 || $usage['count'] < $c->max_deposits_count );
             $sum_ok   = ( $c->max_total_amount == 0 || $usage['total'] + $unique_amount <= $c->max_total_amount );
             if ( $count_ok && $sum_ok && $c->active ) {
@@ -173,13 +173,13 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
         }
 
         if ( ! $card ) {
-            wc_add_notice( __( 'No available bank cards are currently accepting payments. Please contact the store owner.', 'shetabverify' ), 'error' );
+            wc_add_notice( __( 'No available bank cards are currently accepting payments. Please contact the store owner.', 'webdide-card-to-card-verification' ), 'error' );
             return array( 'result' => 'failure' );
         }
 
         $expires_at = date( 'Y-m-d H:i:s', current_time( 'timestamp' ) + 10 * MINUTE_IN_SECONDS );
 
-        $txn_id = ShetabVerify_DB::create_transaction( array(
+        $txn_id = WebDide_CV_DB::create_transaction( array(
             'order_id' => $order_id,
             'card_id' => $card->id,
             'original_amount' => $original_amount,
@@ -193,7 +193,7 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
         $order->save();
 
         // mark order pending/on-hold while waiting for transfer
-        $order->update_status( 'on-hold', __( 'Awaiting bank transfer (ShetabVerify).', 'shetabverify' ) );
+        $order->update_status( 'on-hold', __( 'Awaiting bank transfer (WebDide_CV).', 'webdide-card-to-card-verification' ) );
 
         return array(
             'result'   => 'success',
@@ -205,7 +205,7 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
         $order = wc_get_order( $order_id );
         if ( ! $order ) return;
 
-        $txn = ShetabVerify_DB::get_transaction_by_order_id( $order_id );
+        $txn = WebDide_CV_DB::get_transaction_by_order_id( $order_id );
         
         // Always try to show receipts if they exist regardless of transaction status
         $receipts = $order->get_meta( '_shetab_receipts' );
@@ -214,7 +214,7 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
             return;
         }
 
-        $cards = ShetabVerify_DB::get_cards();
+        $cards = WebDide_CV_DB::get_cards();
         $card  = null;
         foreach ( $cards as $c ) {
             if ( $c->id == $txn->card_id ) {
@@ -231,43 +231,9 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
         $telegram = get_option('shetab_support_telegram');
         $manager_text = get_option('shetab_support_manager_text');
 
-        $full_card_number = $card ? ShetabVerify_Utils::decrypt_card_number($card->encrypted_number) : '';
+        $full_card_number = $card ? WebDide_CV_Utils::decrypt_card_number($card->encrypted_number) : '';
         ?>
-        <style>
-            .shetab-instructions {
-                direction: rtl;
-                background: #fdfdfd;
-                border: 2px solid #3182ce;
-                border-radius: 12px;
-                padding: 25px;
-                margin: 20px 0;
-                font-family: inherit;
-                box-shadow: 0 4px 15px rgba(49, 130, 206, 0.1);
-            }
-            .shetab-instructions h2 { color: #2b6cb0; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; margin-top: 0; }
-            .shetab-amount { font-size: 1.4rem; color: #c53030; font-weight: bold; }
-            .shetab-card-box { background: #ebf8ff; border: 1px dashed #4299e1; padding: 15px; border-radius: 8px; margin: 15px 0; font-size: 1.2rem; text-align: center; }
-            .shetab-countdown { font-weight: bold; color: #718096; margin-top: 10px; }
-            .shetab-support-info { background: #f7fafc; border-top: 1px solid #edf2f7; margin-top: 20px; padding-top: 15px; }
-            .shetab-support-item { display: inline-block; margin-left: 20px; color: #4a5568; text-decoration: none; }
-            .shetab-support-item img { vertical-align: middle; margin-left: 5px; width: 20px; }
-            .shetab-manager-msg { font-style: italic; color: #4a5568; margin-top: 10px; padding: 10px; border-right: 4px solid #3182ce; background: #fff; }
-
-            /* Upload Styles */
-            .shetab-upload-box { background: #fffaf0; border: 1px dashed #ed8936; padding: 20px; border-radius: 10px; margin-top: 20px; text-align: center; }
-            .shetab-upload-btn { background: #ed8936; color: #fff; padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; margin-top: 10px; display: inline-block; }
-            .shetab-upload-btn:hover { background: #dd6b20; }
-            .shetab-receipt-preview { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; justify-content: center; }
-            .shetab-receipt-preview img { width: 80px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; }
-
-            /* Hide bulky WC elements ONLY while payment is pending/on-hold */
-            <?php if ( $order->get_status() === 'on-hold' || $txn->status === 'pending' ) : ?>
-            .woocommerce-order-details, 
-            .woocommerce-customer-details {
-                display: none !important;
-            }
-            <?php endif; ?>
-        </style>
+        
 
         <div class="shetab-instructions">
             <h2><?php echo ( in_array( $order->get_status(), array( 'processing', 'completed' ) ) ) ? 'رسید پرداخت شما' : 'اطلاعات پرداخت'; ?></h2>
@@ -286,7 +252,7 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
                 <p class="shetab-amount"><?php printf( 'مبلغ: %s تومان', number_format_i18n( $txn->unique_amount ) ); ?></p>
                 
                 <?php if ( $card ) : ?>
-                    <div class="shetab-card-box">
+                    <div class="wdcv-card-box">
                         <span><?php echo 'شماره کارت: '; ?></span>
                         <strong style="letter-spacing: 2px;"><?php echo esc_html( $full_card_number ); ?></strong>
                         <p style="font-size: 0.9rem; margin-top: 5px; color: #4a5568;"><?php echo esc_html( $card->label ); ?></p>
@@ -353,8 +319,8 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
             var txnId = <?php echo (int) $txn->id; ?>;
             var orderId = <?php echo (int) $order_id; ?>;
             var el = document.getElementById('shetab-countdown-' + txnId);
-            var statusUrl = '<?php echo esc_url( get_rest_url( null, "shetabverify/v1/status" ) ); ?>';
-            var uploadUrl = '<?php echo esc_url( get_rest_url( null, "shetabverify/v1/upload-receipt" ) ); ?>';
+            var statusUrl = '<?php echo esc_url( get_rest_url( null, "WebDide_CV/v1/status" ) ); ?>';
+            var uploadUrl = '<?php echo esc_url( get_rest_url( null, "WebDide_CV/v1/upload-receipt" ) ); ?>';
 
             // Timer Tick
             if (el) {
@@ -437,3 +403,12 @@ class WC_Gateway_Shetab extends WC_Payment_Gateway {
         <?php
     }
 }
+
+
+
+
+
+
+
+
+

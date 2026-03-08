@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class ShetabVerify_Utils {
+class WebDide_CV_Utils {
     const CIPHER = 'AES-256-CBC';
 
     public static function encrypt_card_number( $plain ) {
@@ -94,3 +94,10 @@ class ShetabVerify_Utils {
         return false;
     }
 }
+
+
+
+
+
+
+

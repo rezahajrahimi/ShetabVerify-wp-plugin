@@ -3,12 +3,19 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class ShetabVerify_Deactivator {
+class WebDide_CV_Deactivator {
     public static function deactivate() {
         // cleanup scheduled hooks if any were added later
-        $timestamp = wp_next_scheduled( 'shetab_verify_cleanup_expired' );
+        $timestamp = wp_next_scheduled( 'wdcv_cleanup_expired' );
         if ( $timestamp ) {
-            wp_unschedule_event( $timestamp, 'shetab_verify_cleanup_expired' );
+            wp_unschedule_event( $timestamp, 'wdcv_cleanup_expired' );
         }
     }
 }
+
+
+
+
+
+
+

@@ -1,16 +1,16 @@
 <?php
 
-class Test_ShetabVerify_REST extends WP_UnitTestCase {
+class Test_WebDide_CV_REST extends WP_UnitTestCase {
 
     public function test_confirm_payment_endpoint_confirms_transaction() {
         // set secret
         $secret = 'test-secret-123';
-        ShetabVerify_Utils::set_api_secret( $secret );
+        WebDide_CV_Utils::set_api_secret( $secret );
 
         // create a fake transaction
         $order_id = 123456;
         $unique_amount = 14123;
-        $txn_id = ShetabVerify_DB::create_transaction( array(
+        $txn_id = WebDide_CV_DB::create_transaction( array(
             'order_id' => $order_id,
             'original_amount' => 14100,
             'unique_amount' => $unique_amount,
@@ -19,7 +19,7 @@ class Test_ShetabVerify_REST extends WP_UnitTestCase {
         ) );
 
         // build request
-        $request = new WP_REST_Request( 'POST', '/shetabverify/v1/confirm' );
+        $request = new WP_REST_Request( 'POST', '/WebDide_CV/v1/confirm' );
         $request->set_header( 'x-shetab-secret', $secret );
         $request->set_body_params( array(
             'order_id' => $order_id,
@@ -27,7 +27,7 @@ class Test_ShetabVerify_REST extends WP_UnitTestCase {
             'remote_ref' => 'BANK-REF-1',
         ) );
 
-        $response = ShetabVerify_REST_Controller::confirm_payment( $request );
+        $response = WebDide_CV_REST_Controller::confirm_payment( $request );
 
         $this->assertInstanceOf( 'WP_REST_Response', $response );
         $data = $response->get_data();
@@ -35,8 +35,14 @@ class Test_ShetabVerify_REST extends WP_UnitTestCase {
         $this->assertEquals( 'confirmed', $data['message'] );
 
         // verify DB updated
-        $txn = ShetabVerify_DB::get_transaction_by_order_id( $order_id );
+        $txn = WebDide_CV_DB::get_transaction_by_order_id( $order_id );
         $this->assertEquals( 'confirmed', $txn->status );
         $this->assertEquals( 'BANK-REF-1', $txn->remote_ref );
     }
 }
+
+
+
+
+
+

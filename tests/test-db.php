@@ -1,6 +1,6 @@
 <?php
 
-class Test_ShetabVerify_DB extends WP_UnitTestCase {
+class Test_WebDide_CV_DB extends WP_UnitTestCase {
 
     public function test_cleanup_expired_transactions_marks_expired() {
         global $wpdb;
@@ -11,7 +11,7 @@ class Test_ShetabVerify_DB extends WP_UnitTestCase {
         $unique_amount = 99999;
         $expired_at = date( 'Y-m-d H:i:s', current_time( 'timestamp' ) - 60 );
 
-        $txn_id = ShetabVerify_DB::create_transaction( array(
+        $txn_id = WebDide_CV_DB::create_transaction( array(
             'order_id' => $order_id,
             'original_amount' => 99900,
             'unique_amount' => $unique_amount,
@@ -20,7 +20,7 @@ class Test_ShetabVerify_DB extends WP_UnitTestCase {
         ) );
 
         // run cleanup
-        ShetabVerify_DB::cleanup_expired_transactions();
+        WebDide_CV_DB::cleanup_expired_transactions();
 
         $txn = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$transactions_table} WHERE id = %d", $txn_id ) );
         $this->assertEquals( 'expired', $txn->status );
@@ -30,7 +30,7 @@ class Test_ShetabVerify_DB extends WP_UnitTestCase {
         global $wpdb;
 
         // create a card with limits
-        $card_id = ShetabVerify_DB::insert_card( array(
+        $card_id = WebDide_CV_DB::insert_card( array(
             'label' => 'Test Card',
             'encrypted_number' => 'enc',
             'masked_number' => '**** **** **** 1111',
@@ -41,7 +41,7 @@ class Test_ShetabVerify_DB extends WP_UnitTestCase {
         ) );
 
         // insert two transactions for this card
-        ShetabVerify_DB::create_transaction( array(
+        WebDide_CV_DB::create_transaction( array(
             'order_id' => 1,
             'card_id' => $card_id,
             'original_amount' => 2000,
@@ -49,7 +49,7 @@ class Test_ShetabVerify_DB extends WP_UnitTestCase {
             'status' => 'confirmed',
             'created_at' => current_time( 'mysql' ),
         ) );
-        ShetabVerify_DB::create_transaction( array(
+        WebDide_CV_DB::create_transaction( array(
             'order_id' => 2,
             'card_id' => $card_id,
             'original_amount' => 2000,
@@ -58,7 +58,7 @@ class Test_ShetabVerify_DB extends WP_UnitTestCase {
             'created_at' => current_time( 'mysql' ),
         ) );
 
-        $usage = ShetabVerify_DB::get_card_usage( $card_id, 'none' );
+        $usage = WebDide_CV_DB::get_card_usage( $card_id, 'none' );
         $this->assertEquals( 2, $usage['count'] );
         $this->assertEquals( 4000, $usage['total'] );
 
@@ -69,3 +69,9 @@ class Test_ShetabVerify_DB extends WP_UnitTestCase {
         $this->assertTrue( $usage['total'] < 5000 );
     }
 }
+
+
+
+
+
+

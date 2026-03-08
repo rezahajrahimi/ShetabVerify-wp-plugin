@@ -3,21 +3,21 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class ShetabVerify_REST_Controller {
+class WebDide_CV_REST_Controller {
     public static function register_routes() {
-        register_rest_route( 'shetabverify/v1', '/confirm', array(
+        register_rest_route( 'webdide-cv/v1', '/confirm', array(
             'methods'  => 'POST',
             'callback' => array( __CLASS__, 'confirm_payment' ),
             'permission_callback' => '__return_true',
         ) );
 
-        register_rest_route( 'shetabverify/v1', '/status', array(
+        register_rest_route( 'webdide-cv/v1', '/status', array(
             'methods'  => 'GET',
             'callback' => array( __CLASS__, 'get_status' ),
             'permission_callback' => '__return_true',
         ) );
 
-        register_rest_route( 'shetabverify/v1', '/upload-receipt', array(
+        register_rest_route( 'webdide-cv/v1', '/upload-receipt', array(
             'methods'  => 'POST',
             'callback' => array( __CLASS__, 'handle_receipt_upload' ),
             'permission_callback' => array( __CLASS__, 'check_upload_permission' ),
@@ -56,7 +56,7 @@ class ShetabVerify_REST_Controller {
         if ( $secret && preg_match( '/Bearer\s+(.*)/i', $secret, $m ) ) {
             $secret = $m[1];
         }
-        if ( ! empty( $secret ) && ShetabVerify_Utils::verify_api_secret( $secret ) ) {
+        if ( ! empty( $secret ) && WebDide_CV_Utils::verify_api_secret( $secret ) ) {
             return true;
         }
 
@@ -66,17 +66,17 @@ class ShetabVerify_REST_Controller {
     public static function handle_receipt_upload( WP_REST_Request $request ) {
         $order_id = absint( $request->get_param( 'order_id' ) );
         if ( ! $order_id ) {
-            return new WP_Error( 'invalid_order', __( 'Invalid order ID.', 'shetabverify' ), array( 'status' => 400 ) );
+            return new WP_Error( 'invalid_order', __( 'Invalid order ID.', 'webdide-card-to-card-verification' ), array( 'status' => 400 ) );
         }
 
         $order = wc_get_order( $order_id );
         if ( ! $order ) {
-            return new WP_Error( 'invalid_order', __( 'Order not found.', 'shetabverify' ), array( 'status' => 404 ) );
+            return new WP_Error( 'invalid_order', __( 'Order not found.', 'webdide-card-to-card-verification' ), array( 'status' => 404 ) );
         }
 
         $files = $request->get_file_params();
         if ( empty( $files['receipts'] ) ) {
-            return new WP_Error( 'no_files', __( 'No files were uploaded.', 'shetabverify' ), array( 'status' => 400 ) );
+            return new WP_Error( 'no_files', __( 'No files were uploaded.', 'webdide-card-to-card-verification' ), array( 'status' => 400 ) );
         }
 
         require_once ABSPATH . 'wp-admin/includes/image.php';
@@ -114,7 +114,7 @@ class ShetabVerify_REST_Controller {
         }
 
         if ( empty( $uploaded_ids ) ) {
-            $msg = is_wp_error( $attach_id ) ? $attach_id->get_error_message() : __( 'Error uploading images.', 'shetabverify' );
+            $msg = is_wp_error( $attach_id ) ? $attach_id->get_error_message() : __( 'Error uploading images.', 'webdide-card-to-card-verification' );
             return new WP_Error( 'upload_failed', $msg, array( 'status' => 500 ) );
         }
 
@@ -126,14 +126,14 @@ class ShetabVerify_REST_Controller {
         $order->update_meta_data( '_shetab_receipts', $all_receipts );
 
         // Update order status to a state that represents "Manual Verification Required"
-        $status_msg = __( 'User uploaded a payment receipt image.', 'shetabverify' );
+        $status_msg = __( 'User uploaded a payment receipt image.', 'webdide-card-to-card-verification' );
         $order->update_status( 'on-hold', $status_msg );
-        $order->add_order_note( __( 'Uploaded receipts are ready for admin review.', 'shetabverify' ) );
+        $order->add_order_note( __( 'Uploaded receipts are ready for admin review.', 'webdide-card-to-card-verification' ) );
         $order->save();
 
         return rest_ensure_response( array(
             'success' => true,
-            'message' => __( 'Images uploaded successfully and are awaiting admin confirmation.', 'shetabverify' ),
+            'message' => __( 'Images uploaded successfully and are awaiting admin confirmation.', 'webdide-card-to-card-verification' ),
             'receipt_ids' => $uploaded_ids
         ) );
     }
@@ -146,7 +146,7 @@ class ShetabVerify_REST_Controller {
         $amount = ! empty( $params['amount'] ) ? absint( preg_replace( '/\D/', '', $params['amount'] ) ) : 0;
 
         if ( ! $amount ) {
-            return new WP_Error( 'invalid_request', __( 'Transaction amount (amount) not found in the sent data.', 'shetabverify' ), array( 'status' => 400 ) );
+            return new WP_Error( 'invalid_request', __( 'Transaction amount (amount) not found in the sent data.', 'webdide-card-to-card-verification' ), array( 'status' => 400 ) );
         }
 
         // Authenticate using Authorization header (as used in flutter app: 'Authorization': settings.apiKey)
@@ -157,34 +157,34 @@ class ShetabVerify_REST_Controller {
             $secret = $m[1];
         }
 
-        if ( empty( $secret ) || ! ShetabVerify_Utils::verify_api_secret( $secret ) ) {
-            return new WP_Error( 'unauthorized', __( 'Invalid or missing API Secret in Authorization header.', 'shetabverify' ), array( 'status' => 401 ) );
+        if ( empty( $secret ) || ! WebDide_CV_Utils::verify_api_secret( $secret ) ) {
+            return new WP_Error( 'unauthorized', __( 'Invalid or missing API Secret in Authorization header.', 'webdide-card-to-card-verification' ), array( 'status' => 401 ) );
         }
 
         // Find match by unique_amount for pending transactions
-        $txn = ShetabVerify_DB::get_pending_transaction_by_amount( $amount );
+        $txn = WebDide_CV_DB::get_pending_transaction_by_amount( $amount );
         if ( ! $txn ) {
-            return new WP_Error( 'not_found', __( 'No pending transaction found with this amount or it has expired.', 'shetabverify' ), array( 'status' => 404 ) );
+            return new WP_Error( 'not_found', __( 'No pending transaction found with this amount or it has expired.', 'webdide-card-to-card-verification' ), array( 'status' => 404 ) );
         }
 
         $order_id = absint($txn->order_id);
         $remote_ref = ! empty( $params['recipeId'] ) ? sanitize_text_field( $params['recipeId'] ) : '';
 
         // Mark confirmed in DB
-        ShetabVerify_DB::mark_transaction_confirmed( $txn->id, $remote_ref, $params );
+        WebDide_CV_DB::mark_transaction_confirmed( $txn->id, $remote_ref, $params );
 
         // Mark WooCommerce order as paid
         if ( function_exists( 'wc_get_order' ) ) {
             $order = wc_get_order( $order_id );
             if ( $order ) {
                 $order->payment_complete( $remote_ref );
-                $order->add_order_note( sprintf( __( 'Auto-confirmation: Amount %s verified by app. Ref Code: %s', 'shetabverify' ), number_format_i18n($amount), $remote_ref ) );
+                $order->add_order_note( sprintf( __( 'Auto-confirmation: Amount %s verified by app. Ref Code: %s', 'webdide-card-to-card-verification' ), number_format_i18n($amount), $remote_ref ) );
             }
         }
 
         return rest_ensure_response( array( 
             'success' => true, 
-            'message' => __( 'Payment confirmed successfully.', 'shetabverify' ),
+            'message' => __( 'Payment confirmed successfully.', 'webdide-card-to-card-verification' ),
             'order_id' => $order_id 
         ) );
     }
@@ -195,7 +195,7 @@ class ShetabVerify_REST_Controller {
             return new WP_Error( 'missing_order_id', 'order_id is required', array( 'status' => 400 ) );
         }
 
-        $txn = ShetabVerify_DB::get_transaction_by_order_id( absint( $order_id ) );
+        $txn = WebDide_CV_DB::get_transaction_by_order_id( absint( $order_id ) );
         if ( ! $txn ) {
             return rest_ensure_response( array( 'order_id' => (int) $order_id, 'status' => 'not_found' ) );
         }
@@ -208,3 +208,11 @@ class ShetabVerify_REST_Controller {
         ) );
     }
 }
+
+
+
+
+
+
+
+
