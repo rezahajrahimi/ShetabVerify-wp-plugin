@@ -163,9 +163,9 @@ class WebDide_CV_Admin {
             }
 
             if ( $action === 'save_support_info' ) {
-                update_option( 'shetab_support_whatsapp', sanitize_text_field( $_POST['support_whatsapp'] ?? '' ) );
-                update_option( 'shetab_support_telegram', sanitize_text_field( $_POST['support_telegram'] ?? '' ) );
-                update_option( 'shetab_support_manager_text', sanitize_textarea_field( $_POST['support_manager_text'] ?? '' ) );
+                update_option( 'wdcv_support_whatsapp', sanitize_text_field( $_POST['support_whatsapp'] ?? '' ) );
+                update_option( 'wdcv_support_telegram', sanitize_text_field( $_POST['support_telegram'] ?? '' ) );
+                update_option( 'wdcv_support_manager_text', sanitize_textarea_field( $_POST['support_manager_text'] ?? '' ) );
                 $messages[] = __( 'Support information saved successfully.', 'webdide-card-to-card-verification' );
             }
         }
@@ -173,14 +173,14 @@ class WebDide_CV_Admin {
         $cards = WebDide_CV_DB::get_cards();
         $api_secret = WebDide_CV_Utils::get_api_secret();
 
-        $confirm_api_url = home_url( '/wp-json/WebDide_CV/v1/confirm' );
-        $status_api_url = home_url( '/wp-json/WebDide_CV/v1/status' );
+        $confirm_api_url = home_url( '/wp-json/webdide-cv/v1/confirm' );
+        $status_api_url = home_url( '/wp-json/webdide-cv/v1/status' );
         ?>
         
 
         <div class="wdcv-admin-wrap">
             <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 30px;">
-                <img src="<?php echo WDCV_PLUGIN_URL . 'public/assets/images/logo.png'; ?>" style="height: 60px; width: auto;" alt="Shetab Logo">
+                <img src="<?php echo esc_url( WDCV_PLUGIN_URL . 'public/assets/images/logo.png' ); ?>" style="height: 60px; width: auto;" alt="Shetab Logo">
                 <h1 style="margin: 0; padding: 0;"><?php esc_html_e( 'card-to-card verification', 'webdide-card-to-card-verification' ); ?></h1>
             </div>
 
@@ -192,8 +192,8 @@ class WebDide_CV_Admin {
                         <br>
                         <?php
                         printf(
-                            /* translators: %s: URL to the permalinks settings page */
-                            esc_html__( 'Please go to %s and set the structure (e.g., to "Post name").', 'webdide-card-to-card-verification' ),
+                            /* translators: %s: Link to the permalinks settings page */
+                            wp_kses_post( __( 'Please go to %s and set the structure (e.g., to "Post name").', 'webdide-card-to-card-verification' ) ),
                             sprintf(
                                 '<a href="%1$s" target="_blank"><strong>%2$s</strong></a>',
                                 esc_url( admin_url( 'options-permalink.php' ) ),
@@ -265,9 +265,9 @@ class WebDide_CV_Admin {
                     <?php wp_nonce_field( 'wdcv_admin' ); ?>
                     <input type="hidden" name="shetab_action" value="save_secret">
                     <div class="wdcv-form-group">
-                        <label><?php echo 'مقدار کلید:'; ?></label>
+                        <label><?php echo esc_html( 'مقدار کلید:' ); ?></label>
                         <input name="api_secret" type="text" class="regular-text" value="<?php echo esc_attr($api_secret); ?>">
-                        <p class="description"><?php echo $api_secret ? 'کلید هم اکنون تنظیم شده است.' : 'هنوز کلیدی تنظیم نشده است.'; ?></p>
+                        <p class="description"><?php echo esc_html( $api_secret ? 'کلید هم اکنون تنظیم شده است.' : 'هنوز کلیدی تنظیم نشده است.' ); ?></p>
                     </div>
                     <?php if ( $api_secret ) : ?>
                         <div class="wdcv-api-info">
@@ -276,9 +276,9 @@ class WebDide_CV_Admin {
                         </div>
                         <div class="wdcv-qr-container">
                             <div class="wdcv-qr-image">
-                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<?php echo urlencode($api_secret); ?>" alt="QR Secret">
+                                <img src="<?php echo esc_url( 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' . urlencode( $api_secret ) ); ?>" alt="QR Secret">
                             </div>
-                            <span style="font-size:0.8rem; color:#718096;"><?php echo 'اسکن برای کپی کلید'; ?></span>
+                            <span style="font-size:0.8rem; color:#718096;"><?php echo esc_html( 'اسکن برای کپی کلید' ); ?></span>
                         </div>
                     <?php endif; ?>
                     <p style="margin-top:20px;"><button type="submit" class="wdcv-btn"><?php echo 'ذخیره کلید مخفی'; ?></button></p>
@@ -294,7 +294,7 @@ class WebDide_CV_Admin {
                         <button type="button" class="wdcv-copy-btn" onclick="copyToClipboard('<?php echo esc_js($confirm_api_url); ?>')"><?php esc_html_e( 'Copy', 'webdide-card-to-card-verification' ); ?></button>
                     </div>
                     <div class="wdcv-qr-container" style="display:inline-flex; margin-right:20px;">
-                        <img class="wdcv-qr-image" src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=<?php echo urlencode($confirm_api_url); ?>" width="100">
+                        <img class="wdcv-qr-image" src="<?php echo esc_url( 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=' . urlencode( $confirm_api_url ) ); ?>" width="100">
                     </div>
                 </div>
                 <div class="wdcv-form-group">
@@ -304,7 +304,7 @@ class WebDide_CV_Admin {
                         <button type="button" class="wdcv-copy-btn" onclick="copyToClipboard('<?php echo esc_js($status_api_url); ?>')"><?php esc_html_e( 'Copy', 'webdide-card-to-card-verification' ); ?></button>
                     </div>
                     <div class="wdcv-qr-container" style="display:inline-flex;">
-                        <img class="wdcv-qr-image" src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=<?php echo urlencode($status_api_url); ?>" width="100">
+                        <img class="wdcv-qr-image" src="<?php echo esc_url( 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=' . urlencode( $status_api_url ) ); ?>" width="100">
                     </div>
                 </div>
             </div>
@@ -387,14 +387,15 @@ class WebDide_CV_Admin {
                                             <?php if ( $usage['count'] > 0 ) : ?>
                                                 <div style="margin-top:5px;">
                                                     <button type="button" style="color: #3182ce; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; font-size: 0.8rem; font-weight: 600;" 
-                                                        onclick='showCardOrders(<?php echo wp_json_encode($usage["orders"]); ?>, "<?php echo esc_js($c->label); ?>")'>
+                                                        onclick="showCardOrders(<?php echo wp_json_encode($usage['orders']); ?>, '<?php echo esc_js($c->label); ?>')">
                                                         <?php printf( esc_html__( 'View Details (%d orders)', 'webdide-card-to-card-verification' ), $usage['count'] ); ?>
                                                     </button>
                                                 </div>
                                             <?php endif; ?>
                                         </div>
                                     </td>
-                                    <td><?php echo $c->active ? '<span style="color:#38a169;">✅ ' . esc_html__( 'Active', 'webdide-card-to-card-verification' ) . '</span>' : '<span style="color:#e53e3e;">❌ ' . esc_html__( 'Inactive', 'webdide-card-to-card-verification' ) . '</span>'; ?></td>
+                                    <td><?php echo $c->active ? '<span style="color:#38a169;">✅ ' . esc_html__( 'Active', 'webdide-card-to-card-verification' ) . '</span>' : '<span style="color:#e53e3e;">❌ ' . esc_html__( 'Inactive', 'webdide-card-to-card-verification' ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                    ?></td>
                                     <td>
                                         <form method="post" onsubmit="return confirm('<?php esc_attr_e( 'Are you sure you want to remove this card?', 'webdide-card-to-card-verification' ); ?>');">
                                             <?php wp_nonce_field( 'wdcv_admin' ); ?>
@@ -417,15 +418,15 @@ class WebDide_CV_Admin {
                     <input type="hidden" name="shetab_action" value="save_support_info">
                     <div class="wdcv-form-group">
                         <label><?php esc_html_e( 'WhatsApp ID (e.g. 989123456789):', 'webdide-card-to-card-verification' ); ?></label>
-                        <input name="support_whatsapp" type="text" value="<?php echo esc_attr(get_option('shetab_support_whatsapp')); ?>" placeholder="989...">
+                        <input name="support_whatsapp" type="text" value="<?php echo esc_attr(get_option('wdcv_support_whatsapp')); ?>" placeholder="989...">
                     </div>
                     <div class="wdcv-form-group">
                         <label><?php esc_html_e( 'Telegram ID:', 'webdide-card-to-card-verification' ); ?></label>
-                        <input name="support_telegram" type="text" value="<?php echo esc_attr(get_option('shetab_support_telegram')); ?>" placeholder="@username">
+                        <input name="support_telegram" type="text" value="<?php echo esc_attr(get_option('wdcv_support_telegram')); ?>" placeholder="@username">
                     </div>
                     <div class="wdcv-form-group">
                         <label><?php esc_html_e( 'Manager Note for Users:', 'webdide-card-to-card-verification' ); ?></label>
-                        <textarea name="support_manager_text" rows="4" style="max-width:600px;"><?php echo esc_textarea(get_option('shetab_support_manager_text')); ?></textarea>
+                        <textarea name="support_manager_text" rows="4" style="max-width:600px;"><?php echo esc_textarea(get_option('wdcv_support_manager_text')); ?></textarea>
                     </div>
                     <button type="submit" class="wdcv-btn"><?php esc_html_e( 'Save Support Info', 'webdide-card-to-card-verification' ); ?></button>
                 </form>
@@ -463,13 +464,31 @@ class WebDide_CV_Admin {
         var currentCardLabel = "";
 
         function copyToClipboard(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(function() {
+                    alert("<?php esc_js_e( 'Copied to clipboard:', 'webdide-card-to-card-verification' ); ?> " + text);
+                }).catch(function(err) {
+                    console.error('Failed to copy: ', err);
+                    fallbackCopyTextToClipboard(text);
+                });
+            } else {
+                fallbackCopyTextToClipboard(text);
+            }
+        }
+
+        function fallbackCopyTextToClipboard(text) {
             var tempInput = document.createElement("input");
             tempInput.value = text;
             document.body.appendChild(tempInput);
             tempInput.select();
-            document.execCommand("copy");
+            try {
+                document.execCommand("copy");
+                alert("<?php esc_js_e( 'Copied to clipboard:', 'webdide-card-to-card-verification' ); ?> " + text);
+            } catch (err) {
+                console.error('Fallback copy failed: ', err);
+                alert("<?php esc_js_e( 'Copy failed. Please copy manually:', 'webdide-card-to-card-verification' ); ?> " + text);
+            }
             document.body.removeChild(tempInput);
-            alert("<?php esc_js_e( 'Copied to clipboard:', 'webdide-card-to-card-verification' ); ?> " + text);
         }
 
         function showCardOrders(orders, cardLabel) {

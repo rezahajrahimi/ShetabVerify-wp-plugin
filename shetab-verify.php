@@ -46,7 +46,7 @@ register_deactivation_hook( __FILE__, array( 'WebDide_CV_Deactivator', 'deactiva
 add_action( 'plugins_loaded', 'wdcv_init' );
 
 // Hook in Blocks integration
-// add_action( 'woocommerce_blocks_loaded', 'wdcv_woocommerce_block_support' );
+add_action( 'woocommerce_blocks_loaded', 'wdcv_woocommerce_block_support' );
 
 function wdcv_init() {
     // Add a custom cron schedule for cleanup (every 5 minutes)
@@ -65,6 +65,7 @@ function wdcv_init() {
 
     if ( class_exists( 'woocommerce' ) ) {
 require_once WDCV_PLUGIN_DIR . 'includes/gateway/class-wc-gateway-wdcv.php';
+require_once WDCV_PLUGIN_DIR . 'includes/gateway/class-wdcv-blocks-support.php';
 
         add_filter( 'woocommerce_payment_gateways', 'wdcv_add_gateway' );
         add_action( 'rest_api_init', array( 'WebDide_CV_REST_Controller', 'register_routes' ) );
@@ -423,7 +424,7 @@ function wdcv_woocommerce_block_support() {
         add_action(
             'woocommerce_blocks_payment_method_type_registration',
             function( Automattic\woocommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry ) {
-                $payment_method_registry->register( new WC_Gateway_WDCV_Blocks_Support() );
+                $payment_method_registry->register( new WC_WebDide_CV_Blocks_Support() );
             }
         );
     }

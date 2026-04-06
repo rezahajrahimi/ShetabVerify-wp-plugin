@@ -77,20 +77,11 @@ class WC_Gateway_WDCV extends WC_Payment_Gateway {
         }
 
         // Do not expose in admin (except via AJAX previews)
-        // In block editor, we want the gateway to be available so it can be configured
-        // if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
-        //     // Check if we are in the block editor
-        //     if ( function_exists( 'get_current_screen' ) ) {
-        //         $screen = get_current_screen();
-        //         if ( $screen && $screen->is_block_editor() ) {
-        //             return true;
-        //         }
-        //     }
-        //     // Otherwise, return false in admin
-        //     // return false; // Actually, WooCommerce core gateways don't return false in admin. Let's just remove this check.
-        // }
+        if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
+            return true; // Allow in admin for settings/configuration
+        }
 
-        // If cart exists, require non-zero total
+        // If cart exists, require non-zero total (but allow in admin)
         if ( ! is_admin() && function_exists( 'WC' ) && WC()->cart ) {
             if ( floatval( WC()->cart->total ) <= 0 ) {
                 return false;
@@ -319,8 +310,8 @@ class WC_Gateway_WDCV extends WC_Payment_Gateway {
             var txnId = <?php echo (int) $txn->id; ?>;
             var orderId = <?php echo (int) $order_id; ?>;
             var el = document.getElementById('shetab-countdown-' + txnId);
-            var statusUrl = '<?php echo esc_url( get_rest_url( null, "WebDide_CV/v1/status" ) ); ?>';
-            var uploadUrl = '<?php echo esc_url( get_rest_url( null, "WebDide_CV/v1/upload-receipt" ) ); ?>';
+            var statusUrl = '<?php echo esc_url( get_rest_url( null, "webdide-cv/v1/status" ) ); ?>';
+            var uploadUrl = '<?php echo esc_url( get_rest_url( null, "webdide-cv/v1/upload-receipt" ) ); ?>';
 
             // Timer Tick
             if (el) {

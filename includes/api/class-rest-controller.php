@@ -8,13 +8,13 @@ class WebDide_CV_REST_Controller {
         register_rest_route( 'webdide-cv/v1', '/confirm', array(
             'methods'  => 'POST',
             'callback' => array( __CLASS__, 'confirm_payment' ),
-            'permission_callback' => '__return_true',
+            'permission_callback' => array( __CLASS__, 'check_api_secret' ),
         ) );
 
         register_rest_route( 'webdide-cv/v1', '/status', array(
             'methods'  => 'GET',
             'callback' => array( __CLASS__, 'get_status' ),
-            'permission_callback' => '__return_true',
+            'permission_callback' => '__return_true', // This is a public endpoint - clients need to check order status
         ) );
 
         register_rest_route( 'webdide-cv/v1', '/upload-receipt', array(
@@ -22,6 +22,21 @@ class WebDide_CV_REST_Controller {
             'callback' => array( __CLASS__, 'handle_receipt_upload' ),
             'permission_callback' => array( __CLASS__, 'check_upload_permission' ),
         ) );
+    }
+
+    /**
+     * Permission check for API Secret authentication.
+     * Verifies that the request contains a valid API Secret in the Authorization header.
+     */
+    public static function check_api_secret( WP_REST_Request $request ) {
+        $secret = $request->get_header( 'authorization' );
+        
+        // If Bearer is present, strip it
+        if ( $secret && preg_match( '/Bearer\s+(.*)/i', $secret, $m ) ) {
+            $secret = $m[1];
+        }
+
+        return ! empty( $secret ) && WebDide_CV_Utils::verify_api_secret( $secret );
     }
 
     /**
