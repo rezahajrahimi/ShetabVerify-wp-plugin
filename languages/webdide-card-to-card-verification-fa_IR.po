@@ -1,0 +1,253 @@
+# Translation of WebDide Card-to-Card Verification in Persian (Farsi)
+# This file is distributed under the same license as the WebDide Card-to-Card Verification package.
+msgid ""
+msgstr ""
+"Project-Id-Version: WebDide Card-to-Card Verification 0.1.0\n"
+"Report-Msgid-Bugs-To: http://verify.webdide.ir/\n"
+"POT-Creation-Date: 2024-01-06 12:00+0000\n"
+"PO-Revision-Date: 2024-01-06 12:00+0000\n"
+"Last-Translator: Reza HajRahimi <reza@webdide.ir>\n"
+"Language-Team: Persian <reza@webdide.ir>\n"
+"Language: fa_IR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
+"X-Generator: Poedit 3.0\n"
+
+msgid "Bank Transfer Slips (Shetab)"
+msgstr "رسیدهای انتقال بانکی (شتاب)"
+
+msgid "No slips have been uploaded for this order."
+msgstr "هیچ رسیدی برای این سفارش آپلود نشده است."
+
+msgid "Confirm Slip"
+msgstr "تایید رسید"
+
+msgid "Invalid"
+msgstr "نامعتبر"
+
+msgid "Confirming the slip will set the order status to \"Processing\"."
+msgstr "تایید رسید وضعیت سفارش را به \"در حال پردازش\" تغییر می‌دهد."
+
+msgid "Insufficient permissions"
+msgstr "دسترسی کافی ندارید"
+
+msgid "Card added."
+msgstr "کارت اضافه شد."
+
+msgid "Card removed."
+msgstr "کارت حذف شد."
+
+msgid "API Secret saved successfully."
+msgstr "کلید API با موفقیت ذخیره شد."
+
+msgid "Support information saved successfully."
+msgstr "اطلاعات پشتیبانی با موفقیت ذخیره شد."
+
+msgid "card-to-card verification"
+msgstr "تایید کارت به کارت"
+
+msgid "⚠️ Warning: Missing Permalinks Configuration"
+msgstr "⚠️ هشدار: تنظیمات پیوندهای یکتا وجود ندارد"
+
+msgid "To ensure the automatic confirmation system (API) works correctly, you must set your WordPress <strong>\"Permalinks\"</strong> to anything other than \"Plain\"."
+msgstr "برای اطمینان از عملکرد صحیح سیستم تایید خودکار (API)، باید <strong>\"پیوندهای یکتا\"</strong> وردپرس خود را روی چیزی غیر از \"ساده\" تنظیم کنید."
+
+msgid "Settings > Permalinks"
+msgstr "تنظیمات > پیوندهای یکتا"
+
+msgid "Guides & Resources"
+msgstr "راهنماها و منابع"
+
+msgid "Download Android App"
+msgstr "دانلود اپلیکیشن اندروید"
+
+msgid "To use automatic bank transfer confirmation, download and install the Shetab app from Cafe Bazaar."
+msgstr "برای استفاده از تایید خودکار انتقال بانکی، اپلیکیشن شتاب را از کافه بازار دانلود و نصب کنید."
+
+msgid "Download from Cafe Bazaar"
+msgstr "دانلود از کافه بازار"
+
+msgid "User Guide"
+msgstr "راهنمای کاربر"
+
+msgid "Watch tutorials and read guides for a correct configuration."
+msgstr "ویدیوهای آموزشی را ببینید و راهنماها را برای تنظیمات صحیح مطالعه کنید."
+
+msgid "View Tutorials"
+msgstr "مشاهده آموزش‌ها"
+
+msgid "Developer Website"
+msgstr "وب‌سایت توسعه‌دهنده"
+
+msgid "Visit our website for support and the latest updates."
+msgstr "برای پشتیبانی و آخرین به‌روزرسانی‌ها به وب‌سایت ما مراجعه کنید."
+
+msgid "Visit Website"
+msgstr "بازدید از وب‌سایت"
+
+msgid "Secret API (Private Key)"
+msgstr "کلید API مخفی"
+
+msgid "مقدار کلید:"
+msgstr "مقدار کلید:"
+
+msgid "کلید هم اکنون تنظیم شده است."
+msgstr "کلید هم اکنون تنظیم شده است."
+
+msgid "هنوز کلیدی تنظیم نشده است."
+msgstr "هنوز کلیدی تنظیم نشده است."
+
+msgid "ذخیره کلید مخفی"
+msgstr "ذخیره کلید مخفی"
+
+msgid "API URL Addresses"
+msgstr "آدرس‌های URL API"
+
+msgid "Confirm Payment (POST):"
+msgstr "تایید پرداخت (POST):"
+
+msgid "Copy"
+msgstr "کپی"
+
+msgid "Payment Status (GET):"
+msgstr "وضعیت پرداخت (GET):"
+
+msgid "Add New Bank Card"
+msgstr "افزودن کارت بانکی جدید"
+
+msgid "Card Label/Name:"
+msgstr "برچسب/نام کارت:"
+
+msgid "e.g. Primary Shop Card"
+msgstr "مثلاً کارت فروشگاه اصلی"
+
+msgid "16-Digit Card Number:"
+msgstr "شماره کارت ۱۶ رقمی:"
+
+msgid "Transaction Limit (Count):"
+msgstr "محدودیت تعداد تراکنش:"
+
+msgid "0 means unlimited"
+msgstr "۰ یعنی نامحدود"
+
+msgid "Total Amount Limit (Toman):"
+msgstr "محدودیت مبلغ کل (تومان):"
+
+msgid "Limit Reset Period:"
+msgstr "دوره بازنشانی محدودیت:"
+
+msgid "No Reset (Forever)"
+msgstr "بدون بازنشانی (برای همیشه)"
+
+msgid "Daily"
+msgstr "روزانه"
+
+msgid "Monthly"
+msgstr "ماهانه"
+
+msgid "Card is active"
+msgstr "کارت فعال است"
+
+msgid "Add Card"
+msgstr "افزودن کارت"
+
+msgid "Existing Cards"
+msgstr "کارت‌های موجود"
+
+msgid "ID"
+msgstr "شناسه"
+
+msgid "Label"
+msgstr "برچسب"
+
+msgid "Full Card Number"
+msgstr "شماره کارت کامل"
+
+msgid "Limits (Count/Amount)"
+msgstr "محدودیت‌ها (تعداد/مبلغ)"
+
+msgid "Current Usage"
+msgstr "استفاده فعلی"
+
+msgid "Status"
+msgstr "وضعیت"
+
+msgid "Actions"
+msgstr "اقدامات"
+
+msgid "No cards have been configured yet."
+msgstr "هنوز هیچ کارتی تنظیم نشده است."
+
+msgid "Copy"
+msgstr "کپی"
+
+msgid "Txns:"
+msgstr "تراکنش‌ها:"
+
+msgid "Sum:"
+msgstr "مجموع:"
+
+msgid "Tomans"
+msgstr "تومان"
+
+msgid "View Details (%d orders)"
+msgstr "مشاهده جزئیات (%d سفارش)"
+
+msgid "Active"
+msgstr "فعال"
+
+msgid "Inactive"
+msgstr "غیرفعال"
+
+msgid "Delete"
+msgstr "حذف"
+
+msgid "Are you sure you want to remove this card?"
+msgstr "آیا مطمئن هستید که می‌خواهید این کارت را حذف کنید؟"
+
+msgid "Support Information"
+msgstr "اطلاعات پشتیبانی"
+
+msgid "WhatsApp ID (e.g. 989123456789):"
+msgstr "شناسه واتس‌اپ (مثلاً ۹۸۹۱۲۳۴۵۶۷۸۹):"
+
+msgid "Telegram ID:"
+msgstr "شناسه تلگرام:"
+
+msgid "Manager Note for Users:"
+msgstr "یادداشت مدیر برای کاربران:"
+
+msgid "Save Support Info"
+msgstr "ذخیره اطلاعات پشتیبانی"
+
+msgid "Copied to clipboard:"
+msgstr "در کلیپ‌بورد کپی شد:"
+
+msgid "Order List"
+msgstr "لیست سفارشات"
+
+msgid "Successful Transactions for"
+msgstr "تراکنش‌های موفق برای"
+
+msgid "No transactions found."
+msgstr "هیچ تراکنشی یافت نشد."
+
+msgid "Order ID"
+msgstr "شناسه سفارش"
+
+msgid "Amount (Toman)"
+msgstr "مبلغ (تومان)"
+
+msgid "Confirmation Date"
+msgstr "تاریخ تایید"
+
+msgid "View"
+msgstr "مشاهده"
+
+msgid "Details"
+msgstr "جزئیات"
+
+msgid "Every 5 Minutes"
+msgstr "هر ۵ دقیقه"

@@ -48,7 +48,77 @@ add_action( 'plugins_loaded', 'wdcv_init' );
 // Hook in Blocks integration
 add_action( 'woocommerce_blocks_loaded', 'wdcv_woocommerce_block_support' );
 
+function wdcv_load_persian_translations() {
+    // Load Persian translations manually
+    $locale = get_locale();
+    if ($locale !== 'fa_IR' && $locale !== 'fa') {
+        return;
+    }
+
+    $po_file = WDCV_PLUGIN_DIR . '/languages/webdide-card-to-card-verification-fa_IR.po';
+    if (!file_exists($po_file)) {
+        return;
+    }
+
+    // Simple PO file parser
+    $content = file_get_contents($po_file);
+    $translations = array();
+
+    // Parse basic msgid/msgstr pairs
+    $lines = explode("\n", $content);
+    $current_msgid = '';
+    $current_msgstr = '';
+    $in_msgstr = false;
+
+    foreach ($lines as $line) {
+        $line = trim($line);
+        if (empty($line) || strpos($line, '#') === 0) {
+            continue;
+        }
+
+        if (strpos($line, 'msgid "') === 0) {
+            if (!empty($current_msgid) && !empty($current_msgstr)) {
+                $translations[trim($current_msgid, '"')] = trim($current_msgstr, '"');
+            }
+            $current_msgid = substr($line, 7, -1); // Remove msgid " and "
+            $current_msgstr = '';
+            $in_msgstr = false;
+        } elseif (strpos($line, 'msgstr "') === 0) {
+            $current_msgstr = substr($line, 8, -1); // Remove msgstr " and "
+            $in_msgstr = true;
+        } elseif ($in_msgstr && strpos($line, '"') === 0) {
+            $current_msgstr .= substr($line, 1, -1); // Remove " and "
+        }
+    }
+
+    // Add the last translation
+    if (!empty($current_msgid) && !empty($current_msgstr)) {
+        $translations[trim($current_msgid, '"')] = trim($current_msgstr, '"');
+    }
+
+    // Load translations into WordPress
+    global $l10n;
+    if (!isset($l10n['webdide-card-to-card-verification'])) {
+        $l10n['webdide-card-to-card-verification'] = new MO();
+    }
+
+    foreach ($translations as $original => $translated) {
+        $l10n['webdide-card-to-card-verification']->entries[$original] = (object) array(
+            'translations' => array($translated),
+            'context' => null,
+            'plural' => null,
+            'singular' => $original,
+        );
+    }
+}
+
 function wdcv_init() {
+    // Load plugin text domain for translations
+    load_plugin_textdomain( 'webdide-card-to-card-verification', false, dirname( plugin_basename( WDCV_PLUGIN_FILE ) ) . '/languages' );
+
+    // Load Persian translations manually if .mo file doesn't exist
+    wdcv_load_persian_translations();
+
     // Add a custom cron schedule for cleanup (every 5 minutes)
     add_filter( 'cron_schedules', function ( $schedules ) {
         if ( empty( $schedules['wdcv_every_5min'] ) ) {
