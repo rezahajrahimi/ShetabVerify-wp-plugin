@@ -25,10 +25,21 @@ define( 'WDCV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
  * Enqueue scripts and styles.
  */
 function wdcv_enqueue_assets( $hook ) {
-    if ( strpos( $hook, 'webdide-card-to-card-verification' ) === false ) {
-        return;
+    // Load on our plugin page
+    if ( $hook === 'toplevel_page_webdide-card-to-card-verification' || strpos( $hook, 'webdide-card-to-card-verification' ) !== false ) {
+        wp_enqueue_style( 'wdcv-admin-style', plugins_url( 'public/css/admin-style.css', WDCV_PLUGIN_FILE ), array(), time() );
+        wp_enqueue_script( 'wdcv-admin-script', plugins_url( 'public/js/admin-script.js', WDCV_PLUGIN_FILE ), array( 'jquery' ), time(), true );
+
+        // Localize script with translation strings
+        wp_localize_script( 'wdcv-admin-script', 'wdcv_admin_vars', array(
+            'copied_text' => esc_js( __( 'Copied to clipboard:', 'webdide-card-to-card-verification' ) ),
+            'copy_failed_text' => esc_js( __( 'Copy failed. Please copy manually:', 'webdide-card-to-card-verification' ) ),
+            'successful_transactions_text' => esc_js( __( 'Successful Transactions for', 'webdide-card-to-card-verification' ) ),
+            'no_transactions_text' => esc_js( __( 'No transactions found.', 'webdide-card-to-card-verification' ) ),
+            'details_text' => esc_js( __( 'Details', 'webdide-card-to-card-verification' ) ),
+            'admin_url' => admin_url()
+        ) );
     }
-    wp_enqueue_style( 'wdcv-admin-style', plugins_url( 'public/css/admin-style.css', WDCV_PLUGIN_FILE ), array(), WDCV_VERSION );
 }
 add_action( 'admin_enqueue_scripts', 'wdcv_enqueue_assets' );
 
