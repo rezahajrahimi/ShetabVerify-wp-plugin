@@ -181,7 +181,7 @@ class WebDide_CV_Admin {
         <div class="wdcv-admin-wrap">
             <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 30px;">
                 <img src="<?php echo WDCV_PLUGIN_URL . 'public/assets/images/logo.png'; ?>" style="height: 60px; width: auto;" alt="Shetab Logo">
-                <h1 style="margin: 0; padding: 0;"><?php esc_html_e( 'WebDide_CV Management', 'webdide-card-to-card-verification' ); ?></h1>
+                <h1 style="margin: 0; padding: 0;"><?php esc_html_e( 'card-to-card verification', 'webdide-card-to-card-verification' ); ?></h1>
             </div>
 
             <?php if ( get_option( 'permalink_structure' ) === '' ) : ?>
@@ -549,6 +549,7 @@ class WebDide_CV_Admin {
         <?php
     }
 }
+
 
 
 

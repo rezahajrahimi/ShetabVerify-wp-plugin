@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: WebDide Card-to-Card Payment Verification for Shetab and WooCommerce
+ * Plugin Name: WebDide Card-to-Card Payment Verification for Shetab
  * Plugin URI:  http://verify.webdide.ir/
- * Description: WooCommerce payment gateway — Automated Card-to-Card transaction confirmation via mobile app.
+ * Description: Payment gateway — Automated Card-to-Card transaction confirmation via mobile app.
  * Version:     0.1.0
  * Author:      Reza HajRahimi
  * Author URI:  http://webdide.ir/
@@ -63,7 +63,7 @@ function wdcv_init() {
     // register cleanup handler
     add_action( 'wdcv_cleanup_expired', array( 'WebDide_CV_DB', 'cleanup_expired_transactions' ) );
 
-    if ( class_exists( 'WooCommerce' ) ) {
+    if ( class_exists( 'woocommerce' ) ) {
 require_once WDCV_PLUGIN_DIR . 'includes/gateway/class-wc-gateway-wdcv.php';
 
         add_filter( 'woocommerce_payment_gateways', 'wdcv_add_gateway' );
@@ -100,7 +100,7 @@ require_once WDCV_PLUGIN_DIR . 'includes/gateway/class-wc-gateway-wdcv.php';
 
         // Register blocks support
         add_action( 'woocommerce_blocks_loaded', function() {
-            if ( class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
+            if ( class_exists( 'Automattic\woocommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
                 require_once WDCV_PLUGIN_DIR . 'includes/gateway/class-wdcv-blocks-support.php';
                 add_action( 'woocommerce_blocks_payment_method_type_registration', function( $payment_method_registry ) {
                     $payment_method_registry->register( new WC_WebDide_CV_Blocks_Support() );
@@ -139,7 +139,7 @@ require_once WDCV_PLUGIN_DIR . 'includes/gateway/class-wc-gateway-wdcv.php';
 
         // Add blocks settings
         // add_action( 'woocommerce_blocks_loaded', function() {
-        //     if ( class_exists( 'Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry' ) ) {
+        //     if ( class_exists( 'Automattic\woocommerce\Blocks\Payments\PaymentMethodRegistry' ) ) {
         //         require_once WDCV_PLUGIN_DIR . 'includes/gateway/class-wc-wdcv-blocks-support.php';
         //         add_filter( 'woocommerce_blocks_payment_method_type_registration', function( $payment_method_registry ) {
         //             $payment_method_registry->register( new WC_WebDide_CV_Blocks_Support() );
@@ -205,7 +205,7 @@ function wdcv_force_available_gateway( $available ) {
 }
 
 function wdcv_refresh_available_gateways_cache() {
-    if ( ! class_exists( 'WooCommerce' ) || ! function_exists( 'WC' ) ) {
+    if ( ! class_exists( 'woocommerce' ) || ! function_exists( 'WC' ) ) {
         return;
     }
 
@@ -304,13 +304,13 @@ function wdcv_extend_store_api_payment_methods( $response, $server, $request ) {
 function wdcv_run_diagnostics() {
     $data = array( 'time' => current_time( 'mysql' ) );
 
-    if ( ! class_exists( 'WooCommerce' ) || ! function_exists( 'WC' ) ) {
-        $data['error'] = 'WooCommerce not active';
+    if ( ! class_exists( 'woocommerce' ) || ! function_exists( 'WC' ) ) {
+        $data['error'] = 'woocommerce not active';
         set_transient( 'wdcv_debug_available', $data, 5 * MINUTE_IN_SECONDS );
         if ( function_exists( 'wc_get_logger' ) ) {
-            wc_get_logger()->debug( 'WebDide_CV diagnostics: WooCommerce not active', array( 'source' => 'webdide-card-to-card-verification' ) );
+            wc_get_logger()->debug( 'WebDide_CV diagnostics: woocommerce not active', array( 'source' => 'webdide-card-to-card-verification' ) );
         } else {
-            error_log( 'WebDide_CV diagnostics: WooCommerce not active' );
+            error_log( 'WebDide_CV diagnostics: woocommerce not active' );
         }
         return $data;
     }
@@ -414,15 +414,15 @@ function wdcv_run_diagnostics() {
 
 function wdcv_woocommerce_missing_notice() {
     if ( current_user_can( 'activate_plugins' ) ) {
-        echo '<div class="notice notice-error"><p>' . esc_html__( 'WebDide_CV requires WooCommerce to be installed and active.', 'webdide-card-to-card-verification' ) . '</p></div>';
+        echo '<div class="notice notice-error"><p>' . esc_html__( 'WebDide_CV requires woocommerce to be installed and active.', 'webdide-card-to-card-verification' ) . '</p></div>';
     }
 }
 
 function wdcv_woocommerce_block_support() {
-    if ( class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
+    if ( class_exists( 'Automattic\woocommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
         add_action(
             'woocommerce_blocks_payment_method_type_registration',
-            function( Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry ) {
+            function( Automattic\woocommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry ) {
                 $payment_method_registry->register( new WC_Gateway_WDCV_Blocks_Support() );
             }
         );
@@ -519,6 +519,10 @@ function wdcv_create_test_order() {
 
     return $diag;
 }
+
+
+
+
 
 
 

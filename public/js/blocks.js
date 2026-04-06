@@ -1,17 +1,17 @@
 ( function () {
     'use strict';
 
-    if ( typeof window.shetabVerifyInit !== 'undefined' ) {
+    if ( typeof window.WebDide_CVInit !== 'undefined' ) {
         return;
     }
-    window.shetabVerifyInit = true;
+    window.WebDide_CVInit = true;
 
-    var config = window.shetab_verify || {};
+    var config = window.wdcv || {};
 
     // Register with WooCommerce Blocks
     if ( window.wc && window.wc.wcBlocksRegistry && typeof window.wc.wcBlocksRegistry.registerPaymentMethod === 'function' ) {
-        const settings = window.wc.wcSettings.getSetting( 'shetab_verify_data', {} );
-        console.log('ShetabVerify Blocks Settings:', settings);
+        const settings = window.wc.wcSettings.getSetting( 'wdcv_data', {} );
+        console.log('WebDide_CV Blocks Settings:', settings);
 
         const label = window.wp.htmlEntities.decodeEntities( settings.title || 'کارت به کارت' );
 
@@ -25,7 +25,7 @@
                         type: emitResponse.responseTypes.SUCCESS,
                         meta: {
                             paymentMethodData: {
-                                'payment_method': 'shetab_verify',
+                                'payment_method': 'wdcv',
                             },
                         },
                     };
@@ -51,7 +51,7 @@
         };
 
         window.wc.wcBlocksRegistry.registerPaymentMethod( {
-            name: 'shetab_verify',
+            name: 'wdcv',
             label: window.wp.element.createElement( Label ),
             content: window.wp.element.createElement( Content ),
             edit: window.wp.element.createElement( Content ),
@@ -71,10 +71,10 @@
             return;
         }
 
-        var radio = container.querySelector( 'input[value="shetab_verify"]' );
+        var radio = container.querySelector( 'input[value="wdcv"]' );
         if ( radio ) {
             // nothing to do — server-side gateway will handle process_payment
-            console.debug( 'ShetabVerify: payment method detected on page' );
+            console.debug( 'WebDide_CV: payment method detected on page' );
             return;
         }
     }
@@ -89,3 +89,4 @@
     } );
 
 } )();
+

@@ -1,6 +1,6 @@
-=== WebDide Card-to-Card Payment Verification for Shetab and WooCommerce ===
+=== WebDide Card-to-Card Payment Verification for Shetab ===
 Contributors: rezahajrahimi
-Tags: woocommerce, payment, shetab, bank transfer, auto-verification, card-to-card, iran
+Tags: WooCommerce, payment, shetab, bank transfer, auto-verification, card-to-card, iran
 Requires at least: 5.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -12,7 +12,7 @@ Automate bank transfer (Card-to-Card) confirmations in WooCommerce using unique 
 
 == Description ==
 
-**WebDide Card-to-Card Payment Verification for Shetab and WooCommerce** is a sophisticated solution for WooCommerce stores in Iran that handle "Card-to-Card" payments. Instead of manual verification of transaction slips, this plugin automates the process using a specialized mobile application.
+**WebDide Card-to-Card Payment Verification for Shetab** is a sophisticated solution for WooCommerce stores in Iran that handle "Card-to-Card" payments. Instead of manual verification of transaction slips, this plugin automates the process using a specialized mobile application.
 
 ### Key Features:
 *   **Unique Suffix Generation**: Generates a small unique suffix (e.g., 0-99 Tomans) for each order to distinguish between multiple transfers of the same base amount.
@@ -33,7 +33,7 @@ This plugin uses the following third-party services:
 
 == توضیحات فارسی (Persian Description) ==
 
-**تایید پرداخت کارت به کارت وب‌دیده برای شتاب و ووکامرس (WebDide Card-to-Card Payment Verification for Shetab and WooCommerce)** یک راهکار پیشرفته برای فروشگاه‌های وردپرسی در ایران است که از روش "کارت به کارت" برای تسویه حساب استفاده می‌کنند. با استفاده از این افزونه و اپلیکیشن همراه آن، دیگر نیازی به تایید دستی فیش‌های واریزی ندارید.
+**تایید پرداخت کارت به کارت وب‌دیده برای شتاب و ووکامرس (WebDide Card-to-Card Payment Verification for Shetab)** یک راهکار پیشرفته برای فروشگاه‌های وردپرسی در ایران است که از روش "کارت به کارت" برای تسویه حساب استفاده می‌کنند. با استفاده از این افزونه و اپلیکیشن همراه آن، دیگر نیازی به تایید دستی فیش‌های واریزی ندارید.
 
 ### ویژگی‌های کلیدی:
 *   **تولید شناسه پرداخت منحصر به فرد**: برای هر سفارش یک مبلغ جزئی (مثلاً ۱ تا ۹۹۹ تومان) به مبلغ اصلی اضافه می‌شود تا تراکنش‌های مشابه از هم تفکیک شوند.
@@ -75,3 +75,6 @@ Orders will remain "On Hold". You can still manually verify payments via the ord
 * Support for unique suffixes per order.
 * WooCommerce Blocks integration.
 * Admin management dashboard.
+
+
+
