@@ -14,7 +14,7 @@ class WebDide_CV_REST_Controller {
         register_rest_route( 'webdide-cv/v1', '/status', array(
             'methods'  => 'GET',
             'callback' => array( __CLASS__, 'get_status' ),
-            'permission_callback' => '__return_true', // This is a public endpoint - clients need to check order status
+            'permission_callback' => array( __CLASS__, 'check_status_permission' ),
         ) );
 
         register_rest_route( 'webdide-cv/v1', '/upload-receipt', array(
@@ -76,6 +76,35 @@ class WebDide_CV_REST_Controller {
         }
 
         return false;
+    }
+
+    /**
+     * Permission check for status polling.
+     * Allows the customer with a matching order key or the app with the API secret.
+     */
+    public static function check_status_permission( WP_REST_Request $request ) {
+        $order_id  = absint( $request->get_param( 'order_id' ) );
+        $order_key  = sanitize_text_field( $request->get_param( 'order_key' ) );
+
+        if ( ! $order_id ) {
+            return false;
+        }
+
+        $order = wc_get_order( $order_id );
+        if ( ! $order ) {
+            return false;
+        }
+
+        if ( ! empty( $order_key ) && hash_equals( $order->get_order_key(), $order_key ) ) {
+            return true;
+        }
+
+        $secret = $request->get_header( 'authorization' );
+        if ( $secret && preg_match( '/Bearer\s+(.*)/i', $secret, $m ) ) {
+            $secret = $m[1];
+        }
+
+        return ! empty( $secret ) && WebDide_CV_Utils::verify_api_secret( $secret );
     }
 
     public static function handle_receipt_upload( WP_REST_Request $request ) {

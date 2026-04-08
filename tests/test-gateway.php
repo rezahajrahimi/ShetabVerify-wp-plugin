@@ -11,7 +11,7 @@ class Test_WebDide_CV_Gateway extends WP_UnitTestCase {
 
     public function test_gateway_filter_registers_class() {
         $registered = apply_filters( 'woocommerce_payment_gateways', array() );
-        $this->assertContains( 'WC_Gateway_WDCV', $registered );
+        $this->assertContains( 'WebDide_CV_Gateway', $registered );
     }
 
     public function test_gateway_available_in_cart() {
@@ -44,7 +44,7 @@ class Test_WebDide_CV_Gateway extends WP_UnitTestCase {
             $this->markTestSkipped( 'WooCommerce not available in test environment.' );
         }
 
-        $gw = new WC_Gateway_WDCV();
+        $gw = new WebDide_CV_Gateway();
         $gw->is_available();
 
         $dbg = get_transient( 'wdcv_is_available_debug' );

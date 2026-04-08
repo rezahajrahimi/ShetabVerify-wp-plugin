@@ -1,6 +1,6 @@
 === WebDide Card-to-Card Payment Verification for Shetab ===
 Contributors: rezahajrahimi
-Tags: WooCommerce, payment, shetab, bank transfer, auto-verification, card-to-card, iran
+Tags: WooCommerce, payment, bank transfer, card-to-card, verification
 Requires at least: 5.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -29,7 +29,7 @@ This plugin uses the following third-party services:
 *   **QR Code API (api.qrserver.com)**: Used to generate QR codes for the API Secret and endpoint URLs in the admin settings page. This allows shop owners to easily sync the configuration with the mobile app.
     *   **Data sent**: The API Secret (private key) and the REST API URLs are sent as URL parameters to generate the QR code image.
     *   **Service provider**: GoQR.me (Digital-Solutions.at).
-    *   **Links**: [Terms of Service](https://goqr.me/terms-of-service/), [Privacy Policy](https://goqr.me/privacy/).
+    *   **Links**: [Legal](https://goqr.me/legal/), [Privacy & Security](https://goqr.me/privacy-safety-security/).
 
 == توضیحات فارسی (Persian Description) ==
 

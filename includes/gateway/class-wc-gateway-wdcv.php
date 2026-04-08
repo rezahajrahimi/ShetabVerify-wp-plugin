@@ -7,7 +7,7 @@ if ( ! class_exists( 'WC_Payment_Gateway' ) ) {
     return;
 }
 
-class WC_Gateway_WDCV extends WC_Payment_Gateway {
+class WebDide_CV_Gateway extends WC_Payment_Gateway {
     public function __construct() {
         $this->id                 = 'wdcv';
         $this->has_fields         = false;
@@ -316,6 +316,7 @@ class WC_Gateway_WDCV extends WC_Payment_Gateway {
             'remaining'       => (int) $remaining,
             'txnId'           => (int) $txn->id,
             'orderId'         => (int) $order_id,
+            'orderKey'        => $order->get_order_key(),
             'statusUrl'       => esc_url( get_rest_url( null, 'webdide-cv/v1/status' ) ),
             'uploadUrl'       => esc_url( get_rest_url( null, 'webdide-cv/v1/upload-receipt' ) ),
             'expiredText'     => __( 'زمان شما به پایان رسیده است.', 'webdide-card-to-card-verification' ),
@@ -327,6 +328,10 @@ class WC_Gateway_WDCV extends WC_Payment_Gateway {
             'systemErrorText' => __( 'خطای سیستمی در آپلود', 'webdide-card-to-card-verification' ),
         ) );
     }
+}
+
+if ( ! class_exists( 'WC_Gateway_WDCV' ) ) {
+    class_alias( 'WebDide_CV_Gateway', 'WC_Gateway_WDCV' );
 }
 
 

@@ -1,16 +1,6 @@
 <?php
-/**
- * Plugin Name: WebDide Card-to-Card Payment Verification for Shetab
- * Plugin URI:  http://verify.webdide.ir/
- * Description: Payment gateway — Automated Card-to-Card transaction confirmation via mobile app.
- * Version:     0.1.0
- * Author:      Reza HajRahimi
- * Author URI:  http://webdide.ir/
- * Text Domain: webdide-card-to-card-verification
- * Domain Path: /languages
- * License:     GPL-2.0-or-later
- * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- */
+
+// Internal bootstrap loaded by webdide-card-to-card-verification.php.
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -185,13 +175,13 @@ require_once WDCV_PLUGIN_DIR . 'includes/gateway/class-wdcv-blocks-support.php';
             if ( class_exists( 'Automattic\woocommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
                 require_once WDCV_PLUGIN_DIR . 'includes/gateway/class-wdcv-blocks-support.php';
                 add_action( 'woocommerce_blocks_payment_method_type_registration', function( $payment_method_registry ) {
-                    $payment_method_registry->register( new WC_WebDide_CV_Blocks_Support() );
+                    $payment_method_registry->register( new WebDide_CV_Blocks_Support() );
                 } );
             }
         } );
 
         // show payment instructions on the thankyou page
-        add_action( 'woocommerce_thankyou_wdcv', array( 'WC_Gateway_WDCV', 'render_payment_instructions' ), 10, 1 );
+        add_action( 'woocommerce_thankyou_wdcv', array( 'WebDide_CV_Gateway', 'render_payment_instructions' ), 10, 1 );
 
         // enqueue frontend/block assets
         // add_action( 'wp_enqueue_scripts', function() {
@@ -255,7 +245,7 @@ function wdcv_add_gateway( $gateways ) {
         error_log( 'wdcv_add_gateway invoked; incoming: ' . wp_json_encode( $gateways ) );
     }
 
-    $gateways[] = 'WC_Gateway_WDCV';
+    $gateways[] = 'WebDide_CV_Gateway';
     return $gateways;
 }
 
@@ -270,11 +260,11 @@ function wdcv_force_available_gateway( $available ) {
         return $available;
     }
 
-    if ( ! class_exists( 'WC_Gateway_WDCV' ) ) {
+    if ( ! class_exists( 'WebDide_CV_Gateway' ) ) {
         return $available;
     }
 
-    $gw = new WC_Gateway_WDCV();
+    $gw = new WebDide_CV_Gateway();
     if ( $gw->is_available() ) {
         $available['wdcv'] = $gw;
         set_transient( 'wdcv_available_filter_added', current_time( 'mysql' ), 5 * MINUTE_IN_SECONDS );
@@ -333,11 +323,11 @@ function wdcv_extend_store_api_payment_methods( $response, $server, $request ) {
         }
     }
 
-    if ( ! class_exists( 'WC_Gateway_WDCV' ) ) {
+    if ( ! class_exists( 'WebDide_CV_Gateway' ) ) {
         return $response;
     }
 
-    $gateway = new WC_Gateway_WDCV();
+    $gateway = new WebDide_CV_Gateway();
     if ( ! $gateway->is_available() ) {
         return $response;
     }
@@ -412,8 +402,8 @@ function wdcv_run_diagnostics() {
     $data['found_available'] = in_array( 'wdcv', $data['available'], true );
 
     // if not found in available, manually check via fallback logic (force through the filter)
-    if ( ! $data['found_available'] && class_exists( 'WC_Gateway_WDCV' ) ) {
-        $gw = new WC_Gateway_WDCV();
+    if ( ! $data['found_available'] && class_exists( 'WebDide_CV_Gateway' ) ) {
+        $gw = new WebDide_CV_Gateway();
         $is_avail = $gw->is_available();
         $data['manual_is_available_check'] = $is_avail;
         if ( $is_avail ) {
@@ -441,7 +431,7 @@ function wdcv_run_diagnostics() {
     // registered gateway classes via filter
     $registered = apply_filters( 'woocommerce_payment_gateways', array() );
     $data['registered_gateways'] = is_array( $registered ) ? $registered : array();
-    $data['found_registered'] = in_array( 'WC_Gateway_WDCV', $data['registered_gateways'], true );
+    $data['found_registered'] = in_array( 'WebDide_CV_Gateway', $data['registered_gateways'], true );
 
     // helper: record transient if filter was called recently
     $filter_called = get_transient( 'wdcv_filter_called' );
@@ -505,7 +495,7 @@ function wdcv_woocommerce_block_support() {
         add_action(
             'woocommerce_blocks_payment_method_type_registration',
             function( Automattic\woocommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry ) {
-                $payment_method_registry->register( new WC_WebDide_CV_Blocks_Support() );
+                $payment_method_registry->register( new WebDide_CV_Blocks_Support() );
             }
         );
     }

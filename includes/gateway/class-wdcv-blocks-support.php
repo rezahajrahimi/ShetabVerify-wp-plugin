@@ -10,10 +10,10 @@ if ( ! class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\Abstra
 }
 
 /**
- * Class WC_WebDide_CV_Blocks_Support
+ * Class WebDide_CV_Blocks_Support
  * Provides WooCommerce Blocks support for WebDide_CV payment gateway.
  */
-class WC_WebDide_CV_Blocks_Support extends Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType {
+class WebDide_CV_Blocks_Support extends Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType {
 
     /**
      * The gateway instance.
@@ -77,6 +77,10 @@ class WC_WebDide_CV_Blocks_Support extends Automattic\WooCommerce\Blocks\Payment
             'logo_url'    => $this->gateway->icon,
         );
     }
+}
+
+if ( ! class_exists( 'WC_WebDide_CV_Blocks_Support' ) ) {
+    class_alias( 'WebDide_CV_Blocks_Support', 'WC_WebDide_CV_Blocks_Support' );
 }
 
 

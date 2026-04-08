@@ -12,6 +12,7 @@
     var remaining  = parseInt( wdcvCheckoutVars.remaining,  10 );
     var txnId      = parseInt( wdcvCheckoutVars.txnId,      10 );
     var orderId    = parseInt( wdcvCheckoutVars.orderId,    10 );
+    var orderKey   = wdcvCheckoutVars.orderKey;
     var statusUrl  = wdcvCheckoutVars.statusUrl;
     var uploadUrl  = wdcvCheckoutVars.uploadUrl;
 
@@ -87,7 +88,7 @@
 
     // ── Status Polling (every 5 s) ─────────────────────────────────────────
     setInterval( function () {
-        fetch( statusUrl + '?order_id=' + orderId )
+        fetch( statusUrl + '?order_id=' + orderId + '&order_key=' + encodeURIComponent( orderKey || '' ) )
             .then( function ( r ) { return r.json(); } )
             .then( function ( data ) {
                 if ( data && data.status === 'confirmed' ) {
