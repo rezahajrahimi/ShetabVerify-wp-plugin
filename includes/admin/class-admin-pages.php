@@ -4,6 +4,52 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class WebDide_CV_Admin {
+    public static function get_qr_code_data_uri( $data, $size = '150x150' ) {
+        $data = (string) $data;
+        if ( '' === $data ) {
+            return '';
+        }
+
+        $cache_key = 'wdcv_qr_' . md5( $size . '|' . $data );
+        $cached    = get_transient( $cache_key );
+        if ( false !== $cached ) {
+            return $cached;
+        }
+
+        $request_url = add_query_arg(
+            array(
+                'size' => $size,
+                'data' => $data,
+            ),
+            'https://api.qrserver.com/v1/create-qr-code/'
+        );
+
+        $response = wp_remote_get(
+            $request_url,
+            array(
+                'timeout'     => 15,
+                'redirection' => 3,
+            )
+        );
+
+        if ( is_wp_error( $response ) ) {
+            return '';
+        }
+
+        $status_code = (int) wp_remote_retrieve_response_code( $response );
+        $body        = wp_remote_retrieve_body( $response );
+        $content_type = wp_remote_retrieve_header( $response, 'content-type' );
+
+        if ( 200 !== $status_code || empty( $body ) || empty( $content_type ) || 0 !== strpos( $content_type, 'image/' ) ) {
+            return '';
+        }
+
+        $data_uri = 'data:' . $content_type . ';base64,' . base64_encode( $body );
+        set_transient( $cache_key, $data_uri, 6 * HOUR_IN_SECONDS );
+
+        return $data_uri;
+    }
+
     public static function init() {
         add_action( 'admin_menu', array( __CLASS__, 'register_menu' ) );
         add_action( 'add_meta_boxes', array( __CLASS__, 'add_order_receipt_metabox' ) );
@@ -172,9 +218,12 @@ class WebDide_CV_Admin {
 
         $cards = WebDide_CV_DB::get_cards();
         $api_secret = WebDide_CV_Utils::get_api_secret();
+        $api_secret_qr = $api_secret ? self::get_qr_code_data_uri( $api_secret, '150x150' ) : '';
 
         $confirm_api_url = home_url( '/wp-json/webdide-cv/v1/confirm' );
         $status_api_url = home_url( '/wp-json/webdide-cv/v1/status' );
+        $confirm_api_qr = self::get_qr_code_data_uri( $confirm_api_url, '100x100' );
+        $status_api_qr  = self::get_qr_code_data_uri( $status_api_url, '100x100' );
         ?>
         
 
@@ -276,7 +325,13 @@ class WebDide_CV_Admin {
                         </div>
                         <div class="wdcv-qr-container">
                             <div class="wdcv-qr-image">
-                                <img src="<?php echo esc_url( 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' . urlencode( $api_secret ) ); ?>" alt="QR Secret">
+                                <?php if ( $api_secret_qr ) : ?>
+                                    <img src="<?php echo esc_attr( $api_secret_qr ); ?>" alt="QR Secret" loading="lazy">
+                                <?php else : ?>
+                                    <p class="description" style="margin:0; max-width: 180px;">
+                                        <?php esc_html_e( 'QR preview is temporarily unavailable. Please use the copy button.', 'webdide-card-to-card-verification' ); ?>
+                                    </p>
+                                <?php endif; ?>
                             </div>
                             <span style="font-size:0.8rem; color:#718096;"><?php echo esc_html( 'اسکن برای کپی کلید' ); ?></span>
                         </div>
@@ -294,7 +349,11 @@ class WebDide_CV_Admin {
                         <button type="button" class="wdcv-copy-btn" onclick="copyToClipboard('<?php echo esc_js($confirm_api_url); ?>')"><?php esc_html_e( 'Copy', 'webdide-card-to-card-verification' ); ?></button>
                     </div>
                     <div class="wdcv-qr-container" style="display:inline-flex; margin-right:20px;">
-                        <img class="wdcv-qr-image" src="<?php echo esc_url( 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=' . urlencode( $confirm_api_url ) ); ?>" width="100">
+                        <?php if ( $confirm_api_qr ) : ?>
+                            <img class="wdcv-qr-image" src="<?php echo esc_attr( $confirm_api_qr ); ?>" width="100" alt="Confirm API QR" loading="lazy">
+                        <?php else : ?>
+                            <p class="description" style="margin:0;"><?php esc_html_e( 'QR preview unavailable.', 'webdide-card-to-card-verification' ); ?></p>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <div class="wdcv-form-group">
@@ -304,7 +363,11 @@ class WebDide_CV_Admin {
                         <button type="button" class="wdcv-copy-btn" onclick="copyToClipboard('<?php echo esc_js($status_api_url); ?>')"><?php esc_html_e( 'Copy', 'webdide-card-to-card-verification' ); ?></button>
                     </div>
                     <div class="wdcv-qr-container" style="display:inline-flex;">
-                        <img class="wdcv-qr-image" src="<?php echo esc_url( 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=' . urlencode( $status_api_url ) ); ?>" width="100">
+                        <?php if ( $status_api_qr ) : ?>
+                            <img class="wdcv-qr-image" src="<?php echo esc_attr( $status_api_qr ); ?>" width="100" alt="Status API QR" loading="lazy">
+                        <?php else : ?>
+                            <p class="description" style="margin:0;"><?php esc_html_e( 'QR preview unavailable.', 'webdide-card-to-card-verification' ); ?></p>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
