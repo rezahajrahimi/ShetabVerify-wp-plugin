@@ -25,6 +25,11 @@ class WebDide_CV_Activator {
             );
             add_option( $option_name, $defaults );
         }
+
+        // Generate a secret on first install so the admin page is ready to use immediately.
+        if ( ! WebDide_CV_Utils::get_api_secret() ) {
+            WebDide_CV_Utils::set_api_secret( wp_generate_password( 32, false, false ) );
+        }
     }
 }
 

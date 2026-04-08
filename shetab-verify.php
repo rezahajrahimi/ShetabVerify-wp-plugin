@@ -7,9 +7,46 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 define( 'WDCV_VERSION', '0.1.0' );
-define( 'WDCV_PLUGIN_FILE', __FILE__ );
+if ( ! defined( 'WDCV_PLUGIN_FILE' ) ) {
+    define( 'WDCV_PLUGIN_FILE', defined( 'WDCV_MAIN_PLUGIN_FILE' ) ? WDCV_MAIN_PLUGIN_FILE : __FILE__ );
+}
 define( 'WDCV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WDCV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+
+function wdcv_is_persian_locale() {
+    $locale = function_exists( 'determine_locale' ) ? determine_locale() : get_locale();
+    return 0 === strpos( strtolower( (string) $locale ), 'fa' );
+}
+
+function wdcv_localize_installed_plugin_row( $plugins ) {
+    $basename = plugin_basename( WDCV_PLUGIN_FILE );
+    if ( empty( $plugins[ $basename ] ) || ! is_array( $plugins[ $basename ] ) ) {
+        return $plugins;
+    }
+
+    if ( wdcv_is_persian_locale() ) {
+        $plugins[ $basename ]['Name']        = 'تأیید پرداخت کارت‌به‌کارت وب‌دیده برای شتاب';
+        $plugins[ $basename ]['Title']       = 'تأیید پرداخت کارت‌به‌کارت وب‌دیده برای شتاب';
+        $plugins[ $basename ]['Description'] = 'افزونه تایید خودکار پرداخت کارت‌به‌کارت برای ووکامرس و شتاب با پشتیبانی از سفارشات و بارگذاری رسید.';
+    } else {
+        $plugins[ $basename ]['Name']        = 'WebDide Card-to-Card Payment Verification for Shetab';
+        $plugins[ $basename ]['Title']       = 'WebDide Card-to-Card Payment Verification for Shetab';
+        $plugins[ $basename ]['Description'] = 'Payment gateway for automated card-to-card transaction confirmation in WooCommerce.';
+    }
+
+    return $plugins;
+}
+
+add_filter( 'all_plugins', 'wdcv_localize_installed_plugin_row' );
+
+function wdcv_plugin_action_links( $links ) {
+    $settings_url = admin_url( 'admin.php?page=webdide-card-to-card-verification' );
+    $label = wdcv_is_persian_locale() ? 'تنظیمات' : 'Settings';
+    array_unshift( $links, '<a href="' . esc_url( $settings_url ) . '">' . esc_html( $label ) . '</a>' );
+    return $links;
+}
+
+add_filter( 'plugin_action_links_' . plugin_basename( WDCV_PLUGIN_FILE ), 'wdcv_plugin_action_links' );
 
 /**
  * Enqueue scripts and styles.
@@ -40,9 +77,6 @@ require_once WDCV_PLUGIN_DIR . 'includes/class-db.php';
 require_once WDCV_PLUGIN_DIR . 'includes/class-utils.php';
 require_once WDCV_PLUGIN_DIR . 'includes/api/class-rest-controller.php';
 require_once WDCV_PLUGIN_DIR . 'includes/admin/class-admin-pages.php';
-
-register_activation_hook( __FILE__, array( 'WebDide_CV_Activator', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'WebDide_CV_Deactivator', 'deactivate' ) );
 
 add_action( 'plugins_loaded', 'wdcv_init' );
 

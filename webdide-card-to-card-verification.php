@@ -16,4 +16,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+define( 'WDCV_MAIN_PLUGIN_FILE', __FILE__ );
+
 require_once __DIR__ . '/shetab-verify.php';
+
+register_activation_hook( WDCV_MAIN_PLUGIN_FILE, array( 'WebDide_CV_Activator', 'activate' ) );
+register_deactivation_hook( WDCV_MAIN_PLUGIN_FILE, array( 'WebDide_CV_Deactivator', 'deactivate' ) );
