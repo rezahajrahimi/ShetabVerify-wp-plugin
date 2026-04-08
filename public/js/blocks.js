@@ -6,12 +6,9 @@
     }
     window.WebDide_CVInit = true;
 
-    var config = window.wdcv || {};
-
     // Register with WooCommerce Blocks
     if ( window.wc && window.wc.wcBlocksRegistry && typeof window.wc.wcBlocksRegistry.registerPaymentMethod === 'function' ) {
         const settings = window.wc.wcSettings.getSetting( 'wdcv_data', {} );
-        console.log('WebDide_CV Blocks Settings:', settings);
 
         const label = window.wp.htmlEntities.decodeEntities( settings.title || 'کارت به کارت' );
 
@@ -33,7 +30,7 @@
                 return unsubscribe;
             }, [ emitResponse.responseTypes.SUCCESS, onPaymentSetup ] );
 
-            return window.wp.element.createElement( 'div', { className: 'shetab-verify-blocks' },
+            return window.wp.element.createElement( 'div', { className: 'wdcv-blocks' },
                 window.wp.element.createElement( 'p', null, window.wp.htmlEntities.decodeEntities( settings.description || 'تایید خودکار کارت به کارت' ) )
             );
         };
@@ -63,7 +60,7 @@
         } );
     }
 
-    // Fallback: observe DOM to show console when checkout payment option is present
+    // Fallback: observe DOM when checkout payment option is present
     function observePayments() {
         var selector = '#payment, .wc-block-components-checkout__payment-methods';
         var container = document.querySelector( selector );
@@ -73,8 +70,6 @@
 
         var radio = container.querySelector( 'input[value="wdcv"]' );
         if ( radio ) {
-            // nothing to do — server-side gateway will handle process_payment
-            console.debug( 'WebDide_CV: payment method detected on page' );
             return;
         }
     }

@@ -218,50 +218,50 @@ class WC_Gateway_WDCV extends WC_Payment_Gateway {
         $now_ts = current_time( 'timestamp' );
         $remaining = max( 0, $expires_at_ts - $now_ts );
 
-        $whatsapp = get_option('shetab_support_whatsapp');
-        $telegram = get_option('shetab_support_telegram');
-        $manager_text = get_option('shetab_support_manager_text');
+        $whatsapp = get_option('wdcv_support_whatsapp');
+        $telegram = get_option('wdcv_support_telegram');
+        $manager_text = get_option('wdcv_support_manager_text');
 
         $full_card_number = $card ? WebDide_CV_Utils::decrypt_card_number($card->encrypted_number) : '';
         ?>
         
 
         <div class="shetab-instructions">
-            <h2><?php echo ( in_array( $order->get_status(), array( 'processing', 'completed' ) ) ) ? 'رسید پرداخت شما' : 'اطلاعات پرداخت'; ?></h2>
+            <h2><?php echo esc_html( in_array( $order->get_status(), array( 'processing', 'completed' ) ) ? __( 'رسید پرداخت شما', 'webdide-card-to-card-verification' ) : __( 'اطلاعات پرداخت', 'webdide-card-to-card-verification' ) ); ?></h2>
 
             <?php if ( ! empty( $receipts ) ) : ?>
                 <div style="background: #f0fff4; border: 1px solid #38a169; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
                     <div style="font-size: 2.5rem; margin-bottom: 10px;">⏳</div>
-                    <strong style="color: #2f855a; font-size: 1.15rem;"><?php echo 'فیش واریزی شما دریافت شد و در انتظار تایید مدیریت است.'; ?></strong>
-                    <p style="margin-top: 10px; color: #4a5568;"><?php echo 'پس از تایید کارشناسان، سفارش شما وارد مرحله ارسال خواهد شد.'; ?></p>
+                    <strong style="color: #2f855a; font-size: 1.15rem;"><?php esc_html_e( 'فیش واریزی شما دریافت شد و در انتظار تایید مدیریت است.', 'webdide-card-to-card-verification' ); ?></strong>
+                    <p style="margin-top: 10px; color: #4a5568;"><?php esc_html_e( 'پس از تایید کارشناسان، سفارش شما وارد مرحله ارسال خواهد شد.', 'webdide-card-to-card-verification' ); ?></p>
                 </div>
             <?php endif; ?>
             
             <?php if ( $txn->status === 'pending' && empty( $receipts ) ) : ?>
-                <p><?php echo 'لطفاً مبلغ دقیق زیر را به شماره کارت اعلام شده منتقل نمایید:'; ?></p>
+                <p><?php esc_html_e( 'لطفاً مبلغ دقیق زیر را به شماره کارت اعلام شده منتقل نمایید:', 'webdide-card-to-card-verification' ); ?></p>
                 
-                <p class="shetab-amount"><?php printf( 'مبلغ: %s تومان', number_format_i18n( $txn->unique_amount ) ); ?></p>
+                <p class="shetab-amount"><?php printf( esc_html__( 'مبلغ: %s تومان', 'webdide-card-to-card-verification' ), number_format_i18n( $txn->unique_amount ) ); ?></p>
                 
                 <?php if ( $card ) : ?>
                     <div class="wdcv-card-box">
-                        <span><?php echo 'شماره کارت: '; ?></span>
+                        <span><?php esc_html_e( 'شماره کارت: ', 'webdide-card-to-card-verification' ); ?></span>
                         <strong style="letter-spacing: 2px;"><?php echo esc_html( $full_card_number ); ?></strong>
                         <p style="font-size: 0.9rem; margin-top: 5px; color: #4a5568;"><?php echo esc_html( $card->label ); ?></p>
                     </div>
                 <?php endif; ?>
 
                 <p class="shetab-countdown" id="shetab-countdown-<?php echo esc_attr( $txn->id ); ?>">
-                    <?php echo sprintf( 'زمان باقیمانده برای انتقال: %s', gmdate( 'i:s', $remaining ) ); ?>
+                    <?php printf( esc_html__( 'زمان باقیمانده برای انتقال: %s', 'webdide-card-to-card-verification' ), gmdate( 'i:s', (int) $remaining ) ); ?>
                 </p>
 
                 <!-- Receipt Upload Form -->
                 <?php if ( empty( $receipts ) ) : ?>
                     <div class="shetab-upload-box" id="shetab-upload-container">
-                        <strong><?php echo 'آپلود تصویر فیش واریزی (اختیاری):'; ?></strong>
-                        <p style="font-size: 0.85rem; color: #718096; margin-bottom: 10px;"><?php echo 'اگر تراکنش شما تایید نشد، می‌توانید تصویر فیش را اینجا آپلود کنید.'; ?></p>
+                        <strong><?php esc_html_e( 'آپلود تصویر فیش واریزی (اختیاری):', 'webdide-card-to-card-verification' ); ?></strong>
+                        <p style="font-size: 0.85rem; color: #718096; margin-bottom: 10px;"><?php esc_html_e( 'اگر تراکنش شما تایید نشد، می‌توانید تصویر فیش را اینجا آپلود کنید.', 'webdide-card-to-card-verification' ); ?></p>
                         <input type="file" id="shetab-receipt-files" multiple accept="image/*" style="display:none;">
-                        <label for="shetab-receipt-files" class="shetab-upload-btn"><?php echo 'انتخاب تصویر فیش'; ?></label>
-                        <button type="button" id="shetab-do-upload" class="shetab-upload-btn" style="display:none; background: #38a169;"><?php echo 'ارسال فیش ها'; ?></button>
+                        <label for="shetab-receipt-files" class="shetab-upload-btn"><?php esc_html_e( 'انتخاب تصویر فیش', 'webdide-card-to-card-verification' ); ?></label>
+                        <button type="button" id="shetab-do-upload" class="shetab-upload-btn" style="display:none; background: #38a169;"><?php esc_html_e( 'ارسال فیش ها', 'webdide-card-to-card-verification' ); ?></button>
                         <div id="file-list-preview" class="shetab-receipt-preview"></div>
                     </div>
                 <?php endif; ?>
@@ -269,7 +269,7 @@ class WC_Gateway_WDCV extends WC_Payment_Gateway {
 
             <?php if ( ! empty( $receipts ) ) : ?>
                 <div style="margin-top: 20px; border-top: 1px solid #edf2f7; padding-top: 15px;">
-                    <strong><?php echo 'تصاویر رسید آپلود شده:'; ?></strong>
+                    <strong><?php esc_html_e( 'تصاویر رسید آپلود شده:', 'webdide-card-to-card-verification' ); ?></strong>
                     <div class="shetab-receipt-preview">
                         <?php foreach ( $receipts as $aid ) : ?>
                             <a href="<?php echo esc_url( wp_get_attachment_url( $aid ) ); ?>" target="_blank">
@@ -281,117 +281,51 @@ class WC_Gateway_WDCV extends WC_Payment_Gateway {
             <?php endif; ?>
 
             <div class="shetab-support-info">
-                <strong><?php echo 'راهنمایی و پشتیبانی:'; ?></strong>
+                <strong><?php esc_html_e( 'راهنمایی و پشتیبانی:', 'webdide-card-to-card-verification' ); ?></strong>
                 <div style="margin-top: 10px;">
                     <?php if ($whatsapp) : ?>
                         <a href="https://wa.me/<?php echo esc_attr($whatsapp); ?>" class="shetab-support-item" target="_blank">
-                             واتس‌اپ: <?php echo esc_html($whatsapp); ?>
+                            <?php esc_html_e( 'واتس‌اپ:', 'webdide-card-to-card-verification' ); ?> <?php echo esc_html($whatsapp); ?>
                         </a>
                     <?php endif; ?>
                     
                     <?php if ($telegram) : ?>
                         <a href="https://t.me/<?php echo esc_attr(str_replace('@', '', $telegram)); ?>" class="shetab-support-item" target="_blank">
-                             تلگرام: <?php echo esc_html($telegram); ?>
+                    <?php esc_html_e( 'تلگرام:', 'webdide-card-to-card-verification' ); ?> <?php echo esc_html($telegram); ?>
                         </a>
                     <?php endif; ?>
                 </div>
 
                 <?php if ($manager_text) : ?>
                     <div class="shetab-manager-msg">
-                        <strong><?php echo 'پیام مدیر: '; ?></strong>
-                        <?php echo nl2br(esc_html($manager_text)); ?>
+                        <strong><?php esc_html_e( 'پیام مدیر:', 'webdide-card-to-card-verification' ); ?></strong>
+                        <?php echo nl2br( esc_html( $manager_text ) ); ?>
                     </div>
                 <?php endif; ?>
             </div>
         </div>
-        <script>
-        (function(){
-            var remaining = <?php echo (int) $remaining; ?>;
-            var txnId = <?php echo (int) $txn->id; ?>;
-            var orderId = <?php echo (int) $order_id; ?>;
-            var el = document.getElementById('shetab-countdown-' + txnId);
-            var statusUrl = '<?php echo esc_url( get_rest_url( null, "webdide-cv/v1/status" ) ); ?>';
-            var uploadUrl = '<?php echo esc_url( get_rest_url( null, "webdide-cv/v1/upload-receipt" ) ); ?>';
-
-            // Timer Tick
-            if (el) {
-                function tick(){
-                    if (remaining <= 0) { el.textContent = '<?php echo "زمان شما به پایان رسیده است."; ?>'; return; }
-                    remaining--; 
-                    var mm = Math.floor(remaining/60); 
-                    var ss = remaining % 60; 
-                    el.textContent = '<?php echo "زمان باقیمانده برای انتقال: "; ?> ' + (mm<10?('0'+mm):mm) + ':' + (ss<10?('0'+ss):ss);
-                }
-                setInterval(tick, 1000);
-            }
-
-            // Upload Logic
-            var fileInput = document.getElementById('shetab-receipt-files');
-            var uploadBtn = document.getElementById('shetab-do-upload');
-            var previewBlock = document.getElementById('file-list-preview');
-
-            if (fileInput) {
-                fileInput.onchange = function() {
-                    previewBlock.innerHTML = '';
-                    if (this.files.length > 0) {
-                        uploadBtn.style.display = 'inline-block';
-                        for (var i=0; i<this.files.length; i++) {
-                            var img = document.createElement('img');
-                            img.src = URL.createObjectURL(this.files[i]);
-                            previewBlock.appendChild(img);
-                        }
-                    } else {
-                        uploadBtn.style.display = 'none';
-                    }
-                };
-            }
-
-            if (uploadBtn) {
-                uploadBtn.onclick = function() {
-                    var formData = new FormData();
-                    formData.append('order_id', orderId);
-                    for (var i=0; i<fileInput.files.length; i++) {
-                        formData.append('receipts[]', fileInput.files[i]);
-                    }
-                    
-                    this.disabled = true;
-                    this.textContent = 'در حال ارسال...';
-
-                    fetch(uploadUrl, { method: 'POST', body: formData })
-                        .then(function(r){ return r.json(); })
-                        .then(function(data){ 
-                            if (data.success) {
-                                alert(data.message);
-                                window.location.reload();
-                            } else {
-                                alert('خطا: ' + (data.message || 'مشکلی در آپلود پیش آمد.'));
-                                uploadBtn.disabled = false;
-                                uploadBtn.textContent = 'ارسال فیش ها';
-                            }
-                        })
-                        .catch(function(err){
-                            console.error(err);
-                            alert('خطای سیستمی در آپلود');
-                            uploadBtn.disabled = false;
-                        });
-                };
-            }
-
-            // polling status every 5s with correct REST URL
-            setInterval(function(){
-                fetch( statusUrl + '?order_id=' + orderId )
-                    .then(function(r){ return r.json(); })
-                    .then(function(data){ 
-                        if ( data && data.status === 'confirmed' ) { 
-                            // Try to find if there is a redirection in return url or just reload
-                            window.location.reload(); 
-                        } 
-                    })
-                    .catch(function(err){ console.error('Error polling status:', err); });
-            }, 5000);
-        })();
-        </script>
         <?php
+        wp_enqueue_script(
+            'wdcv-checkout',
+            WDCV_PLUGIN_URL . 'public/js/checkout.js',
+            array(),
+            WDCV_VERSION,
+            true
+        );
+        wp_localize_script( 'wdcv-checkout', 'wdcvCheckoutVars', array(
+            'remaining'       => (int) $remaining,
+            'txnId'           => (int) $txn->id,
+            'orderId'         => (int) $order_id,
+            'statusUrl'       => esc_url( get_rest_url( null, 'webdide-cv/v1/status' ) ),
+            'uploadUrl'       => esc_url( get_rest_url( null, 'webdide-cv/v1/upload-receipt' ) ),
+            'expiredText'     => __( 'زمان شما به پایان رسیده است.', 'webdide-card-to-card-verification' ),
+            'timerText'       => __( 'زمان باقیمانده برای انتقال:', 'webdide-card-to-card-verification' ),
+            'uploadingText'   => __( 'در حال ارسال...', 'webdide-card-to-card-verification' ),
+            'sendText'        => __( 'ارسال فیش ها', 'webdide-card-to-card-verification' ),
+            'errorText'       => __( 'خطا:', 'webdide-card-to-card-verification' ),
+            'uploadErrorText' => __( 'مشکلی در آپلود پیش آمد.', 'webdide-card-to-card-verification' ),
+            'systemErrorText' => __( 'خطای سیستمی در آپلود', 'webdide-card-to-card-verification' ),
+        ) );
     }
 }
 

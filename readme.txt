@@ -44,16 +44,16 @@ This plugin uses the following third-party services:
 
 == Installation ==
 
-1. Upload the plugin files to the `/wp-content/plugins/shetab-verify` directory.
+1. Upload the plugin files to the `/wp-content/plugins/webdide-card-to-card-verification` directory.
 2. Activate the plugin through the 'Plugins' screen in WordPress.
-3. Go to **WooCommerce -> Settings -> Payments** and enable the **ShetabVerify** gateway.
+3. Go to **WooCommerce -> Settings -> Payments** and enable the **WebDide Card-to-Card Payment Verification for Shetab** gateway.
 4. Navigate to the **Shetab Management** menu in your WordPress dashboard to configure your API secret and destination cards.
 5. Download and configure the companion Android app from [Cafe Bazaar](https://cafebazaar.ir/app/ir.webdide.verify).
 
 == Frequently Asked Questions ==
 
 = Do I need a specific bank account? =
-No, ShetabVerify works with any Iranian bank account that supports SMS notifications or specific app notifications supported by our companion app.
+No, this plugin works with any Iranian bank account that supports SMS notifications or specific app notifications supported by our companion app.
 
 = Is it secure? =
 Yes, all communication between the plugin and the mobile app is secured via a private API Secret. Card numbers are stored in an encrypted format.
@@ -64,7 +64,7 @@ Orders will remain "On Hold". You can still manually verify payments via the ord
 == Screenshots ==
 
 1. Settings page with API configuration and card management.
-2. Checkout page showing the ShetabVerify payment method.
+2. Checkout page showing the WebDide payment method.
 3. Administrative interface for destination bank cards.
 
 == Changelog ==

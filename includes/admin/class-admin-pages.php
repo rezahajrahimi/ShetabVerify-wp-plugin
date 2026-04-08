@@ -388,7 +388,7 @@ class WebDide_CV_Admin {
                                                 <div style="margin-top:5px;">
                                                     <button type="button" 
                                                             style="color: #3182ce; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; font-size: 0.8rem; font-weight: 600;" 
-                                                            data-orders="<?php echo esc_attr(json_encode($usage['orders'])); ?>" 
+                                                            data-orders="<?php echo esc_attr(wp_json_encode($usage['orders'])); ?>" 
                                                             data-card-label="<?php echo esc_attr($c->label); ?>"
                                                             onclick="showCardOrdersFromData(this)">
                                                         <?php printf( esc_html__( 'View Details (%d orders)', 'webdide-card-to-card-verification' ), $usage['count'] ); ?>

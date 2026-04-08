@@ -40,33 +40,24 @@
     }
 
     window.showCardOrdersFromData = function(button) {
-        console.log('showCardOrdersFromData called with button:', button);
         var orders = JSON.parse(button.getAttribute('data-orders'));
         var cardLabel = button.getAttribute('data-card-label');
         showCardOrders(orders, cardLabel);
     };
 
     function showCardOrders(orders, cardLabel) {
-        console.log('showCardOrders called with:', orders, cardLabel);
         currentModalOrders = orders || [];
         currentCardLabel = cardLabel || "";
         currentModalPage = 1;
 
         var modal = document.getElementById("orderModal");
         if (!modal) {
-            console.error('Modal element not found!');
             alert('Modal element not found!');
             return;
         }
 
         modal.style.display = "block";
         document.body.style.overflow = "hidden"; // Prevent background scroll
-
-        console.log('Modal should now be visible');
-        // Add a timeout to ensure modal stays visible for debugging
-        setTimeout(function() {
-            console.log('Modal display after timeout:', modal.style.display);
-        }, 1000);
 
         renderModalPage();
     }
@@ -135,12 +126,9 @@
 
     // Initialize when document is ready
     $(document).ready(function() {
-        console.log('WebDide CV Admin Script loaded at', new Date().toISOString());
-
         // Bind click events for buttons with data-orders attribute
         $(document).on('click', '[data-orders]', function(e) {
             e.preventDefault();
-            console.log('Button clicked:', this);
             window.showCardOrdersFromData(this);
         });
 
@@ -148,8 +136,6 @@
         $(document).on('click', '.wdcv-modal-close', function() {
             window.closeModal();
         });
-
-        console.log('Event binding complete');
     });
 
 })(jQuery);
