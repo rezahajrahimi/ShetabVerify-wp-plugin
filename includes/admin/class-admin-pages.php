@@ -117,11 +117,11 @@ class WebDide_CV_Admin {
     public static function handle_receipt_actions() {
         if ( ! current_user_can( 'manage_woocommerce' ) ) return;
 
-        $action = isset( $_GET['action'] ) ? $_GET['action'] : '';
+        $action = isset( $_GET['action'] ) ? sanitize_key( wp_unslash( $_GET['action'] ) ) : '';
         if ( ! in_array( $action, array( 'shetab_confirm_receipt', 'shetab_reject_receipt' ) ) ) return;
 
         $order_id = isset( $_GET['order_id'] ) ? absint( $_GET['order_id'] ) : 0;
-        $nonce    = isset( $_GET['_nonce'] ) ? $_GET['_nonce'] : '';
+        $nonce    = isset( $_GET['_nonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_nonce'] ) ) : '';
         
         if ( ! wp_verify_nonce( $nonce, 'shetab_receipt_action' ) ) return;
 
@@ -220,8 +220,8 @@ class WebDide_CV_Admin {
         $api_secret = WebDide_CV_Utils::get_api_secret();
         $api_secret_qr = $api_secret ? self::get_qr_code_data_uri( $api_secret, '150x150' ) : '';
 
-        $confirm_api_url = home_url( '/wp-json/webdide-cv/v1/confirm' );
-        $status_api_url = home_url( '/wp-json/webdide-cv/v1/status' );
+        $confirm_api_url = rest_url( 'webdide-cv/v1/confirm' );
+        $status_api_url = rest_url( 'webdide-cv/v1/status' );
         $confirm_api_qr = self::get_qr_code_data_uri( $confirm_api_url, '100x100' );
         $status_api_qr  = self::get_qr_code_data_uri( $status_api_url, '100x100' );
         ?>
