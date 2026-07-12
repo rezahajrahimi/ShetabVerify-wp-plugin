@@ -35,16 +35,31 @@
             );
         };
 
-        const Label = ( props ) => {
-            const { PaymentMethodLabel } = props.components;
-            const labelText = window.wp.htmlEntities.decodeEntities( settings.title || 'کارت به کارت' );
+        const Label = () => {
+            const labelText = window.wp.htmlEntities.decodeEntities( settings.title || 'کارت به کارت (تایید خودکار)' );
+            const children = [];
+
             if ( settings.logo_url ) {
-                return window.wp.element.createElement( 'div', { style: { display: 'flex', alignItems: 'center', gap: '10px' } },
-                    window.wp.element.createElement( 'img', { src: settings.logo_url, alt: labelText, style: { height: '32px', width: 'auto' } } ),
-                    window.wp.element.createElement( PaymentMethodLabel, { text: labelText } )
+                children.push(
+                    window.wp.element.createElement( 'img', {
+                        key: 'logo',
+                        src: settings.logo_url,
+                        alt: labelText,
+                        style: { height: '32px', width: 'auto', flexShrink: 0 }
+                    } )
                 );
             }
-            return window.wp.element.createElement( PaymentMethodLabel, { text: labelText } );
+
+            children.push(
+                window.wp.element.createElement( 'span', {
+                    key: 'text',
+                    style: { fontWeight: 500 }
+                }, labelText )
+            );
+
+            return window.wp.element.createElement( 'div', {
+                style: { display: 'flex', alignItems: 'center', gap: '10px' }
+            }, children );
         };
 
         window.wc.wcBlocksRegistry.registerPaymentMethod( {

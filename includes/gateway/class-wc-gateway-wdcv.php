@@ -20,6 +20,9 @@ class WebDide_CV_Gateway extends WC_Payment_Gateway {
         $this->init_form_fields();
         $this->init_settings();
 
+        $this->title       = $this->get_option( 'title', 'کارت به کارت (تایید خودکار)' );
+        $this->description = $this->get_option( 'description', 'کارت به کارت با استفاده از درگاه شتاب (تایید خودکار تراکنش).' );
+
         add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
         add_filter( 'woocommerce_thankyou_order_received_text', array( $this, 'change_thankyou_text' ), 10, 2 );
     }
@@ -128,7 +131,6 @@ class WebDide_CV_Gateway extends WC_Payment_Gateway {
         if ( $description = $this->get_description() ) {
             echo wpautop( wp_kses_post( $description ) );
         }
-        echo '<p>' . esc_html__( 'After checkout you will be shown a bank card number and an amount to transfer (including a unique suffix).', 'webdide-card-to-card-verification' ) . '</p>';
     }
 
     public function process_payment( $order_id ) {
@@ -260,8 +262,8 @@ class WebDide_CV_Gateway extends WC_Payment_Gateway {
                         <strong><?php esc_html_e( 'آپلود تصویر فیش واریزی (اختیاری):', 'webdide-card-to-card-verification' ); ?></strong>
                         <p style="font-size: 0.85rem; color: #718096; margin-bottom: 10px;"><?php esc_html_e( 'اگر تراکنش شما تایید نشد، می‌توانید تصویر فیش را اینجا آپلود کنید.', 'webdide-card-to-card-verification' ); ?></p>
                         <input type="file" id="shetab-receipt-files" multiple accept="image/*" style="display:none;">
-                        <label for="shetab-receipt-files" class="shetab-upload-btn"><?php esc_html_e( 'انتخاب تصویر فیش', 'webdide-card-to-card-verification' ); ?></label>
-                        <button type="button" id="shetab-do-upload" class="shetab-upload-btn" style="display:none; background: #38a169;"><?php esc_html_e( 'ارسال فیش ها', 'webdide-card-to-card-verification' ); ?></button>
+                        <button type="button" id="shetab-pick-receipt" class="button shetab-upload-btn"><?php esc_html_e( 'انتخاب تصویر فیش', 'webdide-card-to-card-verification' ); ?></button>
+                        <button type="button" id="shetab-do-upload" class="button alt shetab-upload-btn" style="display:none;"><?php esc_html_e( 'ارسال فیش ها', 'webdide-card-to-card-verification' ); ?></button>
                         <div id="file-list-preview" class="shetab-receipt-preview"></div>
                     </div>
                 <?php endif; ?>

@@ -62,7 +62,7 @@ class WebDide_CV_REST_Controller {
         }
 
         // 2. If order key matches (typical for guests)
-        if ( ! empty( $order_key ) && $order->get_order_key() === $order_key ) {
+        if ( ! empty( $order_key ) && hash_equals( $order->get_order_key(), $order_key ) ) {
             return true;
         }
 
@@ -74,7 +74,6 @@ class WebDide_CV_REST_Controller {
         if ( ! empty( $secret ) && WebDide_CV_Utils::verify_api_secret( $secret ) ) {
             return true;
         }
-
         return false;
     }
 
@@ -177,7 +176,7 @@ class WebDide_CV_REST_Controller {
 
         return rest_ensure_response( array(
             'success' => true,
-            'message' => __( 'Images uploaded successfully and are awaiting admin confirmation.', 'webdide-card-to-card-verification' ),
+            'message' => __( 'تصاویر رسید با موفقیت بارگذاری شدند و در انتظار تایید مدیریت هستند.', 'webdide-card-to-card-verification' ),
             'receipt_ids' => $uploaded_ids
         ) );
     }

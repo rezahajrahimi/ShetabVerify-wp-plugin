@@ -36,10 +36,17 @@
 
     // ── Receipt Upload ──────────────────────────────────────────────────────
     var fileInput   = document.getElementById( 'shetab-receipt-files' );
+    var pickBtn     = document.getElementById( 'shetab-pick-receipt' );
     var uploadBtn   = document.getElementById( 'shetab-do-upload' );
     var previewBlock = document.getElementById( 'file-list-preview' );
 
     if ( fileInput && uploadBtn && previewBlock ) {
+        if ( pickBtn ) {
+            pickBtn.onclick = function () {
+                fileInput.click();
+            };
+        }
+
         fileInput.onchange = function () {
             previewBlock.innerHTML = '';
             if ( this.files.length > 0 ) {
@@ -57,6 +64,7 @@
         uploadBtn.onclick = function () {
             var formData = new FormData();
             formData.append( 'order_id', orderId );
+            formData.append( 'order_key', orderKey || '' );
             for ( var j = 0; j < fileInput.files.length; j++ ) {
                 formData.append( 'receipts[]', fileInput.files[ j ] );
             }

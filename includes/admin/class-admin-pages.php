@@ -110,7 +110,7 @@ class WebDide_CV_Admin {
             <a href="<?php echo esc_url( admin_url( 'admin-ajax.php?action=shetab_reject_receipt&order_id=' . $order_id . '&_nonce=' . $confirm_nonce ) ); ?>" 
                class="button button-secondary" style="color:#e53e3e; border-color:#e53e3e;">❌ <?php esc_html_e( 'Invalid', 'webdide-card-to-card-verification' ); ?></a>
         </div>
-        <p style="color:#666; font-size:0.85em; margin-top:10px;"><?php esc_html_e( 'Confirming the slip will set the order status to "Processing".', 'webdide-card-to-card-verification' ); ?></p>
+        <p style="color:#666; font-size:0.85em; margin-top:10px;"><?php esc_html_e( 'با تایید فیش، وضعیت سفارش به "در حال پردازش" تغییر می‌کند.', 'webdide-card-to-card-verification' ); ?></p>
         <?php
     }
 
@@ -130,7 +130,7 @@ class WebDide_CV_Admin {
 
         if ( $action === 'shetab_confirm_receipt' ) {
             $order->payment_complete();
-            $order->add_order_note( __( 'Payment slip confirmed by admin.', 'webdide-card-to-card-verification' ) );
+            $order->add_order_note( __( 'فیش واریزی توسط مدیر تایید شد.', 'webdide-card-to-card-verification' ) );
             
             // Sync with local transactions table to update card statistics
             $txn = WebDide_CV_DB::get_transaction_by_order_id( $order_id );
