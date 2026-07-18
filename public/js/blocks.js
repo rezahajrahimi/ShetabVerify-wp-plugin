@@ -1,17 +1,14 @@
 ( function () {
     'use strict';
 
-    if ( typeof window.shetabVerifyInit !== 'undefined' ) {
+    if ( typeof window.WebDide_CVInit !== 'undefined' ) {
         return;
     }
-    window.shetabVerifyInit = true;
-
-    var config = window.shetab_verify || {};
+    window.WebDide_CVInit = true;
 
     // Register with WooCommerce Blocks
     if ( window.wc && window.wc.wcBlocksRegistry && typeof window.wc.wcBlocksRegistry.registerPaymentMethod === 'function' ) {
-        const settings = window.wc.wcSettings.getSetting( 'shetab_verify_data', {} );
-        console.log('ShetabVerify Blocks Settings:', settings);
+        const settings = window.wc.wcSettings.getSetting( 'wdcv_data', {} );
 
         const label = window.wp.htmlEntities.decodeEntities( settings.title || 'کارت به کارت' );
 
@@ -25,7 +22,7 @@
                         type: emitResponse.responseTypes.SUCCESS,
                         meta: {
                             paymentMethodData: {
-                                'payment_method': 'shetab_verify',
+                                'payment_method': 'wdcv',
                             },
                         },
                     };
@@ -33,25 +30,40 @@
                 return unsubscribe;
             }, [ emitResponse.responseTypes.SUCCESS, onPaymentSetup ] );
 
-            return window.wp.element.createElement( 'div', { className: 'shetab-verify-blocks' },
+            return window.wp.element.createElement( 'div', { className: 'wdcv-blocks' },
                 window.wp.element.createElement( 'p', null, window.wp.htmlEntities.decodeEntities( settings.description || 'تایید خودکار کارت به کارت' ) )
             );
         };
 
-        const Label = ( props ) => {
-            const { PaymentMethodLabel } = props.components;
-            const labelText = window.wp.htmlEntities.decodeEntities( settings.title || 'کارت به کارت' );
+        const Label = () => {
+            const labelText = window.wp.htmlEntities.decodeEntities( settings.title || 'کارت به کارت (تایید خودکار)' );
+            const children = [];
+
             if ( settings.logo_url ) {
-                return window.wp.element.createElement( 'div', { style: { display: 'flex', alignItems: 'center', gap: '10px' } },
-                    window.wp.element.createElement( 'img', { src: settings.logo_url, alt: labelText, style: { height: '32px', width: 'auto' } } ),
-                    window.wp.element.createElement( PaymentMethodLabel, { text: labelText } )
+                children.push(
+                    window.wp.element.createElement( 'img', {
+                        key: 'logo',
+                        src: settings.logo_url,
+                        alt: labelText,
+                        style: { height: '32px', width: 'auto', flexShrink: 0 }
+                    } )
                 );
             }
-            return window.wp.element.createElement( PaymentMethodLabel, { text: labelText } );
+
+            children.push(
+                window.wp.element.createElement( 'span', {
+                    key: 'text',
+                    style: { fontWeight: 500 }
+                }, labelText )
+            );
+
+            return window.wp.element.createElement( 'div', {
+                style: { display: 'flex', alignItems: 'center', gap: '10px' }
+            }, children );
         };
 
         window.wc.wcBlocksRegistry.registerPaymentMethod( {
-            name: 'shetab_verify',
+            name: 'wdcv',
             label: window.wp.element.createElement( Label ),
             content: window.wp.element.createElement( Content ),
             edit: window.wp.element.createElement( Content ),
@@ -63,7 +75,7 @@
         } );
     }
 
-    // Fallback: observe DOM to show console when checkout payment option is present
+    // Fallback: observe DOM when checkout payment option is present
     function observePayments() {
         var selector = '#payment, .wc-block-components-checkout__payment-methods';
         var container = document.querySelector( selector );
@@ -71,10 +83,8 @@
             return;
         }
 
-        var radio = container.querySelector( 'input[value="shetab_verify"]' );
+        var radio = container.querySelector( 'input[value="wdcv"]' );
         if ( radio ) {
-            // nothing to do — server-side gateway will handle process_payment
-            console.debug( 'ShetabVerify: payment method detected on page' );
             return;
         }
     }
@@ -89,3 +99,4 @@
     } );
 
 } )();
+

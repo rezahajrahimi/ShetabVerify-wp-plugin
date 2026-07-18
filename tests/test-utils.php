@@ -1,10 +1,10 @@
 <?php
 
-class Test_ShetabVerify_Utils extends WP_UnitTestCase {
+class Test_WebDide_CV_Utils extends WP_UnitTestCase {
 
     public function test_generate_unique_amount_returns_valid_value() {
         $original = 12000;
-        $unique = ShetabVerify_Utils::generate_unique_amount( $original );
+        $unique = WebDide_CV_Utils::generate_unique_amount( $original );
         $this->assertIsInt( $unique );
         $this->assertGreaterThanOrEqual( $original, $unique );
         $this->assertLessThan( $original + 1000, $unique + 1000 ); // should be within same thousand base range
@@ -28,9 +28,16 @@ class Test_ShetabVerify_Utils extends WP_UnitTestCase {
 
         // run generator multiple times — it should not return the conflicted amount
         for ( $i = 0; $i < 5; $i++ ) {
-            $res = ShetabVerify_Utils::generate_unique_amount( $original );
+            $res = WebDide_CV_Utils::generate_unique_amount( $original );
             $this->assertNotEquals( $conflict_amount, $res );
             $this->assertGreaterThanOrEqual( $original, $res );
         }
     }
 }
+
+
+
+
+
+
+

@@ -1,9 +1,9 @@
 <?php
 
-class Test_ShetabVerify_Gateway extends WP_UnitTestCase {
+class Test_WebDide_CV_Gateway extends WP_UnitTestCase {
 
     public function test_gateway_settings_default_enabled() {
-        $opt = get_option( 'woocommerce_shetab_verify_settings' );
+        $opt = get_option( 'woocommerce_wdcv_settings' );
         $this->assertIsArray( $opt );
         $this->assertArrayHasKey( 'enabled', $opt );
         $this->assertEquals( 'yes', $opt['enabled'] );
@@ -11,7 +11,7 @@ class Test_ShetabVerify_Gateway extends WP_UnitTestCase {
 
     public function test_gateway_filter_registers_class() {
         $registered = apply_filters( 'woocommerce_payment_gateways', array() );
-        $this->assertContains( 'WC_Gateway_Shetab', $registered );
+        $this->assertContains( 'WebDide_CV_Gateway', $registered );
     }
 
     public function test_gateway_available_in_cart() {
@@ -20,7 +20,7 @@ class Test_ShetabVerify_Gateway extends WP_UnitTestCase {
         }
 
         // ensure at least one active card exists (plugin requires this to display the gateway)
-        ShetabVerify_DB::insert_card( array(
+        WebDide_CV_DB::insert_card( array(
             'label' => 'Unit test card',
             'encrypted_number' => 'enc',
             'masked_number' => '**** **** **** 1111',
@@ -36,7 +36,7 @@ class Test_ShetabVerify_Gateway extends WP_UnitTestCase {
         WC()->cart->add_to_cart( $product_id );
 
         $available = WC()->payment_gateways()->get_available_payment_gateways();
-        $this->assertArrayHasKey( 'shetab_verify', $available );
+        $this->assertArrayHasKey( 'wdcv', $available );
     }
 
     public function test_is_available_debug_transient_set() {
@@ -44,12 +44,19 @@ class Test_ShetabVerify_Gateway extends WP_UnitTestCase {
             $this->markTestSkipped( 'WooCommerce not available in test environment.' );
         }
 
-        $gw = new WC_Gateway_Shetab();
+        $gw = new WebDide_CV_Gateway();
         $gw->is_available();
 
-        $dbg = get_transient( 'shetab_verify_is_available_debug' );
+        $dbg = get_transient( 'wdcv_is_available_debug' );
         $this->assertIsArray( $dbg );
         $this->assertArrayHasKey( 'result', $dbg );
     }
 }
+
+
+
+
+
+
+
 

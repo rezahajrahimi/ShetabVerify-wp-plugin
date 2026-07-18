@@ -10,15 +10,15 @@ if ( ! class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\Abstra
 }
 
 /**
- * Class WC_ShetabVerify_Blocks_Support
- * Provides WooCommerce Blocks support for ShetabVerify payment gateway.
+ * Class WebDide_CV_Blocks_Support
+ * Provides WooCommerce Blocks support for WebDide_CV payment gateway.
  */
-class WC_ShetabVerify_Blocks_Support extends Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType {
+class WebDide_CV_Blocks_Support extends Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType {
 
     /**
      * The gateway instance.
      *
-     * @var WC_Gateway_Shetab
+     * @var WC_Gateway_WDCV
      */
     private $gateway;
 
@@ -27,15 +27,15 @@ class WC_ShetabVerify_Blocks_Support extends Automattic\WooCommerce\Blocks\Payme
      *
      * @var string
      */
-    protected $name = 'shetab_verify';
+    protected $name = 'wdcv';
 
     /**
      * Initializes the payment method type.
      */
     public function initialize() {
-        $this->settings = get_option( 'woocommerce_shetab_verify_settings', array() );
-        $this->gateway  = new WC_Gateway_Shetab();
-        set_transient( 'shetab_verify_blocks_initialized', current_time( 'mysql' ), 5 * MINUTE_IN_SECONDS );
+        $this->settings = get_option( 'woocommerce_wdcv_settings', array() );
+        $this->gateway  = new WC_Gateway_WDCV();
+        set_transient( 'wdcv_blocks_initialized', current_time( 'mysql' ), 5 * MINUTE_IN_SECONDS );
     }
 
     /**
@@ -55,13 +55,13 @@ class WC_ShetabVerify_Blocks_Support extends Automattic\WooCommerce\Blocks\Payme
      */
     public function get_payment_method_script_handles() {
         wp_register_script(
-            'wc-shetab-verify-blocks-integration',
-            plugins_url( 'public/js/blocks.js', SSV_PLUGIN_FILE ),
+            'wc-WebDide_CV-blocks-integration',
+            plugins_url( 'public/js/blocks.js', WDCV_PLUGIN_FILE ),
             array( 'wp-element', 'wp-html-entities', 'wc-blocks-registry', 'wc-settings' ),
             '1.0.0',
             true
         );
-        return array( 'wc-shetab-verify-blocks-integration' );
+        return array( 'wc-WebDide_CV-blocks-integration' );
     }
 
     /**
@@ -78,3 +78,15 @@ class WC_ShetabVerify_Blocks_Support extends Automattic\WooCommerce\Blocks\Payme
         );
     }
 }
+
+if ( ! class_exists( 'WC_WebDide_CV_Blocks_Support' ) ) {
+    class_alias( 'WebDide_CV_Blocks_Support', 'WC_WebDide_CV_Blocks_Support' );
+}
+
+
+
+
+
+
+
+

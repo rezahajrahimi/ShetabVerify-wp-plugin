@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class ShetabVerify_Utils {
+class WebDide_CV_Utils {
     const CIPHER = 'AES-256-CBC';
 
     public static function encrypt_card_number( $plain ) {
@@ -45,15 +45,15 @@ class ShetabVerify_Utils {
             return false;
         }
         $hash = wp_hash_password( $secret );
-        update_option( 'shetab_api_secret_hash', $hash );
+        update_option( 'wdcv_api_secret_hash', $hash );
         
         // Store encrypted version for display as requested by user
         $encrypted = self::encrypt_card_number( $secret );
-        return update_option( 'shetab_api_secret_encrypted', $encrypted );
+        return update_option( 'wdcv_api_secret_encrypted', $encrypted );
     }
 
     public static function get_api_secret() {
-        $encrypted = get_option( 'shetab_api_secret_encrypted' );
+        $encrypted = get_option( 'wdcv_api_secret_encrypted' );
         if ( empty( $encrypted ) ) {
             return '';
         }
@@ -61,7 +61,7 @@ class ShetabVerify_Utils {
     }
 
     public static function verify_api_secret( $provided ) {
-        $hash = get_option( 'shetab_api_secret_hash' );
+        $hash = get_option( 'wdcv_api_secret_hash' );
         if ( empty( $hash ) || empty( $provided ) ) {
             return false;
         }
@@ -94,3 +94,11 @@ class ShetabVerify_Utils {
         return false;
     }
 }
+
+
+
+
+
+
+
+
