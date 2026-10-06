@@ -1,0 +1,447 @@
+/**
+ * WebDide Card-to-Card — payment page & thank-you styles
+ */
+
+:root {
+	--wdcv-bg: #f3f5f8;
+	--wdcv-surface: #ffffff;
+	--wdcv-border: #e2e8f0;
+	--wdcv-text: #1a202c;
+	--wdcv-muted: #64748b;
+	--wdcv-accent: #0f766e;
+	--wdcv-accent-soft: #ecfdf5;
+	--wdcv-warn-bg: #fffbeb;
+	--wdcv-warn-border: #f59e0b;
+	--wdcv-warn-text: #92400e;
+	--wdcv-ok-bg: #f0fdf4;
+	--wdcv-ok-border: #22c55e;
+	--wdcv-ok-text: #166534;
+	--wdcv-radius: 12px;
+	--wdcv-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+}
+
+/* ── Standalone pay page shell ─────────────────────────────────────────── */
+
+body.wdcv-pay-page {
+	margin: 0;
+	min-height: 100vh;
+	background:
+		radial-gradient(ellipse at top, #e0f2fe 0%, transparent 55%),
+		linear-gradient(180deg, #f8fafc 0%, var(--wdcv-bg) 100%);
+	color: var(--wdcv-text);
+	font-family: Tahoma, "Segoe UI", system-ui, sans-serif;
+	line-height: 1.6;
+}
+
+.wdcv-pay-shell {
+	width: min(560px, calc(100% - 2rem));
+	margin: 2.5rem auto 3rem;
+}
+
+.wdcv-pay-header {
+	text-align: center;
+	margin-bottom: 1.5rem;
+}
+
+.wdcv-pay-brand {
+	margin: 0 0 0.35rem;
+	font-size: 0.85rem;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var(--wdcv-muted);
+}
+
+.wdcv-pay-title {
+	margin: 0 0 0.35rem;
+	font-size: 1.55rem;
+	font-weight: 700;
+	color: var(--wdcv-text);
+}
+
+.wdcv-pay-order-ref {
+	margin: 0;
+	color: var(--wdcv-muted);
+	font-size: 0.95rem;
+}
+
+/* ── Shared instruction panel ──────────────────────────────────────────── */
+
+.shetab-instructions {
+	background: var(--wdcv-surface);
+	border: 1px solid var(--wdcv-border);
+	border-radius: var(--wdcv-radius);
+	box-shadow: var(--wdcv-shadow);
+	padding: 1.5rem 1.35rem;
+}
+
+.shetab-instructions > h2 {
+	margin: 0 0 1rem;
+	font-size: 1.15rem;
+	font-weight: 700;
+}
+
+.wdcv-awaiting-banner {
+	background: var(--wdcv-warn-bg);
+	border: 1px solid var(--wdcv-warn-border);
+	border-radius: 10px;
+	padding: 1rem 1.1rem;
+	margin-bottom: 1.25rem;
+	color: var(--wdcv-warn-text);
+	font-size: 0.98rem;
+}
+
+.wdcv-success-banner {
+	background: var(--wdcv-ok-bg);
+	border: 1px solid var(--wdcv-ok-border);
+	border-radius: 10px;
+	padding: 1.15rem 1.1rem;
+	margin-bottom: 1rem;
+	color: var(--wdcv-ok-text);
+}
+
+.wdcv-success-banner strong {
+	display: block;
+	font-size: 1.05rem;
+	margin-bottom: 0.35rem;
+}
+
+.wdcv-receipt-pending {
+	background: var(--wdcv-ok-bg);
+	border: 1px solid var(--wdcv-ok-border);
+	border-radius: 10px;
+	padding: 1.15rem 1.1rem;
+	margin-bottom: 1.25rem;
+}
+
+.wdcv-receipt-pending strong {
+	display: block;
+	color: var(--wdcv-ok-text);
+	font-size: 1.05rem;
+	margin-bottom: 0.4rem;
+}
+
+.wdcv-receipt-pending p {
+	margin: 0;
+	color: var(--wdcv-muted);
+}
+
+.shetab-transfer-hint {
+	margin: 0 0 1rem;
+	color: var(--wdcv-muted);
+}
+
+.shetab-amount {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.25rem;
+	width: 100%;
+	margin: 0 0 1rem;
+	padding: 1rem;
+	text-align: center;
+	background: var(--wdcv-accent-soft);
+	border: 1px solid #99f6e4;
+	border-radius: 10px;
+	font: inherit;
+	color: var(--wdcv-accent);
+	letter-spacing: 0.02em;
+	cursor: pointer;
+	transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.shetab-amount:hover {
+	box-shadow: 0 4px 14px rgba(15, 118, 110, 0.18);
+}
+
+.shetab-amount:active {
+	transform: scale(0.99);
+}
+
+.shetab-amount-rial {
+	display: block;
+	font-size: 1.35rem;
+	font-weight: 700;
+	color: var(--wdcv-accent);
+}
+
+.shetab-amount-toman {
+	display: block;
+	font-size: 0.95rem;
+	font-weight: 600;
+	color: #0f766e;
+	opacity: 0.9;
+}
+
+.shetab-amount-hint {
+	display: block;
+	margin-top: 0.15rem;
+	font-size: 0.78rem;
+	font-weight: 500;
+	color: var(--wdcv-muted);
+}
+
+.shetab-amount.is-copied .shetab-amount-hint,
+.shetab-amount-hint.is-copied {
+	color: var(--wdcv-accent);
+}
+
+.wdcv-card-box {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	margin: 0 0 0.85rem;
+	padding: 1.25rem 1rem;
+	border: 1px dashed var(--wdcv-border);
+	border-radius: 10px;
+	background: #f8fafc;
+	text-align: center;
+	box-sizing: border-box;
+}
+
+.wdcv-card-box + .wdcv-card-box {
+	margin-top: 0.15rem;
+}
+
+.wdcv-card-caption {
+	display: block;
+	width: 100%;
+	font-size: 0.85rem;
+	color: var(--wdcv-muted);
+	margin: 0 0 0.4rem;
+}
+
+.wdcv-card-number {
+	display: block;
+	width: 100%;
+	margin: 0;
+	font-size: 1.2rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	direction: ltr;
+	unicode-bidi: isolate;
+	word-break: break-all;
+	color: var(--wdcv-text);
+}
+
+.wdcv-card-label {
+	width: 100%;
+	margin: 0.45rem 0 0;
+	font-size: 0.9rem;
+	color: var(--wdcv-muted);
+}
+
+.wdcv-card-qr {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.45rem;
+	margin: 1rem 0 0;
+}
+
+.wdcv-card-qr img {
+	display: block;
+	width: 148px;
+	height: 148px;
+	border-radius: 8px;
+	background: #fff;
+	border: 1px solid var(--wdcv-border);
+	padding: 0.4rem;
+	box-sizing: border-box;
+}
+
+.wdcv-card-qr-hint {
+	font-size: 0.8rem;
+	font-weight: 500;
+	color: var(--wdcv-muted);
+	line-height: 1.35;
+}
+
+.shetab-copy-card-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	align-self: center;
+	margin: 0.95rem auto 0;
+	cursor: pointer;
+	appearance: none;
+	border: 1px solid var(--wdcv-border);
+	background: #fff;
+	color: var(--wdcv-text);
+	padding: 0.55rem 1.35rem;
+	border-radius: 999px;
+	font: inherit;
+	font-size: 0.92rem;
+	font-weight: 600;
+	line-height: 1.2;
+}
+
+.shetab-copy-card-btn:hover {
+	border-color: #94a3b8;
+}
+
+.shetab-copy-card-btn.is-copied {
+	border-color: var(--wdcv-accent);
+	color: var(--wdcv-accent);
+}
+
+.shetab-countdown {
+	margin: 0 0 1.25rem;
+	padding: 0.65rem 0.85rem;
+	text-align: center;
+	font-weight: 600;
+	color: #b45309;
+	background: #fff1f2;
+	border: 1px solid #fecdd3;
+	border-radius: 10px;
+	font-variant-numeric: tabular-nums;
+}
+
+.shetab-upload-box {
+	margin: 0 0 1.25rem;
+	padding: 1rem;
+	border: 1px solid var(--wdcv-border);
+	border-radius: 10px;
+	background: #fafbfc;
+}
+
+.shetab-upload-box strong {
+	display: block;
+	margin-bottom: 0.35rem;
+}
+
+.shetab-upload-hint {
+	margin: 0 0 0.85rem;
+	font-size: 0.85rem;
+	color: var(--wdcv-muted);
+}
+
+.shetab-upload-actions {
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	gap: 0.6rem;
+}
+
+.shetab-upload-btn {
+	flex: 1 1 0;
+	margin: 0;
+	cursor: pointer;
+	appearance: none;
+	border: 1px solid var(--wdcv-border);
+	background: #fff;
+	color: var(--wdcv-text);
+	padding: 0.55rem 1rem;
+	border-radius: 8px;
+	font: inherit;
+	white-space: nowrap;
+	text-align: center;
+}
+
+.shetab-upload-btn.alt,
+.shetab-upload-btn.button.alt {
+	background: var(--wdcv-accent);
+	border-color: var(--wdcv-accent);
+	color: #fff;
+}
+
+.shetab-upload-btn.is-hidden {
+	display: none !important;
+}
+
+.shetab-upload-btn.is-hidden,
+#shetab-do-upload[hidden],
+.shetab-file-input {
+	display: none !important;
+}
+
+.shetab-receipt-preview {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.6rem;
+	margin-top: 0.85rem;
+}
+
+.shetab-receipt-preview img {
+	width: 72px;
+	height: 72px;
+	object-fit: cover;
+	border-radius: 8px;
+	border: 1px solid var(--wdcv-border);
+}
+
+.wdcv-receipts-list {
+	margin-top: 1.25rem;
+	padding-top: 1rem;
+	border-top: 1px solid var(--wdcv-border);
+}
+
+.wdcv-orders-cta {
+	margin: 1.25rem 0 0;
+	text-align: center;
+}
+
+.wdcv-orders-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-decoration: none;
+	flex: none;
+	min-width: 12rem;
+}
+
+.shetab-support-info {
+	margin-top: 1.35rem;
+	padding-top: 1rem;
+	border-top: 1px solid var(--wdcv-border);
+}
+
+.shetab-support-links {
+	margin-top: 0.65rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.45rem;
+}
+
+.shetab-support-item {
+	color: var(--wdcv-accent);
+	text-decoration: none;
+}
+
+.shetab-support-item:hover {
+	text-decoration: underline;
+}
+
+.shetab-manager-msg {
+	margin-top: 0.85rem;
+	padding: 0.85rem;
+	background: #f8fafc;
+	border-radius: 8px;
+	color: var(--wdcv-muted);
+	font-size: 0.92rem;
+}
+
+.shetab-manager-msg strong {
+	display: block;
+	color: var(--wdcv-text);
+	margin-bottom: 0.25rem;
+}
+
+@media (max-width: 480px) {
+	.wdcv-pay-shell {
+		margin-top: 1.25rem;
+	}
+
+	.shetab-instructions {
+		padding: 1.15rem 1rem;
+	}
+
+	.shetab-amount {
+		font-size: 1.15rem;
+	}
+
+	.wdcv-card-number {
+		font-size: 1.05rem;
+		letter-spacing: 0.08em;
+	}
+}

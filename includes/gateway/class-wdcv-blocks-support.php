@@ -58,7 +58,7 @@ class WebDide_CV_Blocks_Support extends Automattic\WooCommerce\Blocks\Payments\I
             'wc-WebDide_CV-blocks-integration',
             plugins_url( 'public/js/blocks.js', WDCV_PLUGIN_FILE ),
             array( 'wp-element', 'wp-html-entities', 'wc-blocks-registry', 'wc-settings' ),
-            '1.0.0',
+            WDCV_VERSION,
             true
         );
         return array( 'wc-WebDide_CV-blocks-integration' );

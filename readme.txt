@@ -1,73 +1,116 @@
 === WebDide Card-to-Card Payment Verification for Shetab ===
 Contributors: rezahajrahimi
-Tags: WooCommerce, payment, bank transfer, card-to-card, verification
+Tags: woocommerce, card-to-card, bank-transfer, shetab, iran
 Requires at least: 5.0
-Tested up to: 6.9
+Tested up to: 7.1.2
 Requires PHP: 7.4
-Stable tag: 0.1.0
+Stable tag: 0.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Automate bank transfer (Card-to-Card) confirmations in WooCommerce using unique amount suffixes and a mobile app.
+Automate WooCommerce card-to-card (کارت به کارت) confirmations with Shetab, unique amounts, receipt upload, and Telegram/Bale admin bots.
 
 == Description ==
 
-**WebDide Card-to-Card Payment Verification for Shetab** is a sophisticated solution for WooCommerce stores in Iran that handle "Card-to-Card" payments. Instead of manual verification of transaction slips, this plugin automates the process using a specialized mobile application.
+**WebDide Card-to-Card Payment Verification for Shetab** helps Iranian WooCommerce stores accept **card-to-card / کارت به کارت** bank transfers with less manual work.
 
-### Key Features:
-*   **Unique Suffix Generation**: Generates a small unique suffix (e.g., 0-99 Tomans) for each order to distinguish between multiple transfers of the same base amount.
-*   **Auto-Confirmation**: Connects to the Shetab mobile app to verify incoming transfer notifications automatically.
-*   **Order Management**: Automatically changes order status from "On Hold" to "Processing" upon successful verification.
-*   **Manual Fallback**: Support for manual slip upload and admin confirmation if needed.
-*   **Security**: Uses encrypted storage for card numbers and secure API secrets for communication.
-*   **WooCommerce Blocks Support**: Fully compatible with the modern WooCommerce Checkout Block.
+Search keywords: کارت به کارت, درگاه کارت به کارت, تایید خودکار واریز, شتاب, card-to-card, Shetab, WooCommerce bank transfer.
+
+Instead of checking every slip by hand, the plugin can:
+
+* Generate a unique payment amount suffix so similar transfers stay distinguishable
+* Confirm deposits automatically through the companion Shetab Android app
+* Let customers upload a payment slip when needed
+* Notify store managers on **Telegram** or **Bale (بله)** with Approve / Reject buttons
+* Mark the WooCommerce order paid or failed from the bot or the order screen
+
+### Key Features
+* Unique amount suffixes for کارت به کارت payments
+* Dedicated bank-like intermediate payment page before the thank-you screen
+* Auto-confirmation via the Shetab mobile app
+* Manual receipt upload and admin review
+* Telegram & Bale bot review workflow (approve, or reject with a note)
+* Encrypted card storage and API secret authentication
+* WooCommerce Blocks checkout support
+
+### Persian summary
+افزونه تایید پرداخت **کارت به کارت** وب‌دیده برای شتاب و ووکامرس، واریزهای کارت‌به‌کارت را با مبلغ یکتا، اپلیکیشن شتاب، آپلود رسید و ربات تلگرام/بله مدیریت می‌کند.
 
 == External services ==
 
 This plugin uses the following third-party services:
 
-*   **QR Code API (api.qrserver.com)**: Used to generate QR codes for the API Secret and endpoint URLs in the admin settings page. This allows shop owners to easily sync the configuration with the mobile app.
-    *   **Data sent**: The API Secret (private key) and the REST API URLs are sent as URL parameters to generate the QR code image.
-    *   **Service provider**: GoQR.me (Digital-Solutions.at).
-    *   **Links**: [Legal](https://goqr.me/legal/), [Privacy & Security](https://goqr.me/privacy-safety-security/).
+* **QR Code API (api.qrserver.com)**: Generates QR codes for the API Secret and endpoint URLs in the admin settings page, and for destination card / account / Sheba values on the customer payment page (so shoppers can scan them in their bank app).
+  * Data sent: API Secret, REST API URLs, and destination card digits, account digits, or Sheba (IR + 24 digits) as URL parameters.
+  * Provider: GoQR.me (Digital-Solutions.at).
+  * Links: [Legal](https://goqr.me/legal/), [Privacy & Security](https://goqr.me/privacy-safety-security/).
 
-== توضیحات فارسی (Persian Description) ==
+* **Telegram Bot API (api.telegram.org)**: Optional. When enabled, sends uploaded receipt images and order summary to your admin chat, and receives Approve/Reject callbacks.
+  * Data sent: Order ID, payment amount, receipt image URL, and button callback data.
+  * Provider: Telegram Messenger Inc.
+  * Links: [Telegram Bot API](https://core.telegram.org/bots/api), [Privacy Policy](https://telegram.org/privacy).
 
-**تایید پرداخت کارت به کارت وب‌دیده برای شتاب و ووکامرس (WebDide Card-to-Card Payment Verification for Shetab)** یک راهکار پیشرفته برای فروشگاه‌های وردپرسی در ایران است که از روش "کارت به کارت" برای تسویه حساب استفاده می‌کنند. با استفاده از این افزونه و اپلیکیشن همراه آن، دیگر نیازی به تایید دستی فیش‌های واریزی ندارید.
-
-### ویژگی‌های کلیدی:
-*   **تولید شناسه پرداخت منحصر به فرد**: برای هر سفارش یک مبلغ جزئی (مثلاً ۱ تا ۹۹۹ تومان) به مبلغ اصلی اضافه می‌شود تا تراکنش‌های مشابه از هم تفکیک شوند.
-*   **تایید خودکار تراکنش**: از طریق اتصال به اپلیکیشن موبایل، به محض دریافت پیامک واریز، وضعیت سفارش به صورت خودکار تغییر می‌کند.
-*   **مدیریت کارت‌ها**: امکان تعریف چندین کارت بانکی با محدودیت تعداد و مبلغ تراکنش روزانه و ماهانه.
-*   **پشتیبانی از جستجوی فارسی**: بهینه‌سازی شده برای عباراتی چون "درگاه کارت به کارت"، "تایید خودکار واریز" و "شتاب".
-*   **سازگاری با Checkout Blocks**: کاملاً هماهنگ با نسخه جدید تسویه حساب وردپرس.
+* **Bale Bot API (tapi.bale.ai)**: Optional. Same receipt review workflow as Telegram for Bale (بله) bots.
+  * Data sent: Order ID, payment amount, receipt image URL, and button callback data.
+  * Provider: Bale messenger.
+  * Links: [Bale platform](https://ble.ir/).
 
 == Installation ==
 
-1. Upload the plugin files to the `/wp-content/plugins/webdide-card-to-card-verification` directory.
-2. Activate the plugin through the 'Plugins' screen in WordPress.
-3. Go to **WooCommerce -> Settings -> Payments** and enable the **WebDide Card-to-Card Payment Verification for Shetab** gateway.
-4. Navigate to the **Shetab Management** menu in your WordPress dashboard to configure your API secret and destination cards.
-5. Download and configure the companion Android app from [Cafe Bazaar](https://cafebazaar.ir/app/ir.webdide.verify).
+1. Upload the plugin files to the `/wp-content/plugins/webdide-card-to-card-verification` directory, or install via Plugins → Add New.
+2. Activate the plugin through the Plugins screen.
+3. Go to **WooCommerce → Settings → Payments** and enable **WebDide Card-to-Card Payment Verification for Shetab**.
+4. Open **Shetab Management** to configure the API secret, destination cards, and optional Telegram/Bale bots.
+5. Download the companion Android app from [Cafe Bazaar](https://cafebazaar.ir/app/ir.webdide.verify).
 
 == Frequently Asked Questions ==
 
 = Do I need a specific bank account? =
-No, this plugin works with any Iranian bank account that supports SMS notifications or specific app notifications supported by our companion app.
+No. It works with Iranian accounts that provide SMS or app notifications supported by the companion app.
+
+= Does it support کارت به کارت / card-to-card? =
+Yes. The gateway is built for Iranian card-to-card (کارت به کارت) transfers with unique amount matching.
 
 = Is it secure? =
-Yes, all communication between the plugin and the mobile app is secured via a private API Secret. Card numbers are stored in an encrypted format.
+Communication with the mobile app uses a private API Secret. Card numbers are stored encrypted. Bot webhooks only accept actions from configured chat IDs with signed callback data.
 
 = What happens if the app is offline? =
-Orders will remain "On Hold". You can still manually verify payments via the order management screen in WooCommerce.
+Orders stay On Hold. Customers can upload a slip; you can confirm from WooCommerce or from Telegram/Bale.
+
+= How do Telegram / Bale bots work? =
+Enable a bot in Shetab Management, set the token and allowed chat IDs, then click Set webhook. When a receipt is uploaded, the bot sends the image with Approve / Reject. Reject asks for an optional note.
 
 == Screenshots ==
 
 1. Settings page with API configuration and card management.
 2. Checkout page showing the WebDide payment method.
 3. Administrative interface for destination bank cards.
+4. Telegram/Bale bot settings for receipt review.
 
 == Changelog ==
+
+= 0.3.0 =
+* Optional destination account number and Sheba (IBAN) on each card.
+* Gateway toggles to show card, account, and/or Sheba on the payment page (each with copy + QR).
+* Database migration for encrypted/masked account and Sheba fields.
+* Tested and compatible with WordPress 7.1.2.
+
+= 0.2.5 =
+* Payment page: QR code for the destination card number so customers can scan it with their bank app.
+
+= 0.2.4 =
+* Intermediate bank-like payment page before WooCommerce thank-you.
+* Fix infinite thank-you refresh after app confirmation.
+* Show amount in Rials and Tomans; click-to-copy Rial amount and card number.
+* Styled payment UI, receipt upload actions, and “Go to my orders” after slip upload.
+
+= 0.2.0 =
+* Tested up to WordPress 7.1.
+* Proper English source strings with bundled Persian (fa_IR) translations.
+* Improved directory discoverability for card-to-card / کارت به کارت.
+* Telegram and Bale bot notifications for uploaded receipts.
+* Approve or reject deposits from the bot; rejection supports an optional note.
+* Shared approve/reject logic for WooCommerce order screen and bots.
 
 = 0.1.0 =
 * Initial release.
@@ -76,5 +119,16 @@ Orders will remain "On Hold". You can still manually verify payments via the ord
 * WooCommerce Blocks integration.
 * Admin management dashboard.
 
+== Upgrade Notice ==
 
+= 0.3.0 =
+Adds optional account/Sheba on destination cards and payment-page display toggles with copy and QR for each.
 
+= 0.2.5 =
+Adds a scannable card-number QR code on the payment page for bank apps.
+
+= 0.2.4 =
+Adds a dedicated payment page, fixes the post-confirmation refresh loop, and improves amount/card copy UX.
+
+= 0.2.0 =
+Adds Telegram/Bale receipt review bots, WordPress 7.1 compatibility, and improved Persian/English translations for the WordPress.org directory.

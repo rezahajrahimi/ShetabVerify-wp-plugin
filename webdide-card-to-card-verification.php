@@ -1,15 +1,18 @@
 <?php
 /**
- * Plugin Name: WebDide Card-to-Card Payment Verification for Shetab
- * Plugin URI:  http://verify.webdide.ir/
- * Description: Payment gateway — Automated Card-to-Card transaction confirmation via mobile app.
- * Version:     0.1.0
- * Author:      Reza HajRahimi
- * Author URI:  http://webdide.ir/
- * Text Domain: webdide-card-to-card-verification
- * Domain Path: /languages
- * License:     GPL-2.0-or-later
- * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Plugin Name:       WebDide Card-to-Card Payment Verification for Shetab
+ * Plugin URI:        http://verify.webdide.ir/
+ * Description:       Automate WooCommerce card-to-card (کارت به کارت) payment verification via mobile app, receipt upload, and Telegram/Bale admin bots.
+ * Version:           0.3.0
+ * Requires at least: 5.0
+ * Requires PHP:      7.4
+ * Requires Plugins:  woocommerce
+ * Author:            Reza HajRahimi
+ * Author URI:        http://webdide.ir/
+ * Text Domain:       webdide-card-to-card-verification
+ * Domain Path:       /languages
+ * License:           GPL-2.0-or-later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

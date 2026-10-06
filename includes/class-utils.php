@@ -40,6 +40,52 @@ class WebDide_CV_Utils {
         return '**** **** **** ' . $last4;
     }
 
+    /**
+     * Normalize an Iranian bank account number to digits only.
+     *
+     * @param string $account Raw account input.
+     * @return string
+     */
+    public static function normalize_account_number( $account ) {
+        return preg_replace( '/\D+/', '', (string) $account );
+    }
+
+    /**
+     * Normalize Sheba/IBAN to IR + 24 digits.
+     *
+     * @param string $sheba Raw sheba input.
+     * @return string Empty string if invalid.
+     */
+    public static function normalize_sheba( $sheba ) {
+        $raw = strtoupper( preg_replace( '/\s+/', '', (string) $sheba ) );
+        if ( '' === $raw ) {
+            return '';
+        }
+        if ( 0 === strpos( $raw, 'IR' ) ) {
+            $digits = preg_replace( '/\D+/', '', substr( $raw, 2 ) );
+        } else {
+            $digits = preg_replace( '/\D+/', '', $raw );
+        }
+        if ( 24 !== strlen( $digits ) ) {
+            return '';
+        }
+        return 'IR' . $digits;
+    }
+
+    /**
+     * Mask account / sheba showing last 4 characters.
+     *
+     * @param string $value Digits or IR….
+     * @return string
+     */
+    public static function mask_sensitive_number( $value ) {
+        $value = (string) $value;
+        if ( strlen( $value ) <= 4 ) {
+            return $value;
+        }
+        return str_repeat( '*', max( 0, strlen( $value ) - 4 ) ) . substr( $value, -4 );
+    }
+
     public static function set_api_secret( $secret ) {
         if ( empty( $secret ) ) {
             return false;
@@ -66,6 +112,59 @@ class WebDide_CV_Utils {
             return false;
         }
         return wp_check_password( $provided, $hash );
+    }
+
+    /**
+     * Generate a QR code as a data URI (cached). Uses api.qrserver.com.
+     *
+     * @param string $data Payload encoded in the QR (e.g. 16-digit card number).
+     * @param string $size Width x height, e.g. 160x160.
+     * @return string Empty string on failure.
+     */
+    public static function get_qr_code_data_uri( $data, $size = '150x150' ) {
+        $data = (string) $data;
+        if ( '' === $data ) {
+            return '';
+        }
+
+        $cache_key = 'wdcv_qr_' . md5( $size . '|' . $data );
+        $cached    = get_transient( $cache_key );
+        if ( false !== $cached ) {
+            return $cached;
+        }
+
+        $request_url = add_query_arg(
+            array(
+                'size' => $size,
+                'data' => $data,
+            ),
+            'https://api.qrserver.com/v1/create-qr-code/'
+        );
+
+        $response = wp_remote_get(
+            $request_url,
+            array(
+                'timeout'     => 15,
+                'redirection' => 3,
+            )
+        );
+
+        if ( is_wp_error( $response ) ) {
+            return '';
+        }
+
+        $status_code  = (int) wp_remote_retrieve_response_code( $response );
+        $body         = wp_remote_retrieve_body( $response );
+        $content_type = wp_remote_retrieve_header( $response, 'content-type' );
+
+        if ( 200 !== $status_code || empty( $body ) || empty( $content_type ) || 0 !== strpos( $content_type, 'image/' ) ) {
+            return '';
+        }
+
+        $data_uri = 'data:' . $content_type . ';base64,' . base64_encode( $body );
+        set_transient( $cache_key, $data_uri, 6 * HOUR_IN_SECONDS );
+
+        return $data_uri;
     }
 
     public static function generate_unique_amount( $original_amount ) {

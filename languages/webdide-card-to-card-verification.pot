@@ -1,0 +1,941 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WebDide Card-to-Card Payment Verification for Shetab 0.2.0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Domain: webdide-card-to-card-verification\n"
+
+#: includes/admin/class-admin-pages.php:402
+msgid "%s webhook set successfully."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:653
+#: includes/admin/class-admin-pages.php:658
+msgid "0 means unlimited"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:646
+msgid "16-Digit Card Number:"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:574
+msgid "A key is currently set."
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:336
+msgid "A system error occurred during upload."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:249
+msgid "API & App"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:360
+msgid "API Secret saved successfully."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:596
+msgid "API URL Addresses"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:687
+msgid "Actions"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:720
+msgid "Active"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:672
+msgid "Add Card"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:637
+msgid "Add New Bank Card"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:530
+msgid "Add at least one active destination bank card in the Bank cards tab."
+msgstr ""
+
+#: includes/bot/class-bot-notifier.php:191
+msgid "Additional receipt for order #%d"
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:242
+msgid "After staff approval, your order will move to the shipping stage."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:801
+msgid "Allowed chat IDs (comma-separated):"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:507
+msgid "Amount (Toman)"
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:249
+msgid "Amount: %s Tomans"
+msgstr ""
+
+#: includes/bot/class-bot-notifier.php:107
+msgid "Approve"
+msgstr ""
+
+#: includes/bot/class-bot-webhook.php:104
+msgid "Approved. Order #%d has been marked as paid."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:722
+msgid "Are you sure you want to remove this card?"
+msgstr ""
+
+#: includes/api/class-rest-controller.php:228
+msgid "Auto-confirmation: Amount %s verified by app. Ref Code: %s"
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:194
+msgid "Awaiting bank transfer (WebDide_CV)."
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:69
+msgid "Awaiting payment message"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:745
+msgid "Bale"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:891
+msgid "Bale bot setup"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:754
+msgid "Bale setup guide"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:903
+msgid "Bale uses an API compatible with Telegram bots (tapi.bale.ai). Your WordPress site still needs a public HTTPS address for webhooks."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:128
+msgid "Bank Transfer Slips (Shetab)"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:250
+msgid "Bank cards"
+msgstr ""
+
+#: shetab-verify.php:169
+#: includes/class-activator.php:24
+msgid "Bank transfer (WebDide_CV)"
+msgstr ""
+
+#: includes/bot/class-bot-client.php:65
+msgid "Bot API request failed."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:376
+msgid "Bot settings saved successfully."
+msgstr ""
+
+#: includes/bot/class-bot-client.php:43
+msgid "Bot token is missing."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:794
+msgid "Bot token:"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:642
+msgid "Card Label/Name:"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:349
+msgid "Card added."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:670
+msgid "Card is active"
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:253
+msgid "Card number:"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:354
+msgid "Card removed."
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:14
+#: includes/gateway/class-wc-gateway-wdcv.php:23
+#: includes/gateway/class-wc-gateway-wdcv.php:60
+msgid "Card-to-Card (auto verification)"
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:15
+#: includes/gateway/class-wc-gateway-wdcv.php:24
+#: includes/gateway/class-wc-gateway-wdcv.php:65
+msgid "Card-to-Card payments via Shetab with automatic transaction confirmation."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:439
+msgid "Card-to-Card verification"
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:268
+msgid "Choose slip image"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:873
+#: includes/admin/class-admin-pages.php:892
+msgid "Close"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:440
+msgid "Configure API, bank cards, receipt bots, and customer support in separate sections."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:598
+msgid "Confirm Payment (POST):"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:182
+msgid "Confirm Slip"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:508
+msgid "Confirmation Date"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:186
+msgid "Confirming the slip will set the order status to Processing."
+msgstr ""
+
+#: shetab-verify.php:35
+msgid "Copied to clipboard:"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:601
+#: includes/admin/class-admin-pages.php:615
+#: includes/admin/class-admin-pages.php:705
+msgid "Copy"
+msgstr ""
+
+#: shetab-verify.php:36
+msgid "Copy failed. Please copy manually:"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:878
+msgid "Copy the bot token BotFather gives you and paste it into the Bot token field."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:579
+msgid "Copy to clipboard"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:762
+msgid "Create a bot and copy its token."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:896
+msgid "Create a new bot and copy the token provided for your bot."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:685
+msgid "Current Usage"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:252
+msgid "Customer support"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:664
+msgid "Daily"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:726
+msgid "Delete"
+msgstr ""
+
+#: includes/bot/class-bot-webhook.php:101
+msgid "Deposit approved."
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:63
+msgid "Description"
+msgstr ""
+
+#: shetab-verify.php:39
+msgid "Details"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:549
+msgid "Developer Website"
+msgstr ""
+
+#: includes/bot/class-bot-notifier.php:92
+msgid "Do you approve this deposit?"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:539
+msgid "Download Android App"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:541
+msgid "Download from Cafe Bazaar"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:786
+msgid "Enable %s bot notifications"
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:54
+msgid "Enable Shetab Card-to-Card gateway"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:900
+msgid "Enable the Bale bot, save settings, then click Set Bale webhook."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:881
+msgid "Enable the Telegram bot, click Save bot settings, then click Set Telegram webhook."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:531
+msgid "Enable the WooCommerce payment gateway and place a test order."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:407
+msgid "Enable the bot and save a token before setting the webhook."
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:52
+msgid "Enable/Disable"
+msgstr ""
+
+#: includes/api/class-rest-controller.php:162
+msgid "Error uploading images."
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:334
+msgid "Error:"
+msgstr ""
+
+#: shetab-verify.php:71
+msgid "Every 5 Minutes"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:676
+msgid "Existing Cards"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:395
+msgid "Failed to set %1$s webhook: %2$s"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:899
+msgid "Find that account’s numeric chat ID (from Bale bot tools or API getUpdates) and enter it in Allowed chat IDs."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:683
+msgid "Full Card Number"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:880
+msgid "Get your numeric chat ID with a helper bot such as <strong>@userinfobot</strong> or <strong>@getidsbot</strong>, then paste it into Allowed chat IDs."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:527
+msgid "Getting started"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:536
+msgid "Guides & Resources"
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:289
+msgid "Help & support:"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:778
+msgid "How to set up %s"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:681
+msgid "ID"
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:266
+msgid "If your transaction was not confirmed automatically, you can upload the slip image here."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:167
+msgid "Image not found"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:720
+msgid "Inactive"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:326
+msgid "Insufficient permissions"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:183
+msgid "Invalid"
+msgstr ""
+
+#: includes/bot/class-bot-webhook.php:82
+msgid "Invalid action."
+msgstr ""
+
+#: includes/api/class-rest-controller.php:208
+msgid "Invalid or missing API Secret in Authorization header."
+msgstr ""
+
+#: includes/api/class-rest-controller.php:114
+msgid "Invalid order ID."
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:144
+msgid "Invalid order."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:570
+msgid "Key value:"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:682
+msgid "Label"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:661
+msgid "Limit Reset Period:"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:684
+msgid "Limits (Count/Amount)"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:855
+msgid "Manager Note for Users:"
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:306
+msgid "Manager message:"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:665
+msgid "Monthly"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:663
+msgid "No Reset (Forever)"
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:173
+msgid "No available bank cards are currently accepting payments. Please contact the store owner."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:692
+msgid "No cards have been configured yet."
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:157
+msgid "No destination bank cards configured. Please contact the store owner."
+msgstr ""
+
+#: includes/api/class-rest-controller.php:124
+msgid "No files were uploaded."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:574
+msgid "No key has been set yet."
+msgstr ""
+
+#: includes/api/class-rest-controller.php:214
+msgid "No pending transaction found with this amount or it has expired."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:154
+msgid "No slips have been uploaded for this order."
+msgstr ""
+
+#: shetab-verify.php:38
+msgid "No transactions found."
+msgstr ""
+
+#: includes/bot/class-bot-webhook.php:182
+#: includes/admin/class-admin-pages.php:116
+msgid "Note: %s"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:802
+msgid "Numeric IDs of managers who may approve or reject receipts. Separate multiple IDs with commas."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:805
+msgid "Only these chat IDs can approve or reject receipts."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:895
+msgid "Open Bale (بله) and find the official bot creator / BotFather equivalent for Bale."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:876
+msgid "Open Telegram and search for <strong>@BotFather</strong>."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:529
+msgid "Open the API & App tab, set your secret key, and scan the QR code in the Shetab Android app."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:879
+msgid "Open your new bot and press Start (or send any message)."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:532
+msgid "Optional: configure Telegram or Bale bots so uploaded receipts can be approved from your phone."
+msgstr ""
+
+#: includes/bot/class-bot-notifier.php:84
+msgid "Order #%1$s — Amount: %2$s %3$s"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:506
+msgid "Order ID"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:499
+msgid "Order List"
+msgstr ""
+
+#: includes/api/class-rest-controller.php:119
+#: includes/bot/class-bot-webhook.php:88
+#: includes/bot/class-bot-webhook.php:162
+msgid "Order not found."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:248
+msgid "Overview"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:897
+msgid "Paste the token into the Bale Bot token field in this plugin."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:795
+msgid "Paste the token you received when creating the bot (for example from BotFather)."
+msgstr ""
+
+#: shetab-verify.php:170
+msgid "Pay via bank transfer with unique suffix amount."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:612
+msgid "Payment Status (GET):"
+msgstr ""
+
+#: includes/api/class-rest-controller.php:234
+msgid "Payment confirmed successfully."
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:236
+msgid "Payment details"
+msgstr ""
+
+#: includes/class-db.php:198
+msgid "Payment expired (WebDide_CV)."
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:66
+msgid "Payment method description shown on checkout."
+msgstr ""
+
+#: includes/bot/class-bot-notifier.php:79
+msgid "Payment receipt submitted"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:79
+msgid "Payment slip approved (%s)."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:105
+msgid "Payment slip marked as invalid by admin."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:110
+msgid "Payment slip was marked as invalid and the order was rejected (%s)."
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:75
+msgid "Payment success message"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:453
+msgid "Please go to %s and set the structure (e.g., to \"Post name\")."
+msgstr ""
+
+#: includes/bot/class-bot-webhook.php:127
+msgid "Please send a rejection note for order #%d (or send /skip to reject without a note)."
+msgstr ""
+
+#: includes/bot/class-bot-webhook.php:113
+msgid "Please send a rejection note."
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:247
+msgid "Please transfer the exact amount below to the stated card number:"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:852
+msgid "Public support username shown to customers (not the admin bot)."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:586
+msgid "QR preview is temporarily unavailable. Please use the copy button."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:607
+#: includes/admin/class-admin-pages.php:621
+msgid "QR preview unavailable."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:760
+msgid "Quick checklist"
+msgstr ""
+
+#: includes/api/class-rest-controller.php:183
+msgid "Receipt images were uploaded successfully and are awaiting admin approval."
+msgstr ""
+
+#: includes/bot/class-bot-notifier.php:111
+msgid "Reject"
+msgstr ""
+
+#: includes/bot/class-bot-webhook.php:176
+msgid "Rejected. Order #%d was marked as failed."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:178
+msgid "Rejection note (optional):"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:858
+msgid "Save Support Info"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:821
+msgid "Save bot settings"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:592
+msgid "Save secret key"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:764
+msgid "Save settings below, then click Set webhook."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:589
+msgid "Scan to copy the key"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:564
+msgid "Secret API (Private Key)"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:877
+msgid "Send <code>/newbot</code>, choose a name and a username ending with <code>bot</code>."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:829
+msgid "Set Bale webhook"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:828
+msgid "Set Telegram webhook"
+msgstr ""
+
+#: shetab-verify.php:18
+msgid "Settings"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:457
+msgid "Settings > Permalinks"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:469
+msgid "Settings sections"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:231
+#: includes/admin/class-admin-pages.php:232
+msgid "Shetab Management"
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:78
+msgid "Shown after the payment has been confirmed."
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:72
+msgid "Shown on the thank-you page while the transfer is pending confirmation."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:763
+msgid "Start a chat with the bot and get your numeric chat ID."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:898
+msgid "Start a conversation with your bot from the manager account that should approve receipts."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:686
+msgid "Status"
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:269
+#: includes/gateway/class-wc-gateway-wdcv.php:333
+msgid "Submit slips"
+msgstr ""
+
+#: shetab-verify.php:37
+msgid "Successful Transactions for"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:711
+msgid "Sum:"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:840
+msgid "Support Information"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:367
+msgid "Support information saved successfully."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:744
+msgid "Telegram"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:251
+msgid "Telegram & Bale"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:750
+msgid "Telegram & Bale bots"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:850
+msgid "Telegram ID:"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:872
+msgid "Telegram bot setup"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:753
+msgid "Telegram setup guide"
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:299
+msgid "Telegram:"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:901
+msgid "Test by uploading a receipt; approve or reject from Bale. On reject you can send a note or /skip."
+msgstr ""
+
+#: includes/bot/class-bot-notifier.php:91
+msgid "The customer uploaded the receipt below for review."
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:335
+msgid "There was a problem uploading the file."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:841
+msgid "These contacts are shown to customers on the payment instructions page. They are separate from the admin Telegram/Bale bots."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:810
+msgid "This HTTPS endpoint receives Approve/Reject actions from the bot. Set it with the button below after saving the token."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:72
+msgid "This order is already paid."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:571
+msgid "This private key authenticates the Android app with your store. Keep it secret and never share it publicly."
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:331
+msgid "Time remaining to transfer:"
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:260
+msgid "Time remaining to transfer: %s"
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:58
+msgid "Title"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:448
+msgid "To ensure the automatic confirmation system (API) works correctly, you must set your WordPress <strong>\"Permalinks\"</strong> to anything other than \"Plain\"."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:540
+msgid "To use automatic bank transfer confirmation, download and install the Shetab app from Cafe Bazaar."
+msgstr ""
+
+#: includes/bot/class-bot-notifier.php:76
+#: includes/admin/class-admin-pages.php:711
+msgid "Tomans"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:656
+msgid "Total Amount Limit (Toman):"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:651
+msgid "Transaction Limit (Count):"
+msgstr ""
+
+#: includes/api/class-rest-controller.php:196
+msgid "Transaction amount (amount) not found in the sent data."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:710
+msgid "Txns:"
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:151
+msgid "Unable to generate a unique payment amount. Please try again."
+msgstr ""
+
+#: includes/bot/class-bot-webhook.php:76
+msgid "Unauthorized chat."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:882
+msgid "Upload a test receipt on an order. You should receive the image with Approve and Reject buttons."
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:265
+msgid "Upload payment slip image (optional):"
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:277
+msgid "Uploaded receipt images:"
+msgstr ""
+
+#: includes/api/class-rest-controller.php:176
+msgid "Uploaded receipts are ready for admin review."
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:332
+msgid "Uploading…"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:544
+msgid "User Guide"
+msgstr ""
+
+#: includes/api/class-rest-controller.php:174
+msgid "User uploaded a payment receipt image."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:509
+msgid "View"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:715
+msgid "View Details (%d orders)"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:546
+msgid "View Tutorials"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:551
+msgid "Visit Website"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:550
+msgid "Visit our website for support and the latest updates."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:446
+msgid "Warning: Missing Permalinks Configuration"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:545
+msgid "Watch tutorials and read guides for a correct configuration."
+msgstr ""
+
+#: shetab-verify.php:103
+msgid "WebDide_CV gateway is enabled but no active bank cards are configured. To show the gateway on checkout, please add at least one active card in Shetab Management."
+msgstr ""
+
+#: shetab-verify.php:432
+msgid "WebDide_CV requires woocommerce to be installed and active."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:809
+msgid "Webhook URL:"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:884
+msgid "Webhook requires a public HTTPS URL. On local development, expose your site with a tunnel (for example ngrok) and use that base URL."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:846
+msgid "WhatsApp ID (e.g. 989123456789):"
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:293
+msgid "WhatsApp:"
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:758
+msgid "When a customer uploads a payment receipt, enabled bots receive the image with Approve / Reject buttons. On reject, the bot asks for an optional note."
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:35
+#: includes/gateway/class-wc-gateway-wdcv.php:71
+msgid "Your order has been placed and is awaiting payment. Please transfer the amount using the instructions below."
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:236
+msgid "Your payment receipt"
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:241
+msgid "Your payment slip was received and is awaiting admin approval."
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:42
+#: includes/gateway/class-wc-gateway-wdcv.php:77
+msgid "Your payment was confirmed successfully. Your order is being processed."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:765
+msgid "Your site must be reachable over HTTPS from the internet (localhost needs a tunnel such as ngrok)."
+msgstr ""
+
+#: includes/gateway/class-wc-gateway-wdcv.php:330
+msgid "Your time has expired."
+msgstr ""
+
+#: includes/admin/class-admin-pages.php:643
+msgid "e.g. Primary Shop Card"
+msgstr ""
+
+#: shetab-verify.php:135
+msgid "webdide-card-to-card-verification"
+msgstr ""

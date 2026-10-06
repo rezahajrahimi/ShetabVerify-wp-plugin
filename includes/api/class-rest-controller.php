@@ -22,6 +22,8 @@ class WebDide_CV_REST_Controller {
             'callback' => array( __CLASS__, 'handle_receipt_upload' ),
             'permission_callback' => array( __CLASS__, 'check_upload_permission' ),
         ) );
+
+        WebDide_CV_Bot_Webhook::register_routes();
     }
 
     /**
@@ -174,9 +176,11 @@ class WebDide_CV_REST_Controller {
         $order->add_order_note( __( 'Uploaded receipts are ready for admin review.', 'webdide-card-to-card-verification' ) );
         $order->save();
 
+        WebDide_CV_Bot_Notifier::notify_receipt_uploaded( $order, $uploaded_ids );
+
         return rest_ensure_response( array(
             'success' => true,
-            'message' => __( 'تصاویر رسید با موفقیت بارگذاری شدند و در انتظار تایید مدیریت هستند.', 'webdide-card-to-card-verification' ),
+            'message' => __( 'Receipt images were uploaded successfully and are awaiting admin approval.', 'webdide-card-to-card-verification' ),
             'receipt_ids' => $uploaded_ids
         ) );
     }

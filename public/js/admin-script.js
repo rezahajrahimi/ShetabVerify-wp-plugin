@@ -1,6 +1,6 @@
 /**
  * WebDide Card-to-Card Verification Admin JavaScript
- * Handles modal functionality and clipboard operations
+ * Handles modal functionality, guide popups, and clipboard operations
  */
 
 (function($) {
@@ -22,7 +22,7 @@
         } else {
             fallbackCopyTextToClipboard(text);
         }
-    }
+    };
 
     function fallbackCopyTextToClipboard(text) {
         var tempInput = document.createElement("input");
@@ -57,8 +57,7 @@
         }
 
         modal.style.display = "block";
-        document.body.style.overflow = "hidden"; // Prevent background scroll
-
+        document.body.style.overflow = "hidden";
         renderModalPage();
     }
 
@@ -76,7 +75,6 @@
             return;
         }
 
-        // Pagination logic
         var totalPages = Math.ceil(currentModalOrders.length / itemsPerPage);
         var start = (currentModalPage - 1) * itemsPerPage;
         var end = start + itemsPerPage;
@@ -94,7 +92,6 @@
             tbody.appendChild(row);
         });
 
-        // Render pagination buttons if more than one page
         if (totalPages > 1) {
             for (var i = 1; i <= totalPages; i++) {
                 (function(p) {
@@ -112,29 +109,71 @@
     }
 
     window.closeModal = function() {
-        document.getElementById("orderModal").style.display = "none";
+        var modal = document.getElementById("orderModal");
+        if (modal) {
+            modal.style.display = "none";
+        }
         document.body.style.overflow = "auto";
     };
 
-    // Close on outside click
-    window.onclick = function(event) {
-        var modal = document.getElementById("orderModal");
-        if (event.target == modal) {
-            closeModal();
+    function openGuide(guideId) {
+        var modal = document.getElementById('wdcv-guide-' + guideId);
+        if (!modal) {
+            return;
+        }
+        modal.hidden = false;
+        modal.style.display = 'block';
+        modal.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeGuideModals() {
+        document.querySelectorAll('.wdcv-guide-modal').forEach(function(modal) {
+            modal.hidden = true;
+            modal.style.display = 'none';
+            modal.classList.remove('is-open');
+        });
+        var orderModal = document.getElementById('orderModal');
+        if (!orderModal || orderModal.style.display !== 'block') {
+            document.body.style.overflow = 'auto';
         }
     }
 
-    // Initialize when document is ready
+    window.onclick = function(event) {
+        var orderModal = document.getElementById("orderModal");
+        if (orderModal && event.target === orderModal) {
+            closeModal();
+        }
+        if (event.target.classList && event.target.classList.contains('wdcv-guide-modal')) {
+            closeGuideModals();
+        }
+    };
+
     $(document).ready(function() {
-        // Bind click events for buttons with data-orders attribute
         $(document).on('click', '[data-orders]', function(e) {
             e.preventDefault();
             window.showCardOrdersFromData(this);
         });
 
-        // Bind close modal events
         $(document).on('click', '.wdcv-modal-close', function() {
             window.closeModal();
+        });
+
+        $(document).on('click', '.wdcv-help-btn', function(e) {
+            e.preventDefault();
+            openGuide($(this).data('wdcv-guide'));
+        });
+
+        $(document).on('click', '.wdcv-guide-close', function(e) {
+            e.preventDefault();
+            closeGuideModals();
+        });
+
+        $(document).on('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeGuideModals();
+                window.closeModal();
+            }
         });
     });
 

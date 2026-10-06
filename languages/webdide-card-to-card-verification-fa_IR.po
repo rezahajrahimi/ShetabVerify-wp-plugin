@@ -1,253 +1,930 @@
-# Translation of WebDide Card-to-Card Verification in Persian (Farsi)
-# This file is distributed under the same license as the WebDide Card-to-Card Verification package.
 msgid ""
 msgstr ""
-"Project-Id-Version: WebDide Card-to-Card Verification 0.1.0\n"
-"Report-Msgid-Bugs-To: http://verify.webdide.ir/\n"
-"POT-Creation-Date: 2024-01-06 12:00+0000\n"
-"PO-Revision-Date: 2024-01-06 12:00+0000\n"
-"Last-Translator: Reza HajRahimi <reza@webdide.ir>\n"
-"Language-Team: Persian <reza@webdide.ir>\n"
+"Project-Id-Version: WebDide Card-to-Card 0.3.0\n"
 "Language: fa_IR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
-"X-Generator: Poedit 3.0\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Domain: webdide-card-to-card-verification\n"
 
-msgid "Bank Transfer Slips (Shetab)"
-msgstr "رسیدهای انتقال بانکی (شتاب)"
-
-msgid "No slips have been uploaded for this order."
-msgstr "هیچ رسیدی برای این سفارش آپلود نشده است."
-
-msgid "Confirm Slip"
-msgstr "تایید رسید"
-
-msgid "Invalid"
-msgstr "نامعتبر"
-
-msgid "Confirming the slip will set the order status to \"Processing\"."
-msgstr "تایید رسید وضعیت سفارش را به \"در حال پردازش\" تغییر می‌دهد."
-
-msgid "Insufficient permissions"
-msgstr "دسترسی کافی ندارید"
-
-msgid "Card added."
-msgstr "کارت اضافه شد."
-
-msgid "Card removed."
-msgstr "کارت حذف شد."
-
-msgid "API Secret saved successfully."
-msgstr "کلید API با موفقیت ذخیره شد."
-
-msgid "Support information saved successfully."
-msgstr "اطلاعات پشتیبانی با موفقیت ذخیره شد."
-
-msgid "card-to-card verification"
-msgstr "تایید کارت به کارت"
-
-msgid "⚠️ Warning: Missing Permalinks Configuration"
-msgstr "⚠️ هشدار: تنظیمات پیوندهای یکتا وجود ندارد"
-
-msgid "To ensure the automatic confirmation system (API) works correctly, you must set your WordPress <strong>\"Permalinks\"</strong> to anything other than \"Plain\"."
-msgstr "برای اطمینان از عملکرد صحیح سیستم تایید خودکار (API)، باید <strong>\"پیوندهای یکتا\"</strong> وردپرس خود را روی چیزی غیر از \"ساده\" تنظیم کنید."
-
-msgid "Settings > Permalinks"
-msgstr "تنظیمات > پیوندهای یکتا"
-
-msgid "Guides & Resources"
-msgstr "راهنماها و منابع"
-
-msgid "Download Android App"
-msgstr "دانلود اپلیکیشن اندروید"
-
-msgid "To use automatic bank transfer confirmation, download and install the Shetab app from Cafe Bazaar."
-msgstr "برای استفاده از تایید خودکار انتقال بانکی، اپلیکیشن شتاب را از کافه بازار دانلود و نصب کنید."
-
-msgid "Download from Cafe Bazaar"
-msgstr "دانلود از کافه بازار"
-
-msgid "User Guide"
-msgstr "راهنمای کاربر"
-
-msgid "Watch tutorials and read guides for a correct configuration."
-msgstr "ویدیوهای آموزشی را ببینید و راهنماها را برای تنظیمات صحیح مطالعه کنید."
-
-msgid "View Tutorials"
-msgstr "مشاهده آموزش‌ها"
-
-msgid "Developer Website"
-msgstr "وب‌سایت توسعه‌دهنده"
-
-msgid "Visit our website for support and the latest updates."
-msgstr "برای پشتیبانی و آخرین به‌روزرسانی‌ها به وب‌سایت ما مراجعه کنید."
-
-msgid "Visit Website"
-msgstr "بازدید از وب‌سایت"
-
-msgid "Secret API (Private Key)"
-msgstr "کلید API مخفی"
-
-msgid "مقدار کلید:"
-msgstr "مقدار کلید:"
-
-msgid "کلید هم اکنون تنظیم شده است."
-msgstr "کلید هم اکنون تنظیم شده است."
-
-msgid "هنوز کلیدی تنظیم نشده است."
-msgstr "هنوز کلیدی تنظیم نشده است."
-
-msgid "ذخیره کلید مخفی"
-msgstr "ذخیره کلید مخفی"
-
-msgid "API URL Addresses"
-msgstr "آدرس‌های URL API"
-
-msgid "Confirm Payment (POST):"
-msgstr "تایید پرداخت (POST):"
-
-msgid "Copy"
-msgstr "کپی"
-
-msgid "Payment Status (GET):"
-msgstr "وضعیت پرداخت (GET):"
-
-msgid "Add New Bank Card"
-msgstr "افزودن کارت بانکی جدید"
-
-msgid "Card Label/Name:"
-msgstr "برچسب/نام کارت:"
-
-msgid "e.g. Primary Shop Card"
-msgstr "مثلاً کارت فروشگاه اصلی"
-
-msgid "16-Digit Card Number:"
-msgstr "شماره کارت ۱۶ رقمی:"
-
-msgid "Transaction Limit (Count):"
-msgstr "محدودیت تعداد تراکنش:"
+msgid "%s webhook set successfully."
+msgstr "وب‌هوک %s با موفقیت تنظیم شد."
 
 msgid "0 means unlimited"
 msgstr "۰ یعنی نامحدود"
 
-msgid "Total Amount Limit (Toman):"
-msgstr "محدودیت مبلغ کل (تومان):"
+msgid "16-Digit Card Number:"
+msgstr "شماره کارت ۱۶ رقمی:"
 
-msgid "Limit Reset Period:"
-msgstr "دوره بازنشانی محدودیت:"
+msgid "A key is currently set."
+msgstr "کلید هم اکنون تنظیم شده است."
 
-msgid "No Reset (Forever)"
-msgstr "بدون بازنشانی (برای همیشه)"
+msgid "A system error occurred during upload."
+msgstr "خطای سیستمی در آپلود"
 
-msgid "Daily"
-msgstr "روزانه"
+msgid "API & App"
+msgstr "API و اپلیکیشن"
 
-msgid "Monthly"
-msgstr "ماهانه"
+msgid "API Secret saved successfully."
+msgstr "کلید API با موفقیت ذخیره شد."
 
-msgid "Card is active"
-msgstr "کارت فعال است"
-
-msgid "Add Card"
-msgstr "افزودن کارت"
-
-msgid "Existing Cards"
-msgstr "کارت‌های موجود"
-
-msgid "ID"
-msgstr "شناسه"
-
-msgid "Label"
-msgstr "برچسب"
-
-msgid "Full Card Number"
-msgstr "شماره کارت کامل"
-
-msgid "Limits (Count/Amount)"
-msgstr "محدودیت‌ها (تعداد/مبلغ)"
-
-msgid "Current Usage"
-msgstr "استفاده فعلی"
-
-msgid "Status"
-msgstr "وضعیت"
+msgid "API URL Addresses"
+msgstr "آدرس‌های API"
 
 msgid "Actions"
-msgstr "اقدامات"
-
-msgid "No cards have been configured yet."
-msgstr "هنوز هیچ کارتی تنظیم نشده است."
-
-msgid "Copy"
-msgstr "کپی"
-
-msgid "Txns:"
-msgstr "تراکنش‌ها:"
-
-msgid "Sum:"
-msgstr "مجموع:"
-
-msgid "Tomans"
-msgstr "تومان"
-
-msgid "View Details (%d orders)"
-msgstr "مشاهده جزئیات (%d سفارش)"
+msgstr "عملیات"
 
 msgid "Active"
 msgstr "فعال"
 
-msgid "Inactive"
-msgstr "غیرفعال"
+msgid "Add Card"
+msgstr "افزودن کارت"
 
-msgid "Delete"
-msgstr "حذف"
+msgid "Add New Bank Card"
+msgstr "افزودن کارت بانکی جدید"
 
-msgid "Are you sure you want to remove this card?"
-msgstr "آیا مطمئن هستید که می‌خواهید این کارت را حذف کنید؟"
+msgid "Add at least one active destination bank card in the Bank cards tab."
+msgstr "حداقل یک کارت مقصد فعال در تب کارت‌های بانکی اضافه کنید."
 
-msgid "Support Information"
-msgstr "اطلاعات پشتیبانی"
+msgid "Additional receipt for order #%d"
+msgstr "رسید اضافی برای سفارش #%d"
 
-msgid "WhatsApp ID (e.g. 989123456789):"
-msgstr "شناسه واتس‌اپ (مثلاً ۹۸۹۱۲۳۴۵۶۷۸۹):"
+msgid "After staff approval, your order will move to the shipping stage."
+msgstr "پس از تایید کارشناسان، سفارش شما وارد مرحله ارسال خواهد شد."
 
-msgid "Telegram ID:"
-msgstr "شناسه تلگرام:"
-
-msgid "Manager Note for Users:"
-msgstr "یادداشت مدیر برای کاربران:"
-
-msgid "Save Support Info"
-msgstr "ذخیره اطلاعات پشتیبانی"
-
-msgid "Copied to clipboard:"
-msgstr "در کلیپ‌بورد کپی شد:"
-
-msgid "Order List"
-msgstr "لیست سفارشات"
-
-msgid "Successful Transactions for"
-msgstr "تراکنش‌های موفق برای"
-
-msgid "No transactions found."
-msgstr "هیچ تراکنشی یافت نشد."
-
-msgid "Order ID"
-msgstr "شناسه سفارش"
+msgid "Allowed chat IDs (comma-separated):"
+msgstr "شناسه چت‌های مجاز (با کاما):"
 
 msgid "Amount (Toman)"
 msgstr "مبلغ (تومان)"
 
+msgid "Amount: %s Tomans"
+msgstr "مبلغ: %s تومان"
+
+msgid "Approve"
+msgstr "تایید"
+
+msgid "Approved. Order #%d has been marked as paid."
+msgstr "تایید شد. سفارش #%d به‌عنوان پرداخت‌شده علامت خورد."
+
+msgid "Are you sure you want to remove this card?"
+msgstr "از حذف این کارت مطمئن هستید؟"
+
+msgid "Auto-confirmation: Amount %s verified by app. Ref Code: %s"
+msgstr "تایید خودکار: مبلغ %s توسط اپ تایید شد. کد مرجع: %s"
+
+msgid "Awaiting bank transfer (WebDide_CV)."
+msgstr "در انتظار انتقال بانکی (WebDide_CV)."
+
+msgid "Awaiting payment message"
+msgstr "پیام در انتظار پرداخت"
+
+msgid "Bale"
+msgstr "بله"
+
+msgid "Bale bot setup"
+msgstr "تنظیم ربات بله"
+
+msgid "Bale setup guide"
+msgstr "راهنمای تنظیم بله"
+
+msgid "Bale uses an API compatible with Telegram bots (tapi.bale.ai). Your WordPress site still needs a public HTTPS address for webhooks."
+msgstr "بله از API سازگار با ربات‌های تلگرام (tapi.bale.ai) استفاده می‌کند. سایت وردپرس همچنان به آدرس عمومی HTTPS برای وب‌هوک نیاز دارد."
+
+msgid "Bank Transfer Slips (Shetab)"
+msgstr "فیش‌های کارت به کارت (شتاب)"
+
+msgid "Bank cards"
+msgstr "کارت‌های بانکی"
+
+msgid "Bank transfer (WebDide_CV)"
+msgstr "انتقال بانکی (WebDide_CV)"
+
+msgid "Bot API request failed."
+msgstr "درخواست API ربات ناموفق بود."
+
+msgid "Bot settings saved successfully."
+msgstr "تنظیمات ربات ذخیره شد."
+
+msgid "Bot token is missing."
+msgstr "توکن ربات موجود نیست."
+
+msgid "Bot token:"
+msgstr "توکن ربات:"
+
+msgid "Card Label/Name:"
+msgstr "برچسب/نام کارت:"
+
+msgid "Card added."
+msgstr "کارت اضافه شد."
+
+msgid "Card is active"
+msgstr "کارت فعال است"
+
+msgid "Card number:"
+msgstr "شماره کارت:"
+
+msgid "Card removed."
+msgstr "کارت حذف شد."
+
+msgid "Card-to-Card (auto verification)"
+msgstr "کارت به کارت (تایید خودکار)"
+
+msgid "Card-to-Card payments via Shetab with automatic transaction confirmation."
+msgstr "کارت به کارت با استفاده از درگاه شتاب (تایید خودکار تراکنش)."
+
+msgid "Card-to-Card verification"
+msgstr "تایید کارت به کارت"
+
+msgid "Choose slip image"
+msgstr "انتخاب تصویر فیش"
+
+msgid "Close"
+msgstr "بستن"
+
+msgid "Configure API, bank cards, receipt bots, and customer support in separate sections."
+msgstr "API، کارت‌های بانکی، ربات‌های رسید و پشتیبانی مشتری را در بخش‌های جداگانه تنظیم کنید."
+
+msgid "Confirm Payment (POST):"
+msgstr "تایید پرداخت (POST):"
+
+msgid "Confirm Slip"
+msgstr "تایید فیش"
+
 msgid "Confirmation Date"
 msgstr "تاریخ تایید"
 
-msgid "View"
-msgstr "مشاهده"
+msgid "Confirming the slip will set the order status to Processing."
+msgstr "با تایید فیش، وضعیت سفارش به «در حال پردازش» تغییر می‌کند."
+
+msgid "Copied to clipboard:"
+msgstr "کپی شد در کلیپ‌بورد:"
+
+msgid "Copy"
+msgstr "کپی"
+
+msgid "Copy failed. Please copy manually:"
+msgstr "کپی ناموفق بود. لطفاً دستی کپی کنید:"
+
+msgid "Copy the bot token BotFather gives you and paste it into the Bot token field."
+msgstr "توکنی که BotFather می‌دهد را کپی کنید و در فیلد توکن ربات بچسبانید."
+
+msgid "Copy to clipboard"
+msgstr "کپی به کلیپبورد"
+
+msgid "Create a bot and copy its token."
+msgstr "یک ربات بسازید و توکن آن را کپی کنید."
+
+msgid "Create a new bot and copy the token provided for your bot."
+msgstr "یک ربات جدید بسازید و توکن داده‌شده را کپی کنید."
+
+msgid "Current Usage"
+msgstr "مصرف فعلی"
+
+msgid "Customer support"
+msgstr "پشتیبانی مشتری"
+
+msgid "Daily"
+msgstr "روزانه"
+
+msgid "Delete"
+msgstr "حذف"
+
+msgid "Deposit approved."
+msgstr "واریز تایید شد."
+
+msgid "Description"
+msgstr "توضیحات"
 
 msgid "Details"
 msgstr "جزئیات"
 
+msgid "Developer Website"
+msgstr "وب‌سایت توسعه‌دهنده"
+
+msgid "Do you approve this deposit?"
+msgstr "آیا این واریز را تایید می‌کنید؟"
+
+msgid "Download Android App"
+msgstr "دانلود اپ اندروید"
+
+msgid "Download from Cafe Bazaar"
+msgstr "دانلود از کافه بازار"
+
+msgid "Enable %s bot notifications"
+msgstr "فعال‌سازی اعلان‌های ربات %s"
+
+msgid "Enable Shetab Card-to-Card gateway"
+msgstr "فعال سازی درگاه شتاب"
+
+msgid "Enable the Bale bot, save settings, then click Set Bale webhook."
+msgstr "ربات بله را فعال کنید، تنظیمات را ذخیره کنید، سپس وب‌هوک بله را تنظیم کنید."
+
+msgid "Enable the Telegram bot, click Save bot settings, then click Set Telegram webhook."
+msgstr "ربات تلگرام را فعال کنید، تنظیمات را ذخیره کنید، سپس وب‌هوک تلگرام را تنظیم کنید."
+
+msgid "Enable the bot and save a token before setting the webhook."
+msgstr "قبل از تنظیم وب‌هوک، ربات را فعال کرده و توکن را ذخیره کنید."
+
+msgid "Enable/Disable"
+msgstr "فعال/غیرفعال سازی"
+
+msgid "Error uploading images."
+msgstr "خطا در آپلود تصاویر."
+
+msgid "Error:"
+msgstr "خطا:"
+
 msgid "Every 5 Minutes"
 msgstr "هر ۵ دقیقه"
+
+msgid "Existing Cards"
+msgstr "کارت‌های موجود"
+
+msgid "Failed to set %1$s webhook: %2$s"
+msgstr "تنظیم وب‌هوک %1$s ناموفق بود: %2$s"
+
+
+msgid "Full Card Number"
+msgstr "شماره کامل کارت"
+
+msgid "Get your numeric chat ID with a helper bot such as <strong>@userinfobot</strong> or <strong>@getidsbot</strong>, then paste it into Allowed chat IDs."
+msgstr "شناسه عددی چت را با ربات کمکی مثل <strong>@userinfobot</strong> یا <strong>@getidsbot</strong> بگیرید و در شناسه چت‌های مجاز وارد کنید."
+
+msgid "Getting started"
+msgstr "شروع کار"
+
+msgid "Guides & Resources"
+msgstr "راهنما و منابع"
+
+msgid "Help & support:"
+msgstr "راهنمایی و پشتیبانی:"
+
+msgid "How to set up %s"
+msgstr "نحوه تنظیم %s"
+
+msgid "ID"
+msgstr "شناسه"
+
+msgid "If your transaction was not confirmed automatically, you can upload the slip image here."
+msgstr "اگر تراکنش شما تایید نشد، می‌توانید تصویر فیش را اینجا آپلود کنید."
+
+msgid "Image not found"
+msgstr "تصویر یافت نشد"
+
+msgid "Inactive"
+msgstr "غیرفعال"
+
+msgid "Insufficient permissions"
+msgstr "دسترسی کافی نیست"
+
+msgid "Invalid"
+msgstr "نامعتبر"
+
+msgid "Invalid action."
+msgstr "عملیات نامعتبر."
+
+msgid "Invalid or missing API Secret in Authorization header."
+msgstr "کلید API در هدر Authorization نامعتبر یا موجود نیست."
+
+msgid "Invalid order ID."
+msgstr "شناسه سفارش نامعتبر است."
+
+msgid "Invalid order."
+msgstr "سفارش نامعتبر است."
+
+msgid "Key value:"
+msgstr "مقدار کلید:"
+
+msgid "Label"
+msgstr "برچسب"
+
+msgid "Limit Reset Period:"
+msgstr "دوره ریست سقف:"
+
+msgid "Limits (Count/Amount)"
+msgstr "سقف (تعداد/مبلغ)"
+
+msgid "Manager Note for Users:"
+msgstr "یادداشت مدیر برای کاربران:"
+
+msgid "Manager message:"
+msgstr "پیام مدیر:"
+
+msgid "Monthly"
+msgstr "ماهانه"
+
+msgid "No Reset (Forever)"
+msgstr "بدون ریست (همیشگی)"
+
+msgid "No available bank cards are currently accepting payments. Please contact the store owner."
+msgstr "هیچ کارت بانکی در حال حاضر پرداخت نمی‌پذیرد. با فروشگاه تماس بگیرید."
+
+msgid "No cards have been configured yet."
+msgstr "هنوز کارتی تنظیم نشده است."
+
+msgid "No destination bank cards configured. Please contact the store owner."
+msgstr "کارت مقصدی تنظیم نشده است. با فروشگاه تماس بگیرید."
+
+msgid "No files were uploaded."
+msgstr "فایلی آپلود نشد."
+
+msgid "No key has been set yet."
+msgstr "هنوز کلیدی تنظیم نشده است."
+
+msgid "No pending transaction found with this amount or it has expired."
+msgstr "تراکنش معلقی با این مبلغ یافت نشد یا منقضی شده است."
+
+msgid "No slips have been uploaded for this order."
+msgstr "برای این سفارش فیشی آپلود نشده است."
+
+msgid "No transactions found."
+msgstr "تراکنشی یافت نشد."
+
+msgid "Note: %s"
+msgstr "یادداشت: %s"
+
+msgid "Numeric IDs of managers who may approve or reject receipts. Separate multiple IDs with commas."
+msgstr "شناسه عددی مدیرانی که می‌توانند رسید را تایید یا رد کنند. چند شناسه را با کاما جدا کنید."
+
+msgid "Only these chat IDs can approve or reject receipts."
+msgstr "فقط این شناسه‌ها می‌توانند رسید را تایید یا رد کنند."
+
+msgid "Open Bale (بله) and find the official bot creator / BotFather equivalent for Bale."
+msgstr "اپ بله را باز کنید و ربات رسمی ساخت بات / معادل BotFather در بله را پیدا کنید."
+
+msgid "Open Telegram and search for <strong>@BotFather</strong>."
+msgstr "تلگرام را باز کنید و <strong>@BotFather</strong> را جستجو کنید."
+
+msgid "Open in WooCommerce Payments"
+msgstr "باز کردن در پرداخت‌های ووکامرس"
+
+msgid "Open the API & App tab, set your secret key, and scan the QR code in the Shetab Android app."
+msgstr "تب API و اپلیکیشن را باز کنید، کلید مخفی را تنظیم کنید و QR را در اپ اندروید شتاب اسکن کنید."
+
+msgid "Open the Payment gateway tab, enable the method, and set the checkout title and messages."
+msgstr "تب درگاه پرداخت را باز کنید، روش را فعال کنید و عنوان و پیام‌های تسویه را تنظیم کنید."
+
+msgid "Open your new bot and press Start (or send any message)."
+msgstr "ربات جدید را باز کنید و Start را بزنید (یا هر پیامی بفرستید)."
+
+msgid "Optional: configure Telegram or Bale bots so uploaded receipts can be approved from your phone."
+msgstr "اختیاری: ربات تلگرام یا بله را تنظیم کنید تا رسیدهای آپلودشده را از گوشی تایید کنید."
+
+msgid "Order #%1$s — Amount: %2$s %3$s"
+msgstr "سفارش #%1$s — مبلغ: %2$s %3$s"
+
+msgid "Order ID"
+msgstr "شناسه سفارش"
+
+msgid "Order List"
+msgstr "فهرست سفارش‌ها"
+
+msgid "Order not found."
+msgstr "سفارش یافت نشد."
+
+msgid "Overview"
+msgstr "نمای کلی"
+
+msgid "Paste the token into the Bale Bot token field in this plugin."
+msgstr "توکن را در فیلد توکن ربات بله در این افزونه بچسبانید."
+
+msgid "Paste the token you received when creating the bot (for example from BotFather)."
+msgstr "توکنی که هنگام ساخت ربات گرفتید (مثلاً از BotFather) را اینجا بچسبانید."
+
+msgid "Pay via bank transfer with unique suffix amount."
+msgstr "پرداخت با انتقال بانکی و مبلغ پسوند یکتا."
+
+msgid "Payment Status (GET):"
+msgstr "وضعیت پرداخت (GET):"
+
+msgid "Payment confirmed successfully."
+msgstr "پرداخت با موفقیت تایید شد."
+
+msgid "Payment details"
+msgstr "اطلاعات پرداخت"
+
+msgid "Payment expired (WebDide_CV)."
+msgstr "پرداخت منقضی شد (WebDide_CV)."
+
+msgid "Payment gateway"
+msgstr "درگاه پرداخت"
+
+msgid "Payment gateway settings saved successfully."
+msgstr "تنظیمات درگاه پرداخت با موفقیت ذخیره شد."
+
+msgid "Payment method description shown on checkout."
+msgstr "توضیحات روش پرداخت در صفحه تسویه."
+
+msgid "Payment method name shown to customers on the checkout page."
+msgstr "نام روش پرداخت که در صفحه تسویه به مشتری نشان داده می‌شود."
+
+msgid "Payment receipt submitted"
+msgstr "رسید پرداخت ارسال شد"
+
+msgid "Payment slip approved (%s)."
+msgstr "فیش واریزی تایید شد (%s)."
+
+msgid "Payment slip marked as invalid by admin."
+msgstr "فیش واریزی توسط مدیر نامعتبر علامت‌گذاری شد."
+
+msgid "Payment slip was marked as invalid and the order was rejected (%s)."
+msgstr "فیش واریزی نامعتبر اعلام و سفارش رد شد (%s)."
+
+msgid "Payment success message"
+msgstr "پیام موفقیت پرداخت"
+
+msgid "Place a test order and confirm the gateway appears on checkout."
+msgstr "یک سفارش آزمایشی ثبت کنید و مطمئن شوید درگاه در تسویه نمایش داده می‌شود."
+
+msgid "Please go to %s and set the structure (e.g., to \"Post name\")."
+msgstr "لطفاً به %s بروید و ساختار را تنظیم کنید (مثلاً «نام نوشته»)."
+
+msgid "Please send a rejection note for order #%d (or send /skip to reject without a note)."
+msgstr "لطفاً برای سفارش #%d یادداشت رد بفرستید (یا /skip برای رد بدون یادداشت)."
+
+msgid "Please send a rejection note."
+msgstr "لطفاً یادداشت رد را ارسال کنید."
+
+msgid "Please transfer the exact amount below to the stated card number:"
+msgstr "لطفاً مبلغ دقیق زیر را به شماره کارت اعلام شده منتقل نمایید:"
+
+msgid "Please transfer the exact amount below using the destination details:"
+msgstr "لطفاً مبلغ دقیق زیر را با استفاده از اطلاعات مقصد واریز کنید:"
+
+msgid "Public support username shown to customers (not the admin bot)."
+msgstr "نام کاربری پشتیبانی عمومی برای مشتریان (نه ربات مدیر)."
+
+msgid "QR preview is temporarily unavailable. Please use the copy button."
+msgstr "پیش‌نمایش QR موقتاً در دسترس نیست. از دکمه کپی استفاده کنید."
+
+msgid "QR preview unavailable."
+msgstr "پیش‌نمایش QR در دسترس نیست."
+
+msgid "Quick checklist"
+msgstr "چک‌لیست سریع"
+
+msgid "Receipt images were uploaded successfully and are awaiting admin approval."
+msgstr "تصاویر رسید با موفقیت بارگذاری شدند و در انتظار تایید مدیریت هستند."
+
+msgid "Reject"
+msgstr "رد"
+
+msgid "Rejected. Order #%d was marked as failed."
+msgstr "رد شد. سفارش #%d ناموفق علامت خورد."
+
+msgid "Rejection note (optional):"
+msgstr "یادداشت رد (اختیاری):"
+
+msgid "Save Support Info"
+msgstr "ذخیره اطلاعات پشتیبانی"
+
+msgid "Save bot settings"
+msgstr "ذخیره تنظیمات ربات"
+
+msgid "Save gateway settings"
+msgstr "ذخیره تنظیمات درگاه"
+
+msgid "Save secret key"
+msgstr "ذخیره کلید مخفی"
+
+msgid "Save settings below, then click Set webhook."
+msgstr "تنظیمات زیر را ذخیره کنید، سپس «تنظیم وب‌هوک» را بزنید."
+
+msgid "Scan to copy the key"
+msgstr "اسکن برای کپی کلید"
+
+msgid "Secret API (Private Key)"
+msgstr "کلید خصوصی API"
+
+msgid "Send <code>/newbot</code>, choose a name and a username ending with <code>bot</code>."
+msgstr "دستور <code>/newbot</code> را بفرستید، یک نام و نام‌کاربری با پایان <code>bot</code> انتخاب کنید."
+
+msgid "Set Bale webhook"
+msgstr "تنظیم وب‌هوک بله"
+
+msgid "Set Telegram webhook"
+msgstr "تنظیم وب‌هوک تلگرام"
+
+msgid "Settings"
+msgstr "تنظیمات"
+
+msgid "Settings > Permalinks"
+msgstr "تنظیمات > پیوندهای یکتا"
+
+msgid "Settings sections"
+msgstr "بخش‌های تنظیمات"
+
+msgid "Shetab Management"
+msgstr "مدیریت شتاب"
+
+msgid "Shown after the payment has been confirmed."
+msgstr "این پیام زمانی نمایش داده می‌شود که پرداخت تایید شده باشد."
+
+msgid "Shown on the thank-you page while the transfer is pending confirmation."
+msgstr "این پیام زمانی نمایش داده می‌شود که تراکنش هنوز تایید نشده است."
+
+msgid "Start a chat with the bot and get your numeric chat ID."
+msgstr "با ربات گفتگو را شروع کنید و شناسه عددی چت را بگیرید."
+
+msgid "Start a conversation with your bot from the manager account that should approve receipts."
+msgstr "از حساب مدیری که باید رسیدها را تایید کند با ربات گفتگو را شروع کنید."
+
+msgid "Status"
+msgstr "وضعیت"
+
+msgid "Submit receipt"
+msgstr "ارسال رسید"
+
+msgid "Amount: %s Rials"
+msgstr "مبلغ: %s ریال"
+
+msgid "Equivalent: %s Tomans"
+msgstr "معادل: %s تومان"
+
+msgid "Click to copy card number"
+msgstr "کلیک برای کپی شماره کارت"
+
+msgid "Card number QR code"
+msgstr "کد QR شماره کارت"
+
+msgid "Scan with your bank app"
+msgstr "اسکن با اپ همراه بانک"
+
+msgid "Show card number"
+msgstr "نمایش شماره کارت"
+
+msgid "Show destination card number on the payment page"
+msgstr "نمایش شماره کارت مقصد در صفحه پرداخت"
+
+msgid "Show account number"
+msgstr "نمایش شماره حساب"
+
+msgid "Show destination account number on the payment page"
+msgstr "نمایش شماره حساب مقصد در صفحه پرداخت"
+
+msgid "Show Sheba (IBAN)"
+msgstr "نمایش شماره شبا"
+
+msgid "Show destination Sheba on the payment page"
+msgstr "نمایش شماره شبا مقصد در صفحه پرداخت"
+
+msgid "Payment page destination details"
+msgstr "اطلاعات مقصد در صفحه پرداخت"
+
+msgid "Choose which bank details customers see on the payment page. At least one option stays enabled."
+msgstr "انتخاب کنید مشتری کدام اطلاعات بانکی را در صفحه پرداخت ببیند. حداقل یک گزینه فعال می‌ماند."
+
+msgid "Account number:"
+msgstr "شماره حساب:"
+
+msgid "Optional bank account number"
+msgstr "شماره حساب بانکی (اختیاری)"
+
+msgid "Sheba (IBAN):"
+msgstr "شماره شبا:"
+
+msgid "Sheba must be IR followed by 24 digits."
+msgstr "شبا باید با IR و سپس ۲۴ رقم باشد."
+
+msgid "Account"
+msgstr "حساب"
+
+msgid "Sheba"
+msgstr "شبا"
+
+msgid "Account number QR code"
+msgstr "کد QR شماره حساب"
+
+msgid "Sheba QR code"
+msgstr "کد QR شبا"
+
+msgid "Account holder / bank name:"
+msgstr "نام دارنده حساب / بانک:"
+
+msgid "e.g. Mellat Bank — Reza HajRahimi"
+msgstr "مثلاً بانک ملت — رضا حاج‌رحیمی"
+
+msgid "Shown under card, account, and Sheba on the payment page."
+msgstr "زیر شماره کارت، حساب و شبا در صفحه پرداخت نمایش داده می‌شود."
+
+msgid "Optional. Leave empty if customers pay only by account or Sheba. Empty clears a stored card number."
+msgstr "اختیاری. اگر مشتری فقط با حساب یا شبا پرداخت می‌کند خالی بگذارید. خالی بودن شماره کارت ذخیره‌شده را پاک می‌کند."
+
+msgid "Please enter a valid 16-digit card number, or leave it empty."
+msgstr "یک شماره کارت ۱۶ رقمی معتبر وارد کنید، یا خالی بگذارید."
+
+msgid "Enter at least one of: card number, account number, or Sheba."
+msgstr "حداقل یکی از این‌ها را وارد کنید: شماره کارت، شماره حساب یا شبا."
+
+msgid "Please enter the account holder / bank name."
+msgstr "نام دارنده حساب / بانک را وارد کنید."
+
+msgid "Click to copy"
+msgstr "کلیک برای کپی"
+
+msgid "Click to copy amount"
+msgstr "برای کپی مبلغ کلیک کنید"
+
+msgid "Copy card number"
+msgstr "کپی شماره کارت"
+
+msgid "Go to my orders"
+msgstr "رفتن به سفارشات من"
+
+
+
+msgid "Successful Transactions for"
+msgstr "تراکنش‌های موفق برای"
+
+msgid "Sum:"
+msgstr "جمع:"
+
+msgid "Support Information"
+msgstr "اطلاعات پشتیبانی"
+
+msgid "Support information saved successfully."
+msgstr "اطلاعات پشتیبانی ذخیره شد."
+
+msgid "Telegram"
+msgstr "تلگرام"
+
+msgid "Telegram & Bale"
+msgstr "تلگرام و بله"
+
+msgid "Telegram & Bale bots"
+msgstr "ربات‌های تلگرام و بله"
+
+msgid "Telegram ID:"
+msgstr "شناسه تلگرام:"
+
+msgid "Telegram bot setup"
+msgstr "تنظیم ربات تلگرام"
+
+msgid "Telegram setup guide"
+msgstr "راهنمای تنظیم تلگرام"
+
+msgid "Telegram:"
+msgstr "تلگرام:"
+
+msgid "Test by uploading a receipt; approve or reject from Bale. On reject you can send a note or /skip."
+msgstr "با آپلود رسید تست کنید؛ از بله تایید یا رد کنید. در رد می‌توانید یادداشت بفرستید یا /skip بزنید."
+
+msgid "The customer uploaded the receipt below for review."
+msgstr "مشتری رسید زیر را برای بررسی ارسال کرده است."
+
+msgid "There was a problem uploading the file."
+msgstr "مشکلی در آپلود پیش آمد."
+
+msgid "These contacts are shown to customers on the payment instructions page. They are separate from the admin Telegram/Bale bots."
+msgstr "این راه‌های تماس در صفحه دستور پرداخت به مشتری نشان داده می‌شوند و جدا از ربات‌های ادمین تلگرام/بله هستند."
+
+msgid "These settings control how the Card-to-Card method appears on checkout and the thank-you page. Changes are saved to the same WooCommerce gateway options."
+msgstr "این تنظیمات نحوه نمایش روش کارت به کارت در تسویه و صفحه تشکر را کنترل می‌کنند. تغییرات در همان گزینه‌های درگاه ووکامرس ذخیره می‌شوند."
+
+msgid "This HTTPS endpoint receives Approve/Reject actions from the bot. Set it with the button below after saving the token."
+msgstr "این آدرس HTTPS اکشن تایید/رد را از ربات دریافت می‌کند. بعد از ذخیره توکن با دکمه زیر تنظیمش کنید."
+
+msgid "This order is already paid."
+msgstr "این سفارش از قبل پرداخت شده است."
+
+msgid "This private key authenticates the Android app with your store. Keep it secret and never share it publicly."
+msgstr "این کلید خصوصی اپ اندروید را به فروشگاه متصل می‌کند. محرمانه نگه دارید و عمومی نکنید."
+
+msgid "Time remaining to transfer:"
+msgstr "زمان باقیمانده برای انتقال:"
+
+msgid "Time remaining to transfer: %s"
+msgstr "زمان باقیمانده برای انتقال: %s"
+
+msgid "Title"
+msgstr "عنوان درگاه"
+
+msgid "To ensure the automatic confirmation system (API) works correctly, you must set your WordPress <strong>\"Permalinks\"</strong> to anything other than \"Plain\"."
+msgstr "برای کارکرد صحیح سیستم تایید خودکار (API)، باید «پیوندهای یکتا» را روی چیزی غیر از «ساده» تنظیم کنید."
+
+msgid "To use automatic bank transfer confirmation, download and install the Shetab app from Cafe Bazaar."
+msgstr "برای تایید خودکار واریز، اپ شتاب را از کافه بازار نصب کنید."
+
+msgid "Tomans"
+msgstr "تومان"
+
+msgid "Total Amount Limit (Toman):"
+msgstr "سقف مبلغ کل (تومان):"
+
+msgid "Transaction Limit (Count):"
+msgstr "سقف تعداد تراکنش:"
+
+msgid "Transaction amount (amount) not found in the sent data."
+msgstr "مبلغ تراکنش در داده‌های ارسالی یافت نشد."
+
+msgid "Txns:"
+msgstr "تراکنش‌ها:"
+
+msgid "Unable to generate a unique payment amount. Please try again."
+msgstr "امکان تولید مبلغ یکتا وجود ندارد. دوباره تلاش کنید."
+
+msgid "Unauthorized chat."
+msgstr "چت غیرمجاز."
+
+msgid "Upload a test receipt on an order. You should receive the image with Approve and Reject buttons."
+msgstr "یک رسید آزمایشی روی سفارش آپلود کنید. باید تصویر را با دکمه‌های تایید و رد دریافت کنید."
+
+msgid "Upload payment slip image (optional):"
+msgstr "آپلود تصویر فیش واریزی (اختیاری):"
+
+msgid "Uploaded receipt images:"
+msgstr "تصاویر رسید آپلود شده:"
+
+msgid "Uploaded receipts are ready for admin review."
+msgstr "رسیدهای آپلودشده آماده بررسی مدیر هستند."
+
+msgid "Uploading…"
+msgstr "در حال ارسال..."
+
+msgid "User Guide"
+msgstr "راهنمای کاربری"
+
+msgid "User uploaded a payment receipt image."
+msgstr "کاربر تصویر رسید پرداخت را آپلود کرد."
+
+msgid "View"
+msgstr "مشاهده"
+
+msgid "View Details (%d orders)"
+msgstr "مشاهده جزئیات (%d سفارش)"
+
+msgid "View Tutorials"
+msgstr "مشاهده آموزش‌ها"
+
+msgid "Visit Website"
+msgstr "مشاهده وب‌سایت"
+
+msgid "Visit our website for support and the latest updates."
+msgstr "برای پشتیبانی و آخرین به‌روزرسانی‌ها به وب‌سایت ما سر بزنید."
+
+msgid "Warning: Missing Permalinks Configuration"
+msgstr "هشدار: پیکربندی پیوندهای یکتا ناقص است"
+
+msgid "Watch tutorials and read guides for a correct configuration."
+msgstr "آموزش‌ها و راهنماها را برای پیکربندی صحیح ببینید."
+
+msgid "WebDide_CV gateway is enabled but no active bank cards are configured. To show the gateway on checkout, please add at least one active card in Shetab Management."
+msgstr "درگاه WebDide_CV فعال است اما کارت بانکی فعالی تنظیم نشده. برای نمایش در تسویه، حداقل یک کارت فعال در مدیریت شتاب اضافه کنید."
+
+msgid "WebDide_CV requires woocommerce to be installed and active."
+msgstr "WebDide_CV به نصب و فعال بودن ووکامرس نیاز دارد."
+
+msgid "Webhook URL:"
+msgstr "آدرس وب‌هوک:"
+
+msgid "Webhook requires a public HTTPS URL. On local development, expose your site with a tunnel (for example ngrok) and use that base URL."
+msgstr "وب‌هوک به آدرس عمومی HTTPS نیاز دارد. در توسعه محلی سایت را با تونل (مثلاً ngrok) در دسترس کنید."
+
+msgid "WhatsApp ID (e.g. 989123456789):"
+msgstr "شناسه واتساپ (مثلاً 989123456789):"
+
+msgid "WhatsApp:"
+msgstr "واتس‌اپ:"
+
+msgid "When a customer uploads a payment receipt, enabled bots receive the image with Approve / Reject buttons. On reject, the bot asks for an optional note."
+msgstr "با آپلود رسید توسط مشتری، ربات‌های فعال تصویر را با دکمه‌های تایید/رد دریافت می‌کنند. در رد، ربات یادداشت اختیاری می‌خواهد."
+
+msgid "When enabled, the gateway can appear on checkout if at least one active bank card is configured."
+msgstr "در صورت فعال بودن، اگر حداقل یک کارت بانکی فعال باشد درگاه در تسویه نمایش داده می‌شود."
+
+msgid "Your order has been placed and is awaiting payment. Please transfer the amount using the instructions below."
+msgstr "سفارش شما ثبت شده و در انتظار پرداخت می‌باشد. لطفاً جهت نهایی شدن سفارش، مبلغ مورد نظر را طبق دستورالعمل زیر واریز نمایید."
+
+msgid "Your payment receipt"
+msgstr "رسید پرداخت شما"
+
+msgid "Your payment slip was received and is awaiting admin approval."
+msgstr "فیش واریزی شما دریافت شد و در انتظار تایید مدیریت است."
+
+msgid "Your payment was confirmed successfully. Your order is being processed."
+msgstr "پرداخت شما با موفقیت تایید شد. سفارش شما در حال پردازش می‌باشد."
+
+msgid "Your site must be reachable over HTTPS from the internet (localhost needs a tunnel such as ngrok)."
+msgstr "سایت باید از اینترنت با HTTPS در دسترس باشد (روی localhost به تونلی مثل ngrok نیاز دارید)."
+
+msgid "Your time has expired."
+msgstr "زمان شما به پایان رسیده است."
+
+msgid "e.g. Primary Shop Card"
+msgstr "مثلاً کارت اصلی فروشگاه"
+
+msgid "webdide-card-to-card-verification"
+msgstr "تایید کارت به کارت وب‌دیده"
+
+msgid "Get your numeric account/chat ID from the Bale bot <a href=\"https://ble.ir/idbotbot\" target=\"_blank\" rel=\"noopener noreferrer\"><strong>@Idbotbot</strong></a>, then enter it in Allowed chat IDs."
+msgstr "شناسه عددی حساب/چت خود را از ربات بله <a href=\"https://ble.ir/idbotbot\" target=\"_blank\" rel=\"noopener noreferrer\"><strong>@Idbotbot</strong></a> بگیرید و در فیلد شناسه چت‌های مجاز وارد کنید."
+
+msgid "Card updated."
+msgstr "کارت به‌روزرسانی شد."
+
+msgid "Card not found."
+msgstr "کارت یافت نشد."
+
+msgid "Edit bank card #%d"
+msgstr "ویرایش کارت بانکی #%d"
+
+msgid "Cancel edit"
+msgstr "انصراف از ویرایش"
+
+msgid "Leave unchanged to keep the current card number, or enter a new 16-digit number to replace it."
+msgstr "برای نگه‌داشتن شماره فعلی تغییری ندهید، یا شماره ۱۶ رقمی جدید وارد کنید."
+
+msgid "Save card changes"
+msgstr "ذخیره تغییرات کارت"
+
+msgid "Edit"
+msgstr "ویرایش"
+
+msgid "Statistics"
+msgstr "آمار"
+
+msgid "Overview of card-to-card transactions, card performance, and recent activity."
+msgstr "خلاصه تراکنش‌های کارت به کارت، عملکرد کارت‌ها و فعالیت‌های اخیر."
+
+msgid "Confirmed (all time)"
+msgstr "تاییدشده (کل)"
+
+msgid "Confirmed today"
+msgstr "تاییدشده امروز"
+
+msgid "Confirmed this month"
+msgstr "تاییدشده این ماه"
+
+msgid "Pending"
+msgstr "در انتظار"
+
+msgid "Expired"
+msgstr "منقضی"
+
+msgid "Orders with receipt upload"
+msgstr "سفارش‌های دارای آپلود رسید"
+
+msgid "Cards: %1$d active / %2$d total"
+msgstr "کارت‌ها: %1$d فعال / %2$d کل"
+
+msgid "Performance by card"
+msgstr "عملکرد به تفکیک کارت"
+
+msgid "Card"
+msgstr "کارت"
+
+msgid "Number"
+msgstr "شماره"
+
+msgid "Confirmed count"
+msgstr "تعداد تاییدشده"
+
+msgid "Confirmed amount"
+msgstr "مبلغ تاییدشده"
+
+msgid "Recent transactions"
+msgstr "تراکنش‌های اخیر"
+
+msgid "Date"
+msgstr "تاریخ"
+
+msgid "Confirmed"
+msgstr "تاییدشده"
+
+msgid "Slip approved"
+msgstr "فیش تایید شده"
+
+msgid "This payment slip was approved. You can still mark it as invalid below if needed."
+msgstr "این فیش واریزی تایید شده است. در صورت نیاز می‌توانید آن را از پایین نامعتبر علامت بزنید."
+
+msgid "Mark as invalid"
+msgstr "نامعتبر کردن"
+
+msgid "Slip marked as invalid"
+msgstr "فیش نامعتبر علامت‌گذاری شد"
+
+msgid "This payment slip was marked as invalid. You can approve it again if this was a mistake."
+msgstr "این فیش واریزی نامعتبر علامت‌گذاری شده است. اگر اشتباه بوده می‌توانید دوباره تایید کنید."
+
+msgid "Rejected"
+msgstr "رد شده"
+
+msgid "WooPilot"
+msgstr "ووپایلوت"
+
+msgid "From the same team"
+msgstr "از همان تیم"
+
+
+msgid "Your store's co-pilot"
+msgstr "خلبان فروشگاه تو"
+
+
+msgid "Discover WooPilot"
+msgstr "آشنایی با ووپایلوت"
+
+
+msgid "Sell your store products on Instagram (smart bot & Direct), Telegram, and Bale too — fully synced with WooCommerce."
+msgstr "محصولات سایتت را در اینستاگرام (ربات و دایرکت هوشمند)، تلگرام و بله هم بفروش — با هماهنگی کامل با ووکامرس"

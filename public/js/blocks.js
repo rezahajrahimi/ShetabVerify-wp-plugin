@@ -10,7 +10,7 @@
     if ( window.wc && window.wc.wcBlocksRegistry && typeof window.wc.wcBlocksRegistry.registerPaymentMethod === 'function' ) {
         const settings = window.wc.wcSettings.getSetting( 'wdcv_data', {} );
 
-        const label = window.wp.htmlEntities.decodeEntities( settings.title || 'کارت به کارت' );
+        const label = window.wp.htmlEntities.decodeEntities( settings.title || 'Card-to-Card' );
 
         const Content = ( props ) => {
             const { eventRegistration, emitResponse } = props;
@@ -31,12 +31,12 @@
             }, [ emitResponse.responseTypes.SUCCESS, onPaymentSetup ] );
 
             return window.wp.element.createElement( 'div', { className: 'wdcv-blocks' },
-                window.wp.element.createElement( 'p', null, window.wp.htmlEntities.decodeEntities( settings.description || 'تایید خودکار کارت به کارت' ) )
+                window.wp.element.createElement( 'p', null, window.wp.htmlEntities.decodeEntities( settings.description || 'Automatic card-to-card verification' ) )
             );
         };
 
         const Label = () => {
-            const labelText = window.wp.htmlEntities.decodeEntities( settings.title || 'کارت به کارت (تایید خودکار)' );
+            const labelText = window.wp.htmlEntities.decodeEntities( settings.title || 'Card-to-Card (auto verification)' );
             const children = [];
 
             if ( settings.logo_url ) {

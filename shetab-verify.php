@@ -6,43 +6,16 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'WDCV_VERSION', '0.1.0' );
+define( 'WDCV_VERSION', '0.3.0' );
 if ( ! defined( 'WDCV_PLUGIN_FILE' ) ) {
     define( 'WDCV_PLUGIN_FILE', defined( 'WDCV_MAIN_PLUGIN_FILE' ) ? WDCV_MAIN_PLUGIN_FILE : __FILE__ );
 }
 define( 'WDCV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WDCV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
-function wdcv_is_persian_locale() {
-    $locale = function_exists( 'determine_locale' ) ? determine_locale() : get_locale();
-    return 0 === strpos( strtolower( (string) $locale ), 'fa' );
-}
-
-function wdcv_localize_installed_plugin_row( $plugins ) {
-    $basename = plugin_basename( WDCV_PLUGIN_FILE );
-    if ( empty( $plugins[ $basename ] ) || ! is_array( $plugins[ $basename ] ) ) {
-        return $plugins;
-    }
-
-    if ( wdcv_is_persian_locale() ) {
-        $plugins[ $basename ]['Name']        = 'تأیید پرداخت کارت‌به‌کارت وب‌دیده برای شتاب';
-        $plugins[ $basename ]['Title']       = 'تأیید پرداخت کارت‌به‌کارت وب‌دیده برای شتاب';
-        $plugins[ $basename ]['Description'] = 'افزونه تایید خودکار پرداخت کارت‌به‌کارت برای ووکامرس و شتاب با پشتیبانی از سفارشات و بارگذاری رسید.';
-    } else {
-        $plugins[ $basename ]['Name']        = 'WebDide Card-to-Card Payment Verification for Shetab';
-        $plugins[ $basename ]['Title']       = 'WebDide Card-to-Card Payment Verification for Shetab';
-        $plugins[ $basename ]['Description'] = 'Payment gateway for automated card-to-card transaction confirmation in WooCommerce.';
-    }
-
-    return $plugins;
-}
-
-add_filter( 'all_plugins', 'wdcv_localize_installed_plugin_row' );
-
 function wdcv_plugin_action_links( $links ) {
     $settings_url = admin_url( 'admin.php?page=webdide-card-to-card-verification' );
-    $label = wdcv_is_persian_locale() ? 'تنظیمات' : 'Settings';
-    array_unshift( $links, '<a href="' . esc_url( $settings_url ) . '">' . esc_html( $label ) . '</a>' );
+    array_unshift( $links, '<a href="' . esc_url( $settings_url ) . '">' . esc_html__( 'Settings', 'webdide-card-to-card-verification' ) . '</a>' );
     return $links;
 }
 
@@ -75,6 +48,9 @@ require_once WDCV_PLUGIN_DIR . 'includes/class-activator.php';
 require_once WDCV_PLUGIN_DIR . 'includes/class-deactivator.php';
 require_once WDCV_PLUGIN_DIR . 'includes/class-db.php';
 require_once WDCV_PLUGIN_DIR . 'includes/class-utils.php';
+require_once WDCV_PLUGIN_DIR . 'includes/bot/class-bot-client.php';
+require_once WDCV_PLUGIN_DIR . 'includes/bot/class-bot-notifier.php';
+require_once WDCV_PLUGIN_DIR . 'includes/bot/class-bot-webhook.php';
 require_once WDCV_PLUGIN_DIR . 'includes/api/class-rest-controller.php';
 require_once WDCV_PLUGIN_DIR . 'includes/admin/class-admin-pages.php';
 
@@ -83,76 +59,13 @@ add_action( 'plugins_loaded', 'wdcv_init' );
 // Hook in Blocks integration
 add_action( 'woocommerce_blocks_loaded', 'wdcv_woocommerce_block_support' );
 
-function wdcv_load_persian_translations() {
-    // Load Persian translations manually
-    $locale = get_locale();
-    if ($locale !== 'fa_IR' && $locale !== 'fa') {
-        return;
-    }
-
-    $po_file = WDCV_PLUGIN_DIR . '/languages/webdide-card-to-card-verification-fa_IR.po';
-    if (!file_exists($po_file)) {
-        return;
-    }
-
-    // Simple PO file parser
-    $content = file_get_contents($po_file);
-    $translations = array();
-
-    // Parse basic msgid/msgstr pairs
-    $lines = explode("\n", $content);
-    $current_msgid = '';
-    $current_msgstr = '';
-    $in_msgstr = false;
-
-    foreach ($lines as $line) {
-        $line = trim($line);
-        if (empty($line) || strpos($line, '#') === 0) {
-            continue;
-        }
-
-        if (strpos($line, 'msgid "') === 0) {
-            if (!empty($current_msgid) && !empty($current_msgstr)) {
-                $translations[trim($current_msgid, '"')] = trim($current_msgstr, '"');
-            }
-            $current_msgid = substr($line, 7, -1); // Remove msgid " and "
-            $current_msgstr = '';
-            $in_msgstr = false;
-        } elseif (strpos($line, 'msgstr "') === 0) {
-            $current_msgstr = substr($line, 8, -1); // Remove msgstr " and "
-            $in_msgstr = true;
-        } elseif ($in_msgstr && strpos($line, '"') === 0) {
-            $current_msgstr .= substr($line, 1, -1); // Remove " and "
-        }
-    }
-
-    // Add the last translation
-    if (!empty($current_msgid) && !empty($current_msgstr)) {
-        $translations[trim($current_msgid, '"')] = trim($current_msgstr, '"');
-    }
-
-    // Load translations into WordPress
-    global $l10n;
-    if (!isset($l10n['webdide-card-to-card-verification'])) {
-        $l10n['webdide-card-to-card-verification'] = new MO();
-    }
-
-    foreach ($translations as $original => $translated) {
-        $l10n['webdide-card-to-card-verification']->entries[$original] = (object) array(
-            'translations' => array($translated),
-            'context' => null,
-            'plural' => null,
-            'singular' => $original,
-        );
-    }
-}
-
 function wdcv_init() {
-    // Load plugin text domain for translations
+    // Load plugin text domain for translations (.mo / language packs)
     load_plugin_textdomain( 'webdide-card-to-card-verification', false, dirname( plugin_basename( WDCV_PLUGIN_FILE ) ) . '/languages' );
 
-    // Load Persian translations manually if .mo file doesn't exist
-    wdcv_load_persian_translations();
+    if ( class_exists( 'WebDide_CV_DB' ) ) {
+        WebDide_CV_DB::maybe_upgrade();
+    }
 
     // Add a custom cron schedule for cleanup (every 5 minutes)
     add_filter( 'cron_schedules', function ( $schedules ) {
@@ -214,8 +127,21 @@ require_once WDCV_PLUGIN_DIR . 'includes/gateway/class-wdcv-blocks-support.php';
             }
         } );
 
-        // show payment instructions on the thankyou page
-        add_action( 'woocommerce_thankyou_wdcv', array( 'WebDide_CV_Gateway', 'render_payment_instructions' ), 10, 1 );
+		// Intermediate bank-like pay page + thank-you success block
+		add_action( 'template_redirect', array( 'WebDide_CV_Gateway', 'handle_pay_page' ), 5 );
+		add_action( 'template_redirect', array( 'WebDide_CV_Gateway', 'redirect_pending_thankyou' ), 6 );
+		add_action( 'woocommerce_thankyou_wdcv', array( 'WebDide_CV_Gateway', 'render_payment_instructions' ), 10, 1 );
+
+		add_action( 'wp_enqueue_scripts', function () {
+			if ( function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'order-received' ) ) {
+				wp_enqueue_style(
+					'wdcv-checkout',
+					WDCV_PLUGIN_URL . 'public/css/checkout.css',
+					array(),
+					WDCV_VERSION
+				);
+			}
+		} );
 
         // enqueue frontend/block assets
         // add_action( 'wp_enqueue_scripts', function() {
