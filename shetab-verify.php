@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'WDCV_VERSION', '0.3.0' );
+define( 'WDCV_VERSION', '0.3.1' );
 if ( ! defined( 'WDCV_PLUGIN_FILE' ) ) {
     define( 'WDCV_PLUGIN_FILE', defined( 'WDCV_MAIN_PLUGIN_FILE' ) ? WDCV_MAIN_PLUGIN_FILE : __FILE__ );
 }

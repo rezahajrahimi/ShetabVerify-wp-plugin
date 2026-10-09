@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name:       WebDide Card-to-Card Payment Verification for Shetab
+ * Plugin Name:       Card to Card for WooCommerce – WebDide Shetab
  * Plugin URI:        http://verify.webdide.ir/
- * Description:       Automate WooCommerce card-to-card (کارت به کارت) payment verification via mobile app, receipt upload, and Telegram/Bale admin bots.
- * Version:           0.3.0
+ * Description:       Card to card (کارت به کارت) WooCommerce payments with Shetab auto-verification, receipt upload, and Telegram/Bale bots.
+ * Version:           0.3.1
  * Requires at least: 5.0
  * Requires PHP:      7.4
  * Requires Plugins:  woocommerce
